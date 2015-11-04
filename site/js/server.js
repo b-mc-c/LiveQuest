@@ -1,7 +1,7 @@
 //python -m SimpleHTTPServer 8000 
 
 var game
-var url = "ws://" + window.location.hostname" + ":8080/test";
+var url = "ws://" + window.location.hostname + ":8080/test";
 var ws = new WebSocket(url);
 
 

@@ -39,3 +39,12 @@ body
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+td
+{
+	text-align: left;
+	vertical-align: top;
+}
+ul {
+    padding: 0;
+    list-style-type: none;
+}----
