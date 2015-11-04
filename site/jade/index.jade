@@ -1,0 +1,78 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|Bmcc-Home
+	body
+		include navbar.jade
+		.centre
+			table#existingUser
+				tbody
+					tr
+						td
+						td
+							|SigIn
+					tr
+						td
+							|Usename
+						td
+							input#UserName(type="text" name="username")
+					tr
+						td
+							|Password
+						td
+							input#Password(type="password" name="password")
+					tr
+						td
+						td
+							input#SignIn.btn(type="button" value="Submit")
+							input#Join.btn(type="button" value="Join")
+			table#newUser(style="display:none;")
+				tbody
+					tr
+						td
+
+						td
+							|User Details
+					tr
+						td
+							|Username
+						td
+							input#NewUserName(type="text" name="username")
+					tr
+						td
+							|Password
+						td
+							input#NewPassword(type="password")
+					tr
+						td
+							|Confirm Password
+						td
+							input#ConfPassword(type="password")
+					tr#passNotMatch(style="display:none;")
+						td
+						td
+							span(style="color : red;")
+								|*Passwords must match 
+					tr
+						td
+							|Email
+						td
+							input#NewEmail(type="email")
+					tr#EmailNotMatch(style="display:none;")
+						td
+						td
+							span(style="color : red;")
+								|*Email is not vaild exmp test@mail.com
+					tr
+						td
+						td
+							input#SignUP.btn(type="button" value="SignUp")
+							input#ReturnToSignIn.btn(type="button" value="Return to Sign In")
+	footer
+		include commonScripts.jade
+		script(src="js/server.js")
+		script(src="js/home.js")
+
+

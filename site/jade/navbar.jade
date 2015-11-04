@@ -1,0 +1,11 @@
+.navbar.navbar-inverse.navbar-fixed-top
+	.container
+		.navbar-brand(data-bind="text: currentPageName")
+		button.navbar-toggle(data-toggle="collapse" data-target=".navHeaderCollapse")
+			span.icon-bar
+			span.icon-bar
+			span.icon-bar
+		.collapse.navbar-collapse.navHeaderCollapse
+			ul.nav.navbar-nav.navbar-right(data-bind="foreach: menuOptions")
+				li(data-bind=" attr: {class: _class}")
+					a(data-bind="text: name , attr: {href: url}")

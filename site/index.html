@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="external/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <title>Bmcc-Home</title>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div data-bind="text: currentPageName" class="navbar-brand"></div>
+        <button data-toggle="collapse" data-target=".navHeaderCollapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul data-bind="foreach: menuOptions" class="nav navbar-nav navbar-right">
+            <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="centre">
+      <table id="existingUser">
+        <tbody>
+          <tr>
+            <td></td>
+            <td>SigIn</td>
+          </tr>
+          <tr>
+            <td>Usename</td>
+            <td>
+              <input id="UserName" type="text" name="username">
+            </td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>
+              <input id="Password" type="password" name="password">
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input id="SignIn" type="button" value="Submit" class="btn">
+              <input id="Join" type="button" value="Join" class="btn">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table id="newUser" style="display:none;">
+        <tbody>
+          <tr>
+            <td></td>
+            <td>User Details</td>
+          </tr>
+          <tr>
+            <td>Username</td>
+            <td>
+              <input id="NewUserName" type="text" name="username">
+            </td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>
+              <input id="NewPassword" type="password">
+            </td>
+          </tr>
+          <tr>
+            <td>Confirm Password</td>
+            <td>
+              <input id="ConfPassword" type="password">
+            </td>
+          </tr>
+          <tr id="passNotMatch" style="display:none;">
+            <td></td>
+            <td><span style="color : red;">*Passwords must match </span></td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>
+              <input id="NewEmail" type="email">
+            </td>
+          </tr>
+          <tr id="EmailNotMatch" style="display:none;">
+            <td></td>
+            <td><span style="color : red;">*Email is not vaild exmp test@mail.com</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input id="SignUP" type="button" value="SignUp" class="btn">
+              <input id="ReturnToSignIn" type="button" value="Return to Sign In" class="btn">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <footer>
+    <script src="external/jquery-2.1.4.min.js"></script>
+    <script src="external/bootstrap.min.js"></script>
+    <script src="external/knockout-3.3.0.js"></script>
+    <script src="js/server.js"></script>
+    <script src="js/home.js"></script>
+  </footer>
+</html>

@@ -1,0 +1,13 @@
+/*Prerequisites : mysql installed, mysql-python connector installed , python installed */
+/*Run the following code in mysql from command promt as the root user*/
+/*Please note password for user should not be password change below*/
+
+
+CREATE DATABASE livequest;
+CREATE USER 'liveQuestServer'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON livequest.* TO 'newuser'@'localhost';
+CREATE TABLE Users( id INT NOT NULL AUTO_INCREMENT,
+					userName VARCHAR(100) NOT NULL,
+					password VARCHAR(170) NOT NULL,
+					email VARCHAR(100) NOT NULL,
+					PRIMARY KEY (id));
