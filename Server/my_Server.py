@@ -8,7 +8,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*************', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*******', 'DB' : 'livequest'}
 connections = {}
 
 
@@ -47,6 +47,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				SignUp(self,data["SignUp"])
 			if 'LOGOUT' in data.keys():
 				LogOut(self)
+			if 'CREATENEWGAME' in data.keys():
+				CreateNewGame(self, data["CREATENEWGAME"])
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -182,6 +184,35 @@ def LogOut(connection):
 	message["LOGGEDOUT"] = True
 	sendToPlayer(connection,message)
 
+def CreateNewGame(connection, data):
+	message = {}
+	print("Atempting to create new game ")
+	print("Validating characters data")
+	if validateCharacter(data["GameName"]) and validateCharacter(data["EndTime"]):
+		print("characters valid")
+		with MyUtils.UseDatabase(config) as cursor:		
+			SQL = '''SELECT userID FROM Connections WHERE IpKey ="%s"'''% (connection.request.remote_ip)
+			cursor.execute(SQL)
+			userID = cursor.fetchone()
+		print("Creating game in db")
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''INSERT INTO games (GameName , GameEndTime, HostId) VALUES ( "%s" , "%s",%i)'''% (data["GameName"], data["EndTime"], userID[0])
+			cursor.execute(SQL)
+		print("Added to Games table")
+		print("Getting game id")
+		with MyUtils.UseDatabase(config) as cursor:		
+			SQL = '''SELECT id FROM games WHERE GameName ="%s" and HostId = %i LIMIT 1'''% (data["GameName"], userID[0])
+			cursor.execute(SQL)
+			gameID = cursor.fetchone()
+		print("GameID : ", gameID[0])
+		message["GAMECREATEDSUCCESS"] = gameID[0]
+		sendToPlayer(connection,message)
+	else:
+		print("Warning unsafe characters recieved : message " ,data)
+		message["ERROR"] = "INVALIDCHARSNEWGAME"
+		sendToPlayer(connection,message)
+
+
 #validate the data the ensure character which could allow users to modify mysql database are not present 
 def validateCharacter(val):
 	if ";" in val:
@@ -200,7 +231,8 @@ def hash_password(password):
     
 def check_password(hashed_password, user_password):
     password, salt = hashed_password.split(':')
-    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()		
+    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()	
+
 
 app = tornado.web.Application([
 	(r'/test', WSHandler),

@@ -1,0 +1,33 @@
+
+<table id="newGameTable">
+  <tbody>
+    <tr>
+      <td></td>
+      <td>Enter Game details</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>
+        <input id="NewUserName" type="text" name="username"/>
+        <ul data-bind="foreach: NewGameNameError">
+          <li data-bind="text: $data" style="color : red;"></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>EndTime</td>
+      <td>
+        <input id="NewPassword" type="text"/>
+        <ul data-bind="foreach: NewGameTimeError">
+          <li data-bind="text: $data" style="color : red;"></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input id="CreateNewGame" type="button" value="Create" class="btn"/>
+      </td>
+    </tr>
+  </tbody>
+</table>

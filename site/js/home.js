@@ -1,6 +1,6 @@
 var viewModel = {
 	currentPageName : ko.observable("Home"),
-	menuOptions : ko.observableArray([{name:"Home",url:"nome.html",_class:"active"},]),
+	menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:"active"},]),
 }
 
 $(document).ready(function(){
