@@ -1,0 +1,20 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|Bmcc-Home
+	body.homeBody
+		include navbar.jade
+		.col-md-12
+			button.btn#LogOutBtn
+				|Log Out
+		.col-md-3
+			include NewGame.jade
+		.col-md-6
+			include map.jade
+	footer
+		include commonScripts.jade
+		script(src="js/setUpGame.js")
+		script(src="js/server.js")
+

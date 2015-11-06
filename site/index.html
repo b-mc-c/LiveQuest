@@ -23,18 +23,24 @@
         <tbody>
           <tr>
             <td></td>
-            <td>SigIn</td>
+            <td>Sign In</td>
           </tr>
           <tr>
             <td>Usename</td>
             <td>
-              <input id="UserName" type="text" name="username">
+              <input id="UserName" type="text">
+              <ul data-bind="foreach: SignInUserNameError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
             </td>
           </tr>
           <tr>
             <td>Password</td>
             <td>
-              <input id="Password" type="password" name="password">
+              <input id="Password" type="password">
+              <ul data-bind="foreach: SignInPassError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
             </td>
           </tr>
           <tr>
@@ -50,39 +56,43 @@
         <tbody>
           <tr>
             <td></td>
-            <td>User Details</td>
+            <td>Enter new user details</td>
           </tr>
           <tr>
             <td>Username</td>
             <td>
               <input id="NewUserName" type="text" name="username">
+              <ul data-bind="foreach: SignUpUserNameError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
             </td>
           </tr>
           <tr>
             <td>Password</td>
             <td>
               <input id="NewPassword" type="password">
+              <ul data-bind="foreach: SignUpPassError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
             </td>
           </tr>
           <tr>
-            <td>Confirm Password</td>
+            <td>Confirm Password </td>
             <td>
               <input id="ConfPassword" type="password">
+              <ul data-bind="foreach: SignUpConfPassError">
+                <li data-bind="text: $data" style="color : red;">		</li>
+              </ul>
             </td>
-          </tr>
-          <tr id="passNotMatch" style="display:none;">
-            <td></td>
-            <td><span style="color : red;">*Passwords must match </span></td>
           </tr>
           <tr>
             <td>Email</td>
             <td>
               <input id="NewEmail" type="email">
+              <ul data-bind="foreach: SignUpEmailError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
             </td>
-          </tr>
-          <tr id="EmailNotMatch" style="display:none;">
-            <td></td>
-            <td><span style="color : red;">*Email is not vaild exmp test@mail.com</span></td>
           </tr>
           <tr>
             <td></td>
@@ -99,7 +109,7 @@
     <script src="external/jquery-2.1.4.min.js"></script>
     <script src="external/bootstrap.min.js"></script>
     <script src="external/knockout-3.3.0.js"></script>
+    <script src="js/index.js"></script>
     <script src="js/server.js"></script>
-    <script src="js/home.js"></script>
   </footer>
 </html>

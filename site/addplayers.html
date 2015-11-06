@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="external/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <title>Bmcc-Home</title>
+  </head>
+  <body class="homeBody">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div data-bind="text: currentPageName" class="navbar-brand"></div>
+        <button data-toggle="collapse" data-target=".navHeaderCollapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul data-bind="foreach: menuOptions" class="nav navbar-nav navbar-right">
+            <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <button id="LogOutBtn" class="btn">Log Out</button><br>
+      <h1>Game Id = <span data-bind="text: gameID"></span></h1>
+    </div>
+  </body>
+  <footer>
+    <script src="external/jquery-2.1.4.min.js"></script>
+    <script src="external/bootstrap.min.js"></script>
+    <script src="external/knockout-3.3.0.js"></script>
+    <script src="js/addPlayers.js"></script>
+    <script src="js/server.js"></script>
+  </footer>
+</html>

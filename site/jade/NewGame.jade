@@ -1,0 +1,25 @@
+table#newGameTable
+	tbody
+		tr
+			td
+
+			td
+				|Enter Game details
+		tr
+			td
+				|Name
+			td
+				input#NewGameName(type="text" name="username")
+				ul(data-bind="foreach: NewGameNameError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+				|EndTime
+			td
+				input#NewgameEndTime(type="datetime-local")
+				ul(data-bind="foreach: NewGameTimeError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+			td
+				input#CreateNewGame.btn(type="button" value="Create")

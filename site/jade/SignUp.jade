@@ -1,0 +1,40 @@
+table#newUser(style="display:none;")
+	tbody
+		tr
+			td
+
+			td
+				|Enter new user details
+		tr
+			td
+				|Username
+			td
+				input#NewUserName(type="text" name="username")
+				ul(data-bind="foreach: SignUpUserNameError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+				|Password
+			td
+				input#NewPassword(type="password")
+				ul(data-bind="foreach: SignUpPassError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+				|Confirm Password 
+			td
+				input#ConfPassword(type="password")
+				ul(data-bind="foreach: SignUpConfPassError")
+					li(data-bind="text: $data" style="color : red;")		
+		tr
+			td
+				|Email
+			td
+				input#NewEmail(type="email")
+				ul(data-bind="foreach: SignUpEmailError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+			td
+				input#SignUP.btn(type="button" value="SignUp")
+				input#ReturnToSignIn.btn(type="button" value="Return to Sign In")

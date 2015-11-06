@@ -1,0 +1,25 @@
+table#existingUser
+	tbody
+		tr
+			td
+			td
+				|Sign In
+		tr
+			td
+				|Usename
+			td
+				input#UserName(type="text")
+				ul(data-bind="foreach: SignInUserNameError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+				|Password
+			td
+				input#Password(type="password")
+				ul(data-bind="foreach: SignInPassError")
+					li(data-bind="text: $data" style="color : red;")
+		tr
+			td
+			td
+				input#SignIn.btn(type="button" value="Submit")
+				input#Join.btn(type="button" value="Join")

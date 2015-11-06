@@ -4,15 +4,16 @@ html
 		include commonLinks.jade
 		title
 			|Bmcc-Home
-	body
+	body.homeBody
 		include navbar.jade
-		.centre
-			include SignIn.jade
-			include SignUp.jade
+		.col-md-12
+			button.btn#LogOutBtn
+				|Log Out
+			br
+			h1
+				|Game Id = 
+				span(data-bind="text: gameID")
 	footer
 		include commonScripts.jade
-		script(src="js/index.js")
+		script(src="js/addPlayers.js")
 		script(src="js/server.js")
-		
-
-

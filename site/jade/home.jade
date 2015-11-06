@@ -1,0 +1,20 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|Bmcc-Home
+	body.homeBody
+		include navbar.jade
+		h1
+			|Signed In Success
+		button.btn#LogOutBtn
+			|Log Out
+		br
+		button.btn(onclick="parent.location='setUpGame.html'")
+			|Create NewGame
+	footer
+		include commonScripts.jade
+		script(src="js/home.js")
+		script(src="js/server.js")
+
