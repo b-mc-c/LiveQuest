@@ -1,0 +1,53 @@
+#myCarousel.carousel.slide(data-ride='carousel',data-interval="false")
+	// Carousel indicators
+	ol.carousel-indicators
+		li.active(data-target='#myCarousel', data-slide-to='0')
+		li(data-target='#myCarousel', data-slide-to='1')
+		li(data-target='#myCarousel', data-slide-to='2')
+	// Wrapper for carousel items
+	.carousel-inner
+		.item.active
+			.itemImage
+				img.centreItem(src='img/chain.png', alt='chain Slide',width="200" height="200")
+			.itemDescription
+				|Prevents your purse from being stolen but snaps after one use
+		.item
+			.itemImage
+				img.centreItem(src='img/MCHammer.png', alt='hammer Slide',width="200" height="200")
+			.itemDescription
+				|Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold
+				br
+				span
+					|Gold : 
+					span(data-bind="text : hammerGold")
+					#GoldHammer.Gold
+				br
+				span
+					|Range : 
+					span(data-bind="text : hammerRange")
+					|m
+					#RangeHammer.Range
+		.item
+			.itemImage
+				img.centreItem(src='img/fishing-rod.png', alt='rod Slide',width="200" height="200")
+			.itemDescription
+				|The fishing rod allows you to fish out another players coin purse
+				br
+				span
+					|Gold : 
+					span(data-bind="text : fishingGold")
+					#GoldFishing.Gold
+				br
+				span
+					|Range : 
+					span(data-bind="text : fishingRange")
+					|m
+					#RangeFishing.Range
+	// Carousel controls
+	a.carousel-control.left(href='#myCarousel', data-slide='prev')
+		span.glyphicon.glyphicon-chevron-left
+	a.carousel-control.right(href='#myCarousel', data-slide='next')
+		span.glyphicon.glyphicon-chevron-right
+
+
+

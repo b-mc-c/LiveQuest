@@ -4,6 +4,10 @@ var viewModel = {
 									{name:"Home",url:"home.html",_class:""},]),
 	NewGameNameError: ko.observableArray(),
 	NewGameTimeError : ko.observableArray(),
+	fishingGold : ko.observable("50"),
+	fishingRange :ko.observable("50"),
+	hammerGold : ko.observable("50"),
+	hammerRange :ko.observable("50"),
 }
 
 $(document).ready(function(){
@@ -21,7 +25,30 @@ $(document).ready(function(){
 			ws.send(JSON.stringify(message));
 		}
 	});
+
+
+	 $(function() {
+    $( "#GoldHammer, #RangeHammer,#GoldFishing, #RangeFishing").slider({
+      orientation: "horizontal",
+      range: "min",
+      max: 100,
+      value: 50,
+      slide: refresh,
+      change: refresh
+    });
+  });
+
 });//end document ready
+
+function refresh() {
+    viewModel.fishingGold( $("#GoldFishing").slider( "value" ));
+    viewModel.fishingRange( $("#RangeFishing").slider( "value" ));
+    viewModel.hammerGold( $("#GoldHammer").slider( "value" ));
+    viewModel.hammerRange( $("#RangeHammer").slider( "value" ));
+  }
+
+
+
 
 function Receive(data)
 {

@@ -9,12 +9,15 @@ html
 		.col-md-12
 			button.btn#LogOutBtn
 				|Log Out
-		.col-md-3
+		.col-md-6
 			include NewGame.jade
+			include itemCarousel.jade
 		.col-md-6
 			include map.jade
+
 	footer
 		include commonScripts.jade
 		script(src="js/setUpGame.js")
 		script(src="js/server.js")
+		script(src="external/jquery.animateSprite.min.js")
 

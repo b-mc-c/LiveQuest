@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="external/jquery-ui.min.css">
     <title>Bmcc-Home</title>
   </head>
   <body class="homeBody">
@@ -21,7 +22,7 @@
     <div class="col-md-12">
       <button id="LogOutBtn" class="btn">Log Out</button>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
       <table id="newGameTable">
         <tbody>
           <tr>
@@ -54,6 +55,34 @@
           </tr>
         </tbody>
       </table>
+      <div id="myCarousel" data-ride="carousel" data-interval="false" class="carousel slide">
+        <!-- Carousel indicators-->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- Wrapper for carousel items-->
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="itemImage"><img src="img/chain.png" alt="chain Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">Prevents your purse from being stolen but snaps after one use</div>
+          </div>
+          <div class="item">
+            <div class="itemImage"><img src="img/MCHammer.png" alt="hammer Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold<br><span>Gold : <span data-bind="text : hammerGold"></span>
+                <div id="GoldHammer" class="Gold"></div></span><br><span>Range : <span data-bind="text : hammerRange"></span>m
+                <div id="RangeHammer" class="Range"></div></span></div>
+          </div>
+          <div class="item">
+            <div class="itemImage"><img src="img/fishing-rod.png" alt="rod Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">The fishing rod allows you to fish out another players coin purse<br><span>Gold : <span data-bind="text : fishingGold"></span>
+                <div id="GoldFishing" class="Gold"></div></span><br><span>Range : <span data-bind="text : fishingRange"></span>m
+                <div id="RangeFishing" class="Range"></div></span></div>
+          </div>
+        </div>
+        <!-- Carousel controls--><a href="#myCarousel" data-slide="prev" class="carousel-control left"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="#myCarousel" data-slide="next" class="carousel-control right"><span class="glyphicon glyphicon-chevron-right"></span></a>
+      </div>
     </div>
     <div class="col-md-6">
       <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=6&amp;center=53.4129%2C-8.2439&amp;key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk" allowfullscreen=""></iframe>
@@ -63,7 +92,10 @@
     <script src="external/jquery-2.1.4.min.js"></script>
     <script src="external/bootstrap.min.js"></script>
     <script src="external/knockout-3.3.0.js"></script>
+    <script src="external/jquery-ui.min.js"></script>
+    <script src="external/jquery.ui.touch-punch.min.js"></script>
     <script src="js/setUpGame.js"></script>
     <script src="js/server.js"></script>
+    <script src="external/jquery.animateSprite.min.js"></script>
   </footer>
 </html>
