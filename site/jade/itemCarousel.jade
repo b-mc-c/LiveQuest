@@ -1,53 +1,161 @@
-#myCarousel.carousel.slide(data-ride='carousel',data-interval="false")
-	// Carousel indicators
-	ol.carousel-indicators
-		li.active(data-target='#myCarousel', data-slide-to='0')
-		li(data-target='#myCarousel', data-slide-to='1')
-		li(data-target='#myCarousel', data-slide-to='2')
-	// Wrapper for carousel items
-	.carousel-inner
-		.item.active
-			.itemImage
-				img.centreItem(src='img/chain.png', alt='chain Slide',width="200" height="200")
-			.itemDescription
-				|Prevents your purse from being stolen but snaps after one use
-		.item
-			.itemImage
-				img.centreItem(src='img/MCHammer.png', alt='hammer Slide',width="200" height="200")
-			.itemDescription
-				|Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold
-				br
-				span
-					|Gold : 
-					span(data-bind="text : hammerGold")
-					#GoldHammer.Gold
-				br
-				span
-					|Range : 
-					span(data-bind="text : hammerRange")
-					|m
-					#RangeHammer.Range
-		.item
-			.itemImage
-				img.centreItem(src='img/fishing-rod.png', alt='rod Slide',width="200" height="200")
-			.itemDescription
-				|The fishing rod allows you to fish out another players coin purse
-				br
-				span
-					|Gold : 
-					span(data-bind="text : fishingGold")
-					#GoldFishing.Gold
-				br
-				span
-					|Range : 
-					span(data-bind="text : fishingRange")
-					|m
-					#RangeFishing.Range
-	// Carousel controls
-	a.carousel-control.left(href='#myCarousel', data-slide='prev')
-		span.glyphicon.glyphicon-chevron-left
-	a.carousel-control.right(href='#myCarousel', data-slide='next')
-		span.glyphicon.glyphicon-chevron-right
+.centreItem
+	#myCarousel.carousel.slide(data-ride='carousel',data-interval="false")
+		// Carousel indicators
+		//ol.carousel-indicators
+			li.active(data-target='#myCarousel', data-slide-to='0')
+			li(data-target='#myCarousel', data-slide-to='1')
+			li(data-target='#myCarousel', data-slide-to='2')
+			li(data-target='#myCarousel', data-slide-to='3')
+			li(data-target='#myCarousel', data-slide-to='4')
+			li(data-target='#myCarousel', data-slide-to='5')
+			li(data-target='#myCarousel', data-slide-to='7')
+
+		// Wrapper for carousel items
+		.carousel-inner
+			.item.active
+				.itemTitle
+					|Purse chain
+				.itemImage
+					img.centreItem(src='img/chain.png', alt='chain Slide',width="200" height="200")
+				.itemDescription
+					|Prevents your purse from being stolen but snaps after one use
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : chainGold")
+						#GoldChain.Gold
+			.item
+				.itemTitle
+					|Fake pocket 
+				.itemImage
+					img.centreItem(src='img/pocket.png', alt='basket Slide',width="200" height="200")
+				.itemDescription
+					|A fake pocket soen into you jacket fools potential thieves attempting to relieve you of your gold.
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : pocketGold")
+						#GoldPocket.Gold
+			.item
+				.itemTitle
+					|MC Hammer
+				.itemImage
+					img.centreItem(src='img/MCHammer.png', alt='hammer Slide',width="200" height="200")
+				.itemDescription
+					|Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : hammerGold")
+						#GoldHammer.Gold
+					br
+					span
+						|Pick up Range : 
+						span(data-bind="text : hammerRange")
+						|m
+						#RangeHammer.Range
+			.item
+				.itemTitle
+					|Fishing rod
+				.itemImage
+					img.centreItem(src='img/fishing-rod.png', alt='rod Slide',width="200" height="200")
+				.itemDescription
+					|The fishing rod allows you to fish out another players coin purse
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : fishingGold")
+						#GoldFishing.Gold
+					br
+					span
+						|Pick up Range : 
+						span(data-bind="text : fishingRange")
+						|m
+						#RangeFishing.Range
+			.item
+				.itemTitle
+					|The Gold Digger
+				.itemImage
+					img.centreItem(src='img/gold_digger.png', alt='digger Slide',width="200" height="200")
+				.itemDescription
+					|So you think she&apos;s a gold digger , Release the gold digger on another player to relieve them of some of their gold. 
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : diggerGold")
+						#GoldDigger.Gold
+					br
+					span
+						|Pick up Range :  
+						span(data-bind="text : diggerRange")
+						|m
+						#RangeDigger.Range
+			.item
+				.itemTitle
+					|Ali Baba&apos;s 40 Thieves 
+				.itemImage
+					img.centreItem(src='img/thieves.png', alt='alibaba Slide',width="200" height="200")
+				.itemDescription
+					|Dispatch Ali Baba&apos;s 40 thieves to steal gold from players in range.
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : thievesGold")
+						#GoldThieves.Gold
+					br
+					span
+						|Pick up Range :  
+						span(data-bind="text : thievesRange")
+						|m
+						#RangeThieves.Range
+			.item
+				.itemTitle
+					|The oldest trick in the book
+				.itemImage
+					img.centreItem(src='img/book.png', alt='book Slide',width="200" height="200")
+				.itemDescription
+					|Distract a player by shouting &apos;&apos;Look over there&apos;&apos; while they look away help yourself to their gold
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : bookGold")
+						#GoldBook.Gold
+					br
+					span
+						|Pick up Range :  
+						span(data-bind="text : bookRange")
+						|m
+						#RangeBook.Range
+			.item
+				.itemTitle
+					|Baby in a Basket
+				.itemImage
+					img.centreItem(src='img/basket.png', alt='basket Slide',width="200" height="200")
+				.itemDescription
+					|When a player attempts to steal from you A baby in basket appears and with a booming voice shouts &apos;&apos;Thou shalt not covet thy neighbor&apos;s wife, his male servant, his female servant, his ox or  donkey&apos;&apos; scaring off any thief.
+					br
+				.itemSliders
+					span
+						|Gold : 
+						span(data-bind="text : basketGold")
+						#GoldBasket.Gold
+					br
+					span
+						|Pick up Range :  
+						span(data-bind="text : basketRange")
+						|m
+						#RangeBasket.Range
+		// Carousel controls
+		a.carousel-control.left(href='#myCarousel', data-slide='prev')
+			span.glyphicon.glyphicon-chevron-left
+		a.carousel-control.right(href='#myCarousel', data-slide='next')
+			span.glyphicon.glyphicon-chevron-right
 
 
 

@@ -8,7 +8,7 @@
     <tr>
       <td>Name</td>
       <td>
-        <input id="NewUserName" type="text" name="username"/>
+        <input id="NewGameName" type="text" name="username"/>
         <ul data-bind="foreach: NewGameNameError">
           <li data-bind="text: $data" style="color : red;"></li>
         </ul>
@@ -17,7 +17,7 @@
     <tr>
       <td>EndTime</td>
       <td>
-        <input id="NewPassword" type="text"/>
+        <input id="NewgameEndTime" type="datetime-local"/>
         <ul data-bind="foreach: NewGameTimeError">
           <li data-bind="text: $data" style="color : red;"></li>
         </ul>

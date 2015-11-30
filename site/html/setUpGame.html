@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="external/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="external/jquery-ui.min.css">
+    <title>Bmcc-Home</title>
+  </head>
+  <body class="homeBody">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div data-bind="text: currentPageName" class="navbar-brand"></div>
+        <button data-toggle="collapse" data-target=".navHeaderCollapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul data-bind="foreach: menuOptions" class="nav navbar-nav navbar-right">
+            <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <button id="LogOutBtn" class="btn">Log Out</button>
+    </div>
+    <div class="col-md-6">
+      <table id="newGameTable">
+        <tbody>
+          <tr>
+            <td></td>
+            <td>Enter Game details</td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>
+              <input id="NewGameName" type="text" name="username">
+              <ul data-bind="foreach: NewGameNameError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>EndTime</td>
+            <td>
+              <input id="NewgameEndTime" type="datetime-local">
+              <ul data-bind="foreach: NewGameTimeError">
+                <li data-bind="text: $data" style="color : red;"></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input id="CreateNewGame" type="button" value="Create" class="btn">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="myCarousel" data-ride="carousel" data-interval="false" class="carousel slide">
+        <!-- Carousel indicators-->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+          <li data-target="#myCarousel" data-slide-to="3"></li>
+        </ol>
+        <!-- Wrapper for carousel items-->
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="itemImage"><img src="img/chain.png" alt="chain Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">Prevents your purse from being stolen but snaps after one use</div>
+          </div>
+          <div class="item">
+            <div class="itemImage"><img src="img/MCHammer.png" alt="hammer Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold<br><span>Gold : <span data-bind="text : hammerGold"></span>
+                <div id="GoldHammer" class="Gold"></div></span><br><span>Range : <span data-bind="text : hammerRange"></span>m
+                <div id="RangeHammer" class="Range"></div></span></div>
+          </div>
+          <div class="item">
+            <div class="itemImage"><img src="img/fishing-rod.png" alt="rod Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">The fishing rod allows you to fish out another players coin purse<br><span>Gold : <span data-bind="text : fishingGold"></span>
+                <div id="GoldFishing" class="Gold"></div></span><br><span>Range : <span data-bind="text : fishingRange"></span>m
+                <div id="RangeFishing" class="Range"></div></span></div>
+          </div>
+          <div class="item">
+            <div class="itemImage"><img src="img/gold_digger.png" alt="digger Slide" width="200" height="200" class="centreItem"></div>
+            <div class="itemDescription">So you think she&apos;s a gold digger , Release the gold digger on another player to relieve them of some of their gold. <br><span>Gold : <span data-bind="text : diggerGold"></span>
+                <div id="GoldDigger" class="Gold"></div></span><br><span>Range : <span data-bind="text : diggerRange"></span>m
+                <div id="RangeDigger" class="Range"></div></span></div>
+          </div>
+        </div>
+        <!-- Carousel controls--><a href="#myCarousel" data-slide="prev" class="carousel-control left"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="#myCarousel" data-slide="next" class="carousel-control right"><span class="glyphicon glyphicon-chevron-right"></span></a>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/view?zoom=6&amp;center=53.4129%2C-8.2439&amp;key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk" allowfullscreen=""></iframe>
+    </div>
+  </body>
+  <footer>
+    <script src="external/jquery-2.1.4.min.js"></script>
+    <script src="external/bootstrap.min.js"></script>
+    <script src="external/knockout-3.3.0.js"></script>
+    <script src="external/jquery-ui.min.js"></script>
+    <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/setUpGame.js"></script>
+    <script src="js/server.js"></script>
+    <script src="external/jquery.animateSprite.min.js"></script>
+  </footer>
+</html>

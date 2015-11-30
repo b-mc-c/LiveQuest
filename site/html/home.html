@@ -4,9 +4,10 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="external/jquery-ui.min.css">
     <title>Bmcc-Home</title>
   </head>
-  <body>
+  <body class="homeBody">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div data-bind="text: currentPageName" class="navbar-brand"></div>
@@ -18,14 +19,17 @@
         </div>
       </div>
     </div>
-    <div class="centre">
-      <h1>Signed In Success</h1>
-    </div>
+    <h1>Signed In Success</h1>
+    <button id="LogOutBtn" class="btn">Log Out</button><br>
+    <button onclick="parent.location='setUpGame.html'" class="btn">Create NewGame</button>
   </body>
   <footer>
     <script src="external/jquery-2.1.4.min.js"></script>
     <script src="external/bootstrap.min.js"></script>
     <script src="external/knockout-3.3.0.js"></script>
+    <script src="external/jquery-ui.min.js"></script>
+    <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/home.js"></script>
     <script src="js/server.js"></script>
   </footer>
 </html>

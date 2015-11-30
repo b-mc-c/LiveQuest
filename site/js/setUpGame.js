@@ -5,9 +5,19 @@ var viewModel = {
 	NewGameNameError: ko.observableArray(),
 	NewGameTimeError : ko.observableArray(),
 	fishingGold : ko.observable("50"),
-	fishingRange :ko.observable("50"),
+	fishingRange : ko.observable("100"),
 	hammerGold : ko.observable("50"),
-	hammerRange :ko.observable("50"),
+	hammerRange : ko.observable("100"),
+	diggerGold : ko.observable("50"),
+	diggerRange : ko.observable("100"),
+	thievesGold : ko.observable("50"),
+	thievesRange : ko.observable("100"),
+	bookGold : ko.observable("50"),
+	bookRange : ko.observable("100"),
+	basketGold : ko.observable("50"),
+	basketRange : ko.observable("100"),
+	pocketGold : ko.observable("50"),
+	chainGold : ko.observable("50"),
 }
 
 $(document).ready(function(){
@@ -28,11 +38,19 @@ $(document).ready(function(){
 
 
 	 $(function() {
-    $( "#GoldHammer, #RangeHammer,#GoldFishing, #RangeFishing").slider({
+    $( "#GoldHammer, #GoldFishing, #GoldDigger, #GoldThieves, #GoldBook, #GoldBasket, #GoldPocket, #GoldChain").slider({
       orientation: "horizontal",
       range: "min",
       max: 100,
       value: 50,
+      slide: refresh,
+      change: refresh
+    });
+    $( "#RangeHammer, #RangeFishing, #RangeDigger , #RangeThieves, #RangeBook, #RangeBasket").slider({
+      orientation: "horizontal",
+      range: "min",
+      max: 200,
+      value: 100,
       slide: refresh,
       change: refresh
     });
@@ -45,6 +63,16 @@ function refresh() {
     viewModel.fishingRange( $("#RangeFishing").slider( "value" ));
     viewModel.hammerGold( $("#GoldHammer").slider( "value" ));
     viewModel.hammerRange( $("#RangeHammer").slider( "value" ));
+    viewModel.diggerGold( $("#GoldDigger").slider( "value" ));
+    viewModel.diggerRange( $("#RangeDigger").slider( "value" ));
+    viewModel.thievesGold( $("#GoldThieves").slider( "value" ));
+    viewModel.thievesRange( $("#RangeThieves").slider( "value" ));
+    viewModel.bookGold( $("#GoldBook").slider( "value" ));
+    viewModel.bookRange( $("#RangeBook").slider( "value" ));
+    viewModel.basketGold( $("#GoldBasket").slider( "value" ));
+    viewModel.basketRange( $("#RangeBasket").slider( "value" ));
+	viewModel.chainGold( $("#GoldChain").slider( "value" ));
+	viewModel.pocketGold( $("#GoldPocket").slider( "value" ));
   }
 
 
