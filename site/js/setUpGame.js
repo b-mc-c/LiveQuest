@@ -20,8 +20,14 @@ var viewModel = {
 	chainGold : ko.observable("50"),
 }
 
+var item = "Name : , Gold : , Range : ";
+var dropPin = false;
+var image = "img/chainIcon.png";
+
+
 $(document).ready(function(){
 
+	initMap();
 	$("#LogOutBtn").click(function(){
 		message = {}
 		message["LOGOUT"] = "LogOut";
@@ -35,8 +41,47 @@ $(document).ready(function(){
 			ws.send(JSON.stringify(message));
 		}
 	});
-
-
+	/*Click events for placing items */
+	$("#chainButton").click(function(){
+		item = "Name : Purse Chain , Gold : " + viewModel.chainGold();
+		dropPin = true;
+		image = "img/chainIcon.png";
+	});
+	$("#pocketButton").click(function(){
+		item = "Name : Fake Pocket , Gold : " + viewModel.pocketGold();
+		dropPin = true;
+		image = "img/pocketIcon.png";
+	});
+	$("#hammerButton").click(function(){
+		item = "Name : Mc Hammer , Gold : " + viewModel.hammerGold() + ", Range : " + viewModel.hammerRange() + "m";
+		dropPin = true;
+		image = "img/MCHammerIcon.png";
+	});
+	$("#rodButton").click(function(){
+		item = "Name : Fishing rod , Gold : " + viewModel.fishingGold() + ", Range : " + viewModel.fishingRange() + "m";
+		dropPin = true;
+		image = "img/fishing-rodIcon.png";
+	});
+	$("#diggerButton").click(function(){
+		item = "Name : Gold Digger , Gold : " + viewModel.diggerGold() + ", Range : " + viewModel.diggerRange() + "m";
+		dropPin = true;
+		image = "img/gold_diggerIcon.png";
+	});
+	$("#aliButton").click(function(){
+		item = "Name : 40 Thieves , Gold : " + viewModel.thievesGold() + ", Range : " + viewModel.thievesRange() + "m";
+		dropPin = true;
+		image = "img/thievesIcon.png";
+	});
+	$("#bookButton").click(function(){
+		item = "Name : Oldest trick in the book , Gold : " + viewModel.bookGold() + ", Range : " + viewModel.bookRange() + "m";
+		dropPin = true;
+		image = "img/bookIcon.png";
+	});
+	$("#basketButton").click(function(){
+		item = "Name : Baby in a Basket , Gold : " + viewModel.basketGold() + ", Range : " + viewModel.basketRange() + "m";
+		dropPin = true;
+		image = "img/basketIcon.png";
+	});
 	 $(function() {
     $( "#GoldHammer, #GoldFishing, #GoldDigger, #GoldThieves, #GoldBook, #GoldBasket, #GoldPocket, #GoldChain").slider({
       orientation: "horizontal",
@@ -75,7 +120,10 @@ function refresh() {
 	viewModel.pocketGold( $("#GoldPocket").slider( "value" ));
   }
 
-
+function mapClicked(e)
+{
+	alert("map clicked");
+}
 
 
 function Receive(data)
@@ -145,5 +193,64 @@ function ClearAllErrors()
 	viewModel["NewGameTimeError"].removeAll();
 	
 }
+
+function initMap()  {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else 
+    { 
+        alert( "Geolocation is not supported by this browser.");
+        var myLatLng = {lat: -25.363, lng: 131.044};
+		var map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 4,
+		center: myLatLng
+		});
+	}
+}
+
+function showPosition(position) {//initiate the google maps centred on my position
+	var myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
+	var map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 16,
+	center: myLatLng
+	});
+	var marker = new google.maps.Marker({
+		position: myLatLng,
+		map: map,
+		title: 'Your ass is here.'
+		});
+	google.maps.event.addListener(map, 'click', function( event ){
+ 	//alert( "Latitude: "+event.latLng.lat()+" "+", longitude: "+ event.latLng.lng() ); 
+	 	if(dropPin)
+	 	{
+			var myLatLng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+		 	var marker = new google.maps.Marker({
+				position: myLatLng,
+				map: map,
+				title: item,
+				icon: image
+				});
+		 	dropPin = false;
+	 	}
+	});
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+           alert("User denied the request for Geolocation.")
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert( "Location information is unavailable.")
+            break;
+        case error.TIMEOUT:
+            alert( "The request to get user location timed out.")
+            break;
+        case error.UNKNOWN_ERROR:
+            alert( "An unknown error occurred.")
+            break;
+    }
+}
+
 
 ko.applyBindings(viewModel);
