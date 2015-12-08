@@ -3,23 +3,16 @@ html
 	head
 		include commonLinks.jade
 		title
-			|Bmcc-Home
+			|Play
 	body.homeBody
 		include navbar.jade
-		.col-md-12
-			button.btn#LogOutBtn
-				|Log Out
 		.col-md-6
-			include NewGame.jade
-			include itemCarousel.jade
-		.col-md-6
+			span(data-bind="text : ItemInfo")
 			include map.jade
 
 	footer
 		include commonScripts.jade
-		script(src="js/setUpGame.js")
+		script(src="js/PlayGame.js")
 		script(src="js/server.js")
-		script(src="js/map.js")
-
-
+		
 

@@ -8,7 +8,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*******', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*****', 'DB' : 'livequest'}
 connections = {}
 
 
@@ -49,6 +49,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				LogOut(self)
 			if 'CREATENEWGAME' in data.keys():
 				CreateNewGame(self, data["CREATENEWGAME"])
+			if 'ITEMLOCATIONS' in data.keys():
+				GetItemLocations(self, data["ITEMLOCATIONS"])
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -205,6 +207,28 @@ def CreateNewGame(connection, data):
 			cursor.execute(SQL)
 			gameID = cursor.fetchone()
 		print("GameID : ", gameID[0])
+		with MyUtils.UseDatabase(config) as cursor:		
+			SQL = '''CREATE TABLE Game_%i_Items ( id INT NOT NULL AUTO_INCREMENT,
+					ItemIdentifier INT NOT NULL,
+					Name varchar(50) NOT NULL,
+					Gold INT NOT NULL,
+					PickUpRange INT NOT NULL,
+					Lat DOUBLE(25,20) NOT NULL,
+					Lng DOUBLE(25,20) NOT NULL,
+					PickedUp BOOLEAN NOT NULL,
+					User INT,
+					Alive bool NOT NULL,
+					PRIMARY KEY (id))'''% (gameID[0])
+			cursor.execute(SQL)
+		print ("Creaed Table : Game_%i_Items", gameID[0])
+		placedItems = data["placedItems"]
+		for item in  placedItems:
+			it = placedItems[item]
+			print("Adding Item : ", it )
+			with MyUtils.UseDatabase(config) as cursor:	
+				SQL = '''INSERT INTO Game_%i_Items (ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
+											VALUES ( %i , "%s",%i , %i, %.20f , %.20f , 0, 1)'''% (gameID[0], it["Item"], it["Name"], it["Gold"], it["Range"], it["Lat"], it["Lng"])
+				cursor.execute(SQL)
 		message["GAMECREATEDSUCCESS"] = gameID[0]
 		sendToPlayer(connection,message)
 	else:
@@ -212,7 +236,24 @@ def CreateNewGame(connection, data):
 		message["ERROR"] = "INVALIDCHARSNEWGAME"
 		sendToPlayer(connection,message)
 
-
+def GetItemLocations(connection, data):
+	message = {}
+	gameId = data["GameId"]
+	print("checking if table game_", gameId ,"_items exists")
+	with MyUtils.UseDatabase(config) as cursor:		
+		SQL = '''SHOW TABLES LIKE 'Game_%i_Items';'''% (gameId)
+		cursor.execute(SQL)
+		result = cursor.fetchone()
+	if result == None:
+		print("Table does not exist")
+	else:
+		print("Found table")
+		with MyUtils.UseDatabase(config) as cursor:		
+			SQL = '''SELECT * FROM Game_%i_Items;'''% (gameId)
+			cursor.execute(SQL)
+			result = cursor.fetchall()
+		message["ITEMSFOUND"] = result
+		sendToPlayer(connection,message)
 #validate the data the ensure character which could allow users to modify mysql database are not present 
 def validateCharacter(val):
 	if ";" in val:

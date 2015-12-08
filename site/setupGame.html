@@ -75,7 +75,8 @@
               <div class="itemImage"><img src="img/chain.png" alt="chain Slide" width="200" height="200" class="centreItem"></div>
               <div class="itemDescription">Prevents your purse from being stolen but snaps after one use</div>
               <div class="itemSliders"><span>Gold : <span data-bind="text : chainGold"></span>
-                  <div id="GoldChain" class="Gold"></div></span></div><br>
+                  <div id="GoldChain" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : chainRange"></span>m
+                  <div id="RangeChain" class="Range"></div></span></div><br>
               <div class="itemBtns">
                 <button id="chainButton" class="btn">Place</button>
               </div>
@@ -85,7 +86,8 @@
               <div class="itemImage"><img src="img/pocket.png" alt="basket Slide" width="200" height="200" class="centreItem"></div>
               <div class="itemDescription">A fake pocket sewn into you jacket fools potential thieves attempting to relieve you of your gold.<br></div>
               <div class="itemSliders"><span>Gold : <span data-bind="text : pocketGold"></span>
-                  <div id="GoldPocket" class="Gold"></div></span></div><br>
+                  <div id="GoldPocket" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : pocketRange"></span>m
+                  <div id="RangePocket" class="Range"></div></span></div><br>
               <div class="itemBtns">
                 <button id="pocketButton" class="btn">Place</button>
               </div>
@@ -173,9 +175,9 @@
     <script src="external/knockout-3.3.0.js"></script>
     <script src="external/jquery-ui.min.js"></script>
     <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="external/jquery.animateSprite.min.js"></script>
     <script src="js/setUpGame.js"></script>
     <script src="js/server.js"></script>
     <script src="js/map.js"></script>
-    <script src="external/jquery.animateSprite.min.js"></script>
   </footer>
 </html>
