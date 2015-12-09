@@ -2,7 +2,8 @@
 var viewModel = {
 	currentPageName : ko.observable("Set Up Game"),
 	menuOptions : ko.observableArray([{name:"Set Up Game",url:"setUpGame.html",_class:"active"},
-									{name:"Home",url:"home.html",_class:""},]),
+									{name:"Home",url:"home.html",_class:""},
+									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	NewGameNameError: ko.observableArray(),
 	NewGameTimeError : ko.observableArray(),
 	fishingGold : ko.observable("50"),
@@ -37,12 +38,6 @@ var itemId = 0; // increments each time an item is added to markers
 $(document).ready(function(){
 
 	initMap();/*Call initialise map when page is loaded*/
-	/* Log out button click*/
-	$("#LogOutBtn").click(function(){
-		message = {}
-		message["LOGOUT"] = "LogOut";
-		ws.send(JSON.stringify(message));
-	});/*End Log out button click*/
 	/* Create new game button click*/
 	$("#CreateNewGame").click(function(){
 		if(validateNewGame())
@@ -57,42 +52,50 @@ $(document).ready(function(){
 		item = {Name : "Purse Chain", ID : 1 , Gold : viewModel.chainGold() , Range : viewModel.chainRange()};
 		dropPin = true;
 		image = "img/chainIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#pocketButton").click(function(){
 		item = {Name : "Fake Pocket", ID : 2 , Gold : viewModel.pocketGold() , Range : viewModel.pocketRange()};
 		dropPin = true;
 		image = "img/pocketIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#hammerButton").click(function(){
 		item = {Name : "Mc Hammer", ID : 3 , Gold : viewModel.hammerGold() , Range : viewModel.hammerRange()};
 		dropPin = true;
 		image = "img/MCHammerIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#rodButton").click(function(){
 		item = {Name : "Fishing rod", ID : 4 , Gold : viewModel.fishingGold() , Range : viewModel.fishingRange()};
 		dropPin = true;
 		image = "img/fishing-rodIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#diggerButton").click(function(){
 		item = {Name : "Gold Digger", ID : 5 , Gold : viewModel.diggerGold() , Range : viewModel.diggerRange()};
 		dropPin = true;
 		image = "img/gold_diggerIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#aliButton").click(function(){
 		item = {Name : "40 Thieves", ID : 6 , Gold : viewModel.thievesGold() , Range : viewModel.thievesRange()};
 		dropPin = true;
 		image = "img/thievesIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#bookButton").click(function(){
 		item = {Name : "Oldest trick in the book ", ID : 7 , Gold : viewModel.bookGold() , Range : viewModel.bookRange()};
 	
 		dropPin = true;
 		image = "img/bookIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	$("#basketButton").click(function(){
 		item = {Name : "Baby in a Basket ", ID : 8 , Gold : viewModel.basketGold() , Range : viewModel.basketRange()};
 		dropPin = true;
 		image = "img/basketIcon.png";
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
 	});
 	/*End Click events for placing items */
 	/*sets up the sliders*/
@@ -108,6 +111,7 @@ $(document).ready(function(){
 	    $( "#RangeHammer, #RangeFishing, #RangeDigger , #RangeThieves, #RangeBook, #RangeBasket, #RangePocket,#RangeChain").slider({
 	      orientation: "horizontal",
 	      range: "min",
+	      min: 5,
 	      max: 200,
 	      value: 100,
 	      slide: refresh,

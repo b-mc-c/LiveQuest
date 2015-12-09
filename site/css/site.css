@@ -1,8 +1,8 @@
 body
 {
-	background-color: #FFF7D6; 
-	color: #7F3300;
-	font-family: Impact, sans-serif;
+	background-color: white; 
+	color: black;
+	font-family: Arial, sans-serif;
 	font-size: large;
 }
 .homeBody
@@ -34,6 +34,12 @@ body
 	margin-bottom: 25px;
 	margin-top: 25px;
 }
+.centreHorz
+{
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+}
 .centre
 {
     position: fixed;
@@ -42,7 +48,7 @@ body
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-td
+td, th
 {
 	text-align: left;
 	vertical-align: top;
@@ -82,8 +88,8 @@ iframe
 {
 	width : 100%;
 	min-height : 500px;
-	background-color : #7F3300;
-	color : #FFF7D6;
+	background-color : #4CAF50;
+	color : white;
 }
 .centreItem
 {
@@ -113,3 +119,46 @@ iframe
   .Gold .ui-slider-handle { border-color: #FFD700; }
   .Range .ui-slider-range { background: #8ae234; }
   .Range .ui-slider-handle { border-color: #8ae234; }
+
+
+.gamesTable
+{
+	font-family: Arial;
+    font-size: medium;
+    width: 100%;
+    max-width: 500px;
+    border:1px solid #4CAF50;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    -moz-border-radius: 5px;
+}
+.gamesTableHead
+{
+	background-color:#4CAF50 ; 
+	color: white;
+}
+.gamesTableBody tr:nth-child(even)
+{
+   background-color: #f2f2f2;
+}
+.gamesTableBody tr:nth-child(odd)
+{
+   background-color: white;
+}
+/* the first 'th' within the first 'tr' of the 'thead': */
+thead tr:first-child th:first-child {
+    border-radius: 10px 0 0 0;
+}
+/* the last 'th' within the first 'tr' of the 'thead': */
+thead tr:first-child th:last-child {
+    border-radius: 0 10px 0 0;
+}
+/* the first 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 10px;
+}
+/* the last 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:last-child {
+    border-radius: 0 0 10px 0;
+}

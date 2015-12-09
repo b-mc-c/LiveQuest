@@ -8,7 +8,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*****', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '****', 'DB' : 'livequest'}
 connections = {}
 
 
@@ -51,6 +51,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				CreateNewGame(self, data["CREATENEWGAME"])
 			if 'ITEMLOCATIONS' in data.keys():
 				GetItemLocations(self, data["ITEMLOCATIONS"])
+			if 'GETGAMES' in data.keys():
+				GetAllGames(self, data["GETGAMES"])
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -154,8 +156,12 @@ def SignUp(connection,data):
 				connectionCount = cursor.fetchone()
 			if connectionCount[0] == 0:
 				print("User not in Connection table, adding to table")
+				with MyUtils.UseDatabase(config) as cursor:		
+					SQL = '''SELECT id FROM Users WHERE username ="%s"'''% (data["userName"])
+					cursor.execute(SQL)
+					userId = cursor.fetchone()
 				with MyUtils.UseDatabase(config) as cursor:	
-					SQL = '''INSERT INTO Connections (userID , IpKey) VALUES ( %i , "%s")'''% (the_data[0], connection.request.remote_ip)
+					SQL = '''INSERT INTO Connections (userID , IpKey) VALUES ( %i , "%s")'''% (userId[0] , connection.request.remote_ip)
 					cursor.execute(SQL)
 				print("Added to Connection table")
 			else:
@@ -198,7 +204,7 @@ def CreateNewGame(connection, data):
 			userID = cursor.fetchone()
 		print("Creating game in db")
 		with MyUtils.UseDatabase(config) as cursor:	
-			SQL = '''INSERT INTO games (GameName , GameEndTime, HostId) VALUES ( "%s" , "%s",%i)'''% (data["GameName"], data["EndTime"], userID[0])
+			SQL = '''INSERT INTO games (GameName , GameEndTime, HostId, active) VALUES ( "%s" , "%s",%i, 1)'''% (data["GameName"], data["EndTime"], userID[0])
 			cursor.execute(SQL)
 		print("Added to Games table")
 		print("Getting game id")
@@ -207,27 +213,13 @@ def CreateNewGame(connection, data):
 			cursor.execute(SQL)
 			gameID = cursor.fetchone()
 		print("GameID : ", gameID[0])
-		with MyUtils.UseDatabase(config) as cursor:		
-			SQL = '''CREATE TABLE Game_%i_Items ( id INT NOT NULL AUTO_INCREMENT,
-					ItemIdentifier INT NOT NULL,
-					Name varchar(50) NOT NULL,
-					Gold INT NOT NULL,
-					PickUpRange INT NOT NULL,
-					Lat DOUBLE(25,20) NOT NULL,
-					Lng DOUBLE(25,20) NOT NULL,
-					PickedUp BOOLEAN NOT NULL,
-					User INT,
-					Alive bool NOT NULL,
-					PRIMARY KEY (id))'''% (gameID[0])
-			cursor.execute(SQL)
-		print ("Creaed Table : Game_%i_Items", gameID[0])
 		placedItems = data["placedItems"]
 		for item in  placedItems:
 			it = placedItems[item]
 			print("Adding Item : ", it )
 			with MyUtils.UseDatabase(config) as cursor:	
-				SQL = '''INSERT INTO Game_%i_Items (ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
-											VALUES ( %i , "%s",%i , %i, %.20f , %.20f , 0, 1)'''% (gameID[0], it["Item"], it["Name"], it["Gold"], it["Range"], it["Lat"], it["Lng"])
+				SQL = '''INSERT INTO Game_Items (GameId, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
+											VALUES ( %i, %i , "%s",%i , %i, %.20f , %.20f , 0, 1)'''% (gameID[0], it["Item"], it["Name"], it["Gold"], it["Range"], it["Lat"], it["Lng"])
 				cursor.execute(SQL)
 		message["GAMECREATEDSUCCESS"] = gameID[0]
 		sendToPlayer(connection,message)
@@ -239,21 +231,50 @@ def CreateNewGame(connection, data):
 def GetItemLocations(connection, data):
 	message = {}
 	gameId = data["GameId"]
-	print("checking if table game_", gameId ,"_items exists")
 	with MyUtils.UseDatabase(config) as cursor:		
-		SQL = '''SHOW TABLES LIKE 'Game_%i_Items';'''% (gameId)
+		SQL = '''SELECT * FROM Game_Items WHERE GameId = %i AND pickedUp = 0 AND Alive > 0;'''% (gameId)
 		cursor.execute(SQL)
-		result = cursor.fetchone()
-	if result == None:
-		print("Table does not exist")
-	else:
-		print("Found table")
-		with MyUtils.UseDatabase(config) as cursor:		
-			SQL = '''SELECT * FROM Game_%i_Items;'''% (gameId)
+		result = cursor.fetchall()
+	message["ITEMSFOUND"] = result
+	sendToPlayer(connection,message)
+
+def GetAllGames(connection, data):
+	print("Getting all games for : ",connection.request.remote_ip)
+	message = {}
+	print("Getting userId ")
+	with MyUtils.UseDatabase(config) as cursor:		
+		SQL = '''SELECT userID FROM Connections WHERE IpKey ="%s"'''% (connection.request.remote_ip)
+		cursor.execute(SQL)
+		userID = cursor.fetchone()
+	print("Getting active games hosted by user : ", userID[0])
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT id ,GameName, GameEndTime FROM games WHERE  HostId = %i AND active = 1'''% (userID[0])
+		cursor.execute(SQL)
+		tempHostGames = cursor.fetchall()
+	hostGames = []
+	for game in  tempHostGames:
+		temp = {"id" : game[0], "name" : game[1], "time" : game[2].strftime("%I:%M%p on %B %d, %Y")}
+		print(temp)
+		hostGames.append(temp)
+	print("Getting all active games")
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT id ,GameName, GameEndTime, HostId FROM games WHERE active = 1'''
+		cursor.execute(SQL)
+		tempAllGames = cursor.fetchall()
+	allGames = []
+	for game in  tempAllGames:
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''SELECT userName FROM users WHERE id = %i'''% (game[3])
+			print(SQL)
 			cursor.execute(SQL)
-			result = cursor.fetchall()
-		message["ITEMSFOUND"] = result
-		sendToPlayer(connection,message)
+			hostName = cursor.fetchone()
+		temp = {"id" : game[0], "name" : game[1], "time" : game[2].strftime("%I:%M%p on %B %d, %Y"),"host":hostName[0]}
+		print(temp)
+		allGames.append(temp)
+	message["GAMESLIST"] = {"myHostedGames" : hostGames, "availableGames" : allGames,}
+	sendToPlayer(connection,message)
+
+
 #validate the data the ensure character which could allow users to modify mysql database are not present 
 def validateCharacter(val):
 	if ";" in val:

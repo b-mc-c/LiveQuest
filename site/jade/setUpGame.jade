@@ -3,16 +3,14 @@ html
 	head
 		include commonLinks.jade
 		title
-			|Bmcc-Home
+			|LiveQuest-SetUpGame
 	body.homeBody
 		include navbar.jade
 		.col-md-12
-			button.btn#LogOutBtn
-				|Log Out
-		.col-md-6
 			include NewGame.jade
-			include itemCarousel.jade
 		.col-md-6
+			include itemCarousel.jade
+		.col-md-6(style="padding-top: 20px;")
 			include map.jade
 
 	footer

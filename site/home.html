@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="external/jquery-ui.min.css">
-    <title>Bmcc-Home</title>
+    <title>LiveQuest-Home</title>
   </head>
   <body class="homeBody">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -19,9 +19,50 @@
         </div>
       </div>
     </div>
-    <h1>Signed In Success</h1>
-    <button id="LogOutBtn" class="btn">Log Out</button><br>
-    <button onclick="parent.location='setUpGame.html'" class="btn">Create NewGame</button>
+    <div class="col-md-12"><br>
+      <div class="centreHorz">
+        <button onclick="parent.location='setUpGame.html'" class="btn">Create NewGame</button>
+      </div><br>
+      <table class="gamesTable centreHorz">
+        <thead class="gamesTableHead">
+          <tr>
+            <th>All Activae Games</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Game name</th>
+            <th>Game End</th>
+            <th>Host</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: availableGames" class="gamesTableBody">
+          <tr>
+            <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+            <td data-bind="text: end"></td>
+            <td data-bind="text: hostName"></td>
+          </tr>
+        </tbody>
+      </table><br>
+      <table class="gamesTable centreHorz">
+        <thead class="gamesTableHead">
+          <tr>
+            <th>My Activae Games</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Game name</th>
+            <th>Game End</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: myHostedGames" class="gamesTableBody">
+          <tr>
+            <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+            <td data-bind="text: end"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
   <footer>
     <script src="external/jquery-2.1.4.min.js"></script>

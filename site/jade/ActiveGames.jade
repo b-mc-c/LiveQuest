@@ -1,0 +1,17 @@
+table.gamesTable.centreHorz
+	thead.gamesTableHead
+		tr
+			th
+				|All Activae Games
+			th
+			th
+		tr
+			th Game name
+			th Game End
+			th Host
+	tbody.gamesTableBody(data-bind='foreach: availableGames')
+		tr
+			td
+				a(data-bind='text: Name , attr: { href: url}' )
+			td(data-bind='text: end')
+			td(data-bind='text: hostName')

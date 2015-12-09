@@ -1,0 +1,49 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|LiveQuest-LogOut
+	body.homeBody
+		include navbar.jade
+		.centre.centreHorz
+			h1
+				|Are you sure you want to log out?
+			button.btn#LogOutBtn
+				|Yes
+			button.btn(onclick="parent.location='home.html'")
+				|No
+	footer
+		include commonScripts.jade
+		script.
+			var viewModel = {
+				currentPageName : ko.observable("LogOut"),
+				menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:""},
+												{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+			}
+			$(document).ready(function(){
+
+			$("#LogOutBtn").click(function(){
+				message = {}
+				message["LOGOUT"] = "LogOut";
+				ws.send(JSON.stringify(message));
+			});
+			});//end document ready
+
+			function Receive(data)
+			{
+				console.log(data);
+				if(data["SIGNEDIN"])
+				{
+					if(data["SIGNEDIN"].localeCompare("NOTSIGNEDIN")==0)
+					{
+						document.location.href = "index.html";
+					}
+				}
+				if(data["LOGGEDOUT"])
+				{
+					document.location.href = "index.html";
+				}
+			}
+			ko.applyBindings(viewModel);
+		script(src="js/server.js")

@@ -1,7 +1,8 @@
 var viewModel = {
 	currentPageName : ko.observable("Set Up Game"),
 	menuOptions : ko.observableArray([{name:"Set Up Game",url:"setUpGame.html",_class:"active"},
-									{name:"Home",url:"home.html",_class:""},]),
+									{name:"Home",url:"home.html",_class:""},
+									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	ItemInfo: ko.observable(""),
 }
 var gameId = parseInt(window.location.hash.substring(1));
@@ -114,12 +115,12 @@ function placeItemsOnMap(MapItems)
 {
 	for (i = 0; i < MapItems.length; i++) 
 	{
-		var myLatLng = {lat: MapItems[i][5], lng: MapItems[i][6]};
+		var myLatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
 		var marker = new google.maps.Marker({
 		position: myLatLng,
 		map: map,
 		icon: "img/chestIcon.png",
-		title: 'Gold : ' + MapItems[i][3] + ", Pickup range : " + MapItems[i][4] + "m"
+		title: 'Gold : ' + MapItems[i][4] + ", Pickup range : " + MapItems[i][5] + "m"
 		});
 		markers.push(marker);
 

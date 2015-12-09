@@ -1,0 +1,15 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Game name</th>
+      <th>Game End</th>
+    </tr>
+  </thead>
+  <tbody data-bind="foreach: myHostedGames">
+    <tr>
+      <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+      <td data-bind="text: end"></td>
+    </tr>
+  </tbody>
+</table>

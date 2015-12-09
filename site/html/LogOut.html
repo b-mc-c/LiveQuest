@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="external/jquery-ui.min.css">
-    <title>Bmcc-Home</title>
+    <title>LogOut</title>
   </head>
   <body class="homeBody">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -19,8 +19,10 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12">
-      <h1>Game Id = <span data-bind="text: gameID"></span></h1>
+    <div class="centre">
+      <h1>Are you sure you want to log out?</h1>
+      <button id="LogOutBtn" class="btn">Log Out</button>
+      <button onclick="parent.location='setUpGame.html'" class="btn">Yes</button>
     </div>
   </body>
   <footer>
@@ -30,7 +32,36 @@
     <script src="external/jquery-ui.min.js"></script>
     <script src="external/jquery.ui.touch-punch.min.js"></script>
     <script src="external/jquery.animateSprite.min.js"></script>
-    <script src="js/addPlayers.js"></script>
+    <script>
+      var viewModel = {
+      	currentPageName : ko.observable("LogOut"),
+      	menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:""},
+      									{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+      }
+      $(document).ready(function(){
+      
+      $("#LogOutBtn").click(function(){
+      	message = {}
+      	message["LOGOUT"] = "LogOut";
+      	ws.send(JSON.stringify(message));
+      });
+      ko.applyBindings(viewModel);
+      function Receive(data)
+      {
+      	console.log(data);
+      	if(data["SIGNEDIN"])
+      	{
+      		if(data["SIGNEDIN"].localeCompare("NOTSIGNEDIN")==0)
+      		{
+      			document.location.href = "index.html";
+      		}
+      	}
+      	if(data["LOGGEDOUT"])
+      	{
+      		document.location.href = "index.html";
+      	}
+      }
+    </script>
     <script src="js/server.js"></script>
   </footer>
 </html>
