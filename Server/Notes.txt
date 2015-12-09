@@ -1,0 +1,5 @@
+//To copy table constructors from datbase 
+mysqldump -u liveQuestServer -p -d livequest  > DataBaseConstructor.txt
+
+//To copy table constructors into database
+mysql -u liveQuestServer -p livequest< DataBaseConstructor.txt
