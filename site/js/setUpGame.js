@@ -112,7 +112,7 @@ $(document).ready(function(){
 	      orientation: "horizontal",
 	      range: "min",
 	      min: 5,
-	      max: 200,
+	      max: 500,
 	      value: 100,
 	      slide: refresh,
 	      change: refresh
