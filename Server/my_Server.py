@@ -239,6 +239,7 @@ def GetItemLocations(connection, data):
 	sendToPlayer(connection,message)
 
 def GetAllGames(connection, data):
+	DeActivateOldGames()
 	print("Getting all games for : ",connection.request.remote_ip)
 	message = {}
 	print("Getting userId ")
@@ -248,7 +249,7 @@ def GetAllGames(connection, data):
 		userID = cursor.fetchone()
 	print("Getting active games hosted by user : ", userID[0])
 	with MyUtils.UseDatabase(config) as cursor:	
-		SQL = '''SELECT id ,GameName, GameEndTime FROM games WHERE  HostId = %i AND active = 1'''% (userID[0])
+		SQL = '''SELECT id ,GameName, GameEndTime FROM games WHERE  HostId = %i AND active = 1 AND GameEndTime > now()'''% (userID[0])
 		cursor.execute(SQL)
 		tempHostGames = cursor.fetchall()
 	hostGames = []
@@ -258,7 +259,7 @@ def GetAllGames(connection, data):
 		hostGames.append(temp)
 	print("Getting all active games")
 	with MyUtils.UseDatabase(config) as cursor:	
-		SQL = '''SELECT id ,GameName, GameEndTime, HostId FROM games WHERE active = 1'''
+		SQL = '''SELECT id ,GameName, GameEndTime, HostId FROM games WHERE active = 1 AND GameEndTime > now()'''
 		cursor.execute(SQL)
 		tempAllGames = cursor.fetchall()
 	allGames = []
@@ -273,6 +274,20 @@ def GetAllGames(connection, data):
 		allGames.append(temp)
 	message["GAMESLIST"] = {"myHostedGames" : hostGames, "availableGames" : allGames,}
 	sendToPlayer(connection,message)
+
+
+def DeActivateOldGames():
+	print("Checking for expired Games that are still marked as active")
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT id  FROM games WHERE active = 1 AND GameEndTime < now()'''
+		cursor.execute(SQL)
+		expiredGames = cursor.fetchall()
+	print("expired Games : ", expiredGames)
+	for game in expiredGames:
+		print("Deactivating game : ", game[0])
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
+			cursor.execute(SQL)
 
 
 #validate the data the ensure character which could allow users to modify mysql database are not present 

@@ -23,7 +23,7 @@ var viewModel = {
 	chainGold : ko.observable("50"),
 	chainRange : ko.observable("100"),
 }
-
+var FIREFOX = /Firefox/i.test(navigator.userAgent);
 /* Info for markers being placed on map */
 var item = {Name : "Purse Chain", ID : 1 , Gold : viewModel.chainGold() , Range : viewModel.chainRange()};//{Name : ,ID :,  Gold : , Range : };
 var dropPin = false; // pins can only be placed when dropPin is true 
@@ -37,6 +37,9 @@ var itemId = 0; // increments each time an item is added to markers
 /* Function gets called when page loaded */
 $(document).ready(function(){
 
+	if (FIREFOX) {
+		viewModel["NewGameTimeError"].push("Enter DateTime format yyyy-mm-ddThh:mm exmp '2015-01-01T00:00'")
+	}
 	initMap();/*Call initialise map when page is loaded*/
 	/* Create new game button click*/
 	$("#CreateNewGame").click(function(){
@@ -198,8 +201,12 @@ function validateNewGame()
 	//get data from input 
 	var Name = $("#NewGameName").val();
 	var dt = $("#NewgameEndTime").val();
+	var now = new Date();
 	//bool if true message passes all  validation
 	var canSend = true;
+	if (FIREFOX) {
+		viewModel["NewGameTimeError"].push("Enter DateTime format yyyy-mm-ddThh:mm exmp '2015-01-01T00:00'")
+	}
 	if (Name == "" || Name == null) //validae that username is not empty
 	{
 		viewModel["NewGameNameError"].push("Please enter a Game Name");
