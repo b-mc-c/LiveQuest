@@ -50,12 +50,12 @@ function SetGames(data)
 	var h = data["myHostedGames"]
 	for (i = 0; i < a.length; i++) 
 	{
-		var temp = {Name:a[i]["name"],end:a[i]["time"],url:"PlayGame.html#" + a[i]["id"], hostName: a[i]["host"]};
+		var temp = {Name:a[i]["name"],end:a[i]["time"],url:"ViewGame.html#" + a[i]["id"], hostName: a[i]["host"]};
 		viewModel.availableGames.push(temp);
 	}
 	for (i = 0; i < h.length; i++) 
 	{
-		var temp = {Name:h[i]["name"],end:h[i]["time"],url:"PlayGame.html#" + h[i]["id"]};
+		var temp = {Name:h[i]["name"],end:h[i]["time"],url:"ViewGame.html#" + h[i]["id"]};
 		viewModel.myHostedGames.push(temp);
 	}
 }

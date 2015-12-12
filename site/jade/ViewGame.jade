@@ -1,0 +1,25 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|LiveQuest-View game
+	body.homeBody
+		include navbar.jade
+		.centreHorz
+			button.spacedOut10.btn.btn-success(data-bind="click: JoinGame")
+				|Play
+			br
+			div(data-bind="visible: showChangeCharcter")
+				button.spacedOut10.btn(onclick="UpdateMyIcon(-1)")
+					|&lt;&lt;
+				span
+					|Player Icon
+				button.spacedOut10.btn(onclick="UpdateMyIcon(1)")
+					|&gt;&gt; 
+		include map.jade
+	footer
+		include commonScripts.jade
+		script(src="js/viewGame.js")
+		script(src="js/server.js")
+		

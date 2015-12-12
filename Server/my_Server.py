@@ -8,7 +8,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '****', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*******', 'DB' : 'livequest'}
 connections = {}
 
 
@@ -53,6 +53,10 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				GetItemLocations(self, data["ITEMLOCATIONS"])
 			if 'GETGAMES' in data.keys():
 				GetAllGames(self, data["GETGAMES"])
+			if 'ADDPLAYERTOGAME' in data.keys():
+				AddPlayerToGame(self,data['ADDPLAYERTOGAME'])
+			if 'PLAYERICON' in data.keys():
+				getPlayerIcon(self,data['PLAYERICON'])
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -198,18 +202,15 @@ def CreateNewGame(connection, data):
 	print("Validating characters data")
 	if validateCharacter(data["GameName"]) and validateCharacter(data["EndTime"]):
 		print("characters valid")
-		with MyUtils.UseDatabase(config) as cursor:		
-			SQL = '''SELECT userID FROM Connections WHERE IpKey ="%s"'''% (connection.request.remote_ip)
-			cursor.execute(SQL)
-			userID = cursor.fetchone()
+		userID = GetUserId(connection)
 		print("Creating game in db")
 		with MyUtils.UseDatabase(config) as cursor:	
-			SQL = '''INSERT INTO games (GameName , GameEndTime, HostId, active) VALUES ( "%s" , "%s",%i, 1)'''% (data["GameName"], data["EndTime"], userID[0])
+			SQL = '''INSERT INTO games (GameName , GameEndTime, HostId, active) VALUES ( "%s" , "%s",%i, 1)'''% (data["GameName"], data["EndTime"], userID)
 			cursor.execute(SQL)
 		print("Added to Games table")
 		print("Getting game id")
 		with MyUtils.UseDatabase(config) as cursor:		
-			SQL = '''SELECT id FROM games WHERE GameName ="%s" and HostId = %i LIMIT 1'''% (data["GameName"], userID[0])
+			SQL = '''SELECT id FROM games WHERE GameName ="%s" and HostId = %i LIMIT 1'''% (data["GameName"], userID)
 			cursor.execute(SQL)
 			gameID = cursor.fetchone()
 		print("GameID : ", gameID[0])
@@ -242,14 +243,10 @@ def GetAllGames(connection, data):
 	DeActivateOldGames()
 	print("Getting all games for : ",connection.request.remote_ip)
 	message = {}
-	print("Getting userId ")
-	with MyUtils.UseDatabase(config) as cursor:		
-		SQL = '''SELECT userID FROM Connections WHERE IpKey ="%s"'''% (connection.request.remote_ip)
-		cursor.execute(SQL)
-		userID = cursor.fetchone()
-	print("Getting active games hosted by user : ", userID[0])
+	userID = GetUserId(connection)
+	print("Getting active games hosted by user : ", userID)
 	with MyUtils.UseDatabase(config) as cursor:	
-		SQL = '''SELECT id ,GameName, GameEndTime FROM games WHERE  HostId = %i AND active = 1 AND GameEndTime > now()'''% (userID[0])
+		SQL = '''SELECT id ,GameName, GameEndTime FROM games WHERE  HostId = %i AND active = 1 AND GameEndTime > now()'''% (userID)
 		cursor.execute(SQL)
 		tempHostGames = cursor.fetchall()
 	hostGames = []
@@ -289,7 +286,54 @@ def DeActivateOldGames():
 			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
 			cursor.execute(SQL)
 
+def AddPlayerToGame(connection,data):
+	userID = GetUserId(connection)
+	gameID = int(data["GameId"])
+	playericonID = int(data["PlayerIconId"])
+	if IsUserAlreadyInGame(userID, gameID) == False:
+		print("Adding user" , userID , " to game ", data["GameId"])
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''INSERT INTO Game_players (GameId, PlayerId , Gold ,Lat ,Lng ,Alive,PlayerIcon) 
+											VALUES ( %i, %i , 0 ,0 , 0, 1 ,%i)'''% (gameID, userID, playericonID)
+			cursor.execute(SQL)
+		print("Successfully added user" , userID , " to game ", data["GameId"])
+	else:
+		print("User" , userID , "already associated with game ", data["GameId"] , " : Do nothing" )
 
+def getPlayerIcon(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	if IsUserAlreadyInGame(userID, gameId) == True:
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''SELECT PlayerIcon from Game_players WHERE GameId = %i AND PlayerId = %i'''% (gameId, userID)
+			cursor.execute(SQL)
+			icon = cursor.fetchone()
+		message["PLAYERICON"] = icon[0]
+		sendToPlayer(connection,message)
+
+
+def IsUserAlreadyInGame(userId,gameId):
+	print("Checking if user" , userId , " is already associated with game ", gameId )
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT count(*)  FROM Game_Players WHERE PlayerId = %i AND GameId = %i'''% (userId, gameId)
+		cursor.execute(SQL)
+		userCount = cursor.fetchone()
+	if userCount[0] >= 1:
+		return True;
+	else:
+		return False;
+
+
+
+
+def GetUserId(connection):
+	print("Getting userId ")
+	with MyUtils.UseDatabase(config) as cursor:		
+		SQL = '''SELECT userID FROM Connections WHERE IpKey ="%s"'''% (connection.request.remote_ip)
+		cursor.execute(SQL)
+		userID = cursor.fetchone()
+	return userID[0]
 #validate the data the ensure character which could allow users to modify mysql database are not present 
 def validateCharacter(val):
 	if ";" in val:
@@ -309,6 +353,8 @@ def hash_password(password):
 def check_password(hashed_password, user_password):
     password, salt = hashed_password.split(':')
     return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()	
+
+
 
 
 app = tornado.web.Application([

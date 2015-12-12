@@ -1,23 +1,39 @@
 var viewModel = {
 	currentPageName : ko.observable("Play Game"),
-	menuOptions : ko.observableArray([{name:"PlayGame",url:"#"+window.location.hash.substring(1),_class:"active"},
+	menuOptions : ko.observableArray([{name:"ViewGame",url:"#"+window.location.hash.substring(1),_class:"active"},
 									{name:"Home",url:"home.html",_class:""},
 									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	ItemInfo: ko.observable(""),
+	JoinGame : function(){
+
+		//nedd to add player to the game on server 
+		message = {}
+		message["ADDPLAYERTOGAME"] = {"GameId" : window.location.hash.substring(1), "PlayerIconId" : myIconId };
+		ws.send(JSON.stringify(message));
+		document.location.href = "PlayGame.html#"+window.location.hash.substring(1) ;
+	},
+	showChangeCharcter : ko.observable(true),
 }
 var gameId = parseInt(window.location.hash.substring(1));
 /* Markers list*/
 var markers = [];
 var myPosMarker;
-var myIconId = 0;
 var map; //the google map 
 var infowindow = null;
 var availableMapItems = [];
-
+var myIconId = 0;
 var myLatLng = {};
 
 
 $(document).ready(function(){
+
+	if(typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+
+
+	} else {
+	    // Sorry! No Web Storage support..
+	}
 
 	initMap();/*Call initialise map when page is loaded*/
 	//placeItemsOnMap(1)
@@ -40,11 +56,12 @@ function Receive(data)
 	}
 	if(data["ITEMSFOUND"])
 	{
-		placeItemsOnMap(data["ITEMSFOUND"])
+		placeItemsOnMap(data["ITEMSFOUND"]);
 	}
 	if (data["PLAYERICON"])
 	{
-		UpdatePlayerIcon(data["PLAYERICON"])
+		UpdatePlayerIcon(data["PLAYERICON"]);
+		viewModel.showChangeCharcter(false);
 	};
 }//end recieve
 /* validate the manually entered data is ok before sending to server*/
@@ -67,6 +84,10 @@ function initMap()  {
 function showPosition(position) {//initiate the google maps centred on my position
 	myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
 
+	map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 16,
+	center: myLatLng
+	});
 	var image = {
     url: 'img/characters.png',
     // This marker is 20 pixels wide by 32 pixels high.
@@ -77,16 +98,12 @@ function showPosition(position) {//initiate the google maps centred on my positi
     anchor: new google.maps.Point(25, 25)
  	 };
 
-	map = new google.maps.Map(document.getElementById('map'), {
-	zoom: 16,
-	center: myLatLng
-	});
-	myPosMarker = new google.maps.Marker({
+
+	 myPosMarker = new google.maps.Marker({
 		position: myLatLng,
 		map: map,
 		title: 'Your ass is here.',
-		icon : image,
-
+		icon : image
 		});
 	updateItemlocations();
 }
@@ -123,93 +140,33 @@ function placeItemsOnMap(MapItems)
 	availableMapItems = MapItems;
 	for (i = 0; i < MapItems.length; i++) 
 	{
-		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
 		var myLatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
 		var marker = new google.maps.Marker({
 		position: myLatLng,
 		map: map,
 		icon: "img/chestIcon.png",
 		title: 'Gold : ' + MapItems[i][4] + ", Pickup range : " + MapItems[i][5] + "m",
-		html: contentString,
-		});
-		
-		markers.push(marker);
-		
+		});	
+		markers.push(marker);	
 	}
-	for (i = 0; i < MapItems.length; i++) 
-	{
-		var marker = markers[i];
-		google.maps.event.addListener(marker, 'click', function () {
-		// where I have added .html to the marker object.
-		infowindow.setContent(this.html);
-		infowindow.open(map, this);
-		});
-	}
-
 
 }
-function PickUpObject(i)
+function UpdateMyIcon(num)
 {
-	message = {}
-	var mapitem = availableMapItems[i];
-	if(getdistBetween(mapitem[6], mapitem[7] , myLatLng["lat"] , myLatLng["lng"]) <= mapitem[5])
+	myIconId += num;
+	if(myIconId < 0)
 	{
-		alert("in range");
-		message["PICKUPITEM"] = {"gamedId" : gameId, "Item" : mapitem, "playerLatLng" : myLatLng}
+		myIconId = 53;
 	}
-	else
+	if(myIconId > 53)
 	{
-		alert("Not in range");
+		myIconId = 0;
 	}
-
-}
-
-function getdistBetween(lat1, lon1 , lat2 , lon2) 
-{
-	/** Converts numeric degrees to radians */
-	if (typeof(Number.prototype.toRadians) === "undefined") {
-	  Number.prototype.toRadians = function() {
-	    return this * Math.PI / 180;
-	  }
-	}
-	/*formula source http://www.movable-type.co.uk/scripts/latlong.html*/ 
-	var R = 6371000; // metres
-	var lt1 = lat1.toRadians();
-	var lt2 = lat2.toRadians();
-	var dt = (lat2-lat1).toRadians();
-	var dp = (lon2-lon1).toRadians();
-	var a = Math.sin(dt/2) * Math.sin(dt/2) +
-	        Math.cos(lt1) * Math.cos(lt2) *
-	        Math.sin(dp/2) * Math.sin(dp/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	var d = R * c;
-	return d; // returns distance in meters
-
-}
-
-function Update()
-{
-	message = {};
-	message["ITEMLOCATIONS"] = {"GameId" : gameId};
-
-	
-	/*Get current longLat*/
- 	if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(UpdatePosition, showError);
-    } else 
-    { 
-        alert( "Geolocation is not supported by this browser.");
-	}
-
-	ws.send(JSON.stringify(message));
-}
-
-function UpdatePosition(position) {//initiate the google maps centred on my position
-	myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
-	myPosMarker.setPosition(myLatLng);
+	UpdatePlayerIcon(myIconId)
 }
 function UpdatePlayerIcon(dt)
 {
+
 	myIconId = dt;
 	var image = {
     url: 'img/characters.png',
@@ -222,5 +179,6 @@ function UpdatePlayerIcon(dt)
  	 };
 	myPosMarker.setIcon(image);	
 }
+
 
 ko.applyBindings(viewModel);

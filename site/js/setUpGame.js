@@ -159,7 +159,7 @@ function Receive(data)
 	}
 	if(data["GAMECREATEDSUCCESS"])
 	{
-		document.location.href = "addplayers.html#" +data["GAMECREATEDSUCCESS"] ;
+		document.location.href = "ViewGame.html#" +data["GAMECREATEDSUCCESS"] ;
 	}
 	if(data["ERROR"])
 	{

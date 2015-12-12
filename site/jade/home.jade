@@ -7,14 +7,13 @@ html
 	body.homeBody
 		include navbar.jade
 		.col-md-12
-			br
 			.centreHorz
-				button.btn(onclick="parent.location='setUpGame.html'")
+				button.spacedOut10.btn(onclick="parent.location='setUpGame.html'")
 					|Create NewGame
-			br
-			include ActiveGames.jade
-			br
-			include MyHostedGames.jade
+			.spacedOut10
+				include ActiveGames.jade
+			.spacedOut10
+				include MyHostedGames.jade
 	footer
 		include commonScripts.jade
 		script(src="js/home.js")

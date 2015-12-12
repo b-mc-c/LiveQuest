@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="external/jquery-ui.min.css">
-    <title>LiveQuest-Play</title>
+    <title>LiveQuest-View game</title>
   </head>
   <body class="homeBody">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -19,11 +19,16 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6"><span data-bind="text : ItemInfo"></span>
-      <!--iframe(width='600', height='450', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/view?zoom=6&center=53.4129%2C-8.2439&key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk', allowfullscreen='')-->
-      <div id="map" class="centreHorz"></div>
-      <script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFpCLjX0hV3hCuTs0F7sLEi86946TNNFk&amp;signed_in=true"></script>
+    <div class="centreHorz">
+      <button data-bind="click: JoinGame" class="spacedOut10 btn btn-success">Play</button><br>
+      <div data-bind="visible: showChangeCharcter">
+        <button onclick="UpdateMyIcon(-1)" class="spacedOut10 btn">&lt;&lt;</button><span>Player Icon</span>
+        <button onclick="UpdateMyIcon(1)" class="spacedOut10 btn">&gt;&gt; </button>
+      </div>
     </div>
+    <!--iframe(width='600', height='450', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/view?zoom=6&center=53.4129%2C-8.2439&key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk', allowfullscreen='')-->
+    <div id="map" class="centreHorz"></div>
+    <script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFpCLjX0hV3hCuTs0F7sLEi86946TNNFk&amp;signed_in=true"></script>
   </body>
   <footer>
     <script src="external/jquery-2.1.4.min.js"></script>
@@ -32,7 +37,7 @@
     <script src="external/jquery-ui.min.js"></script>
     <script src="external/jquery.ui.touch-punch.min.js"></script>
     <script src="external/jquery.animateSprite.min.js"></script>
-    <script src="js/PlayGame.js"></script>
+    <script src="js/viewGame.js"></script>
     <script src="js/server.js"></script>
   </footer>
 </html>
