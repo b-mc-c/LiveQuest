@@ -4,10 +4,16 @@ var viewModel = {
 									{name:"Home",url:"home.html",_class:""},
 									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	ItemInfo: ko.observable(""),
+	myPickedUpItems: ko.observableArray(),
+	myGold : ko.observable("0"), 
 }
 var gameId = parseInt(window.location.hash.substring(1));
 /* Markers list*/
+
+var images = ["","img/chain.png","img/pocket.png","img/MCHammer.png","img/fishing-rod.png","img/gold_digger.png","img/thieves.png","img/book.png","img/basket.png"];
+
 var markers = [];
+var PlayerMarkers = [];
 var myPosMarker;
 var myIconId = 0;
 var map; //the google map 
@@ -45,7 +51,20 @@ function Receive(data)
 	if (data["PLAYERICON"])
 	{
 		UpdatePlayerIcon(data["PLAYERICON"])
-	};
+	}
+	if(data["MyItemsList"])
+	{
+		SetMyItems(data["MyItemsList"])
+		//alert(data["MyItemsList"])
+	}
+	if(data["CurrentGold"])
+	{
+		SetMyGold(data["CurrentGold"]);
+	}
+	if(data["PlayersInGame"])
+	{
+		placePlayersOnMap(data["PlayersInGame"])
+	}
 }//end recieve
 /* validate the manually entered data is ok before sending to server*/
 
@@ -111,6 +130,9 @@ function updateItemlocations()
 	message = {}
 	message["ITEMLOCATIONS"] = {"GameId" : gameId};
 	message["PLAYERICON"] = {"GameId" : gameId};
+	message["GETMYITEMS"]  = {"GameId" : gameId};
+	message["GETMYGOLD"] = {"GameId" : gameId};
+	message["GETPLAYERSINGAME"] = {"GameId" : gameId};
 	ws.send(JSON.stringify(message));
 }
 function placeItemsOnMap(MapItems)
@@ -120,6 +142,13 @@ function placeItemsOnMap(MapItems)
 	infowindow = new google.maps.InfoWindow({
 	content: "holding..."
 	});
+	//remove markers from google maps 
+	for (i = 0; i < markers.length; i++) 
+	{
+		markers[i].setMap(null);
+	}
+	//clear the marker array 
+	markers = [];
 	availableMapItems = MapItems;
 	for (i = 0; i < MapItems.length; i++) 
 	{
@@ -133,8 +162,7 @@ function placeItemsOnMap(MapItems)
 		html: contentString,
 		});
 		
-		markers.push(marker);
-		
+		markers.push(marker);	
 	}
 	for (i = 0; i < MapItems.length; i++) 
 	{
@@ -145,23 +173,62 @@ function placeItemsOnMap(MapItems)
 		infowindow.open(map, this);
 		});
 	}
-
+}
+function placePlayersOnMap(MapItems)
+{
+	for (i = 0; i < PlayerMarkers.length; i++) 
+	{
+		PlayerMarkers[i].setMap(null);
+	}
+	//clear the marker array 
+	PlayerMarkers = [];
+	for (i = 0; i < MapItems.length; i++) 
+	{
+		var IconId = MapItems[i][0]
+		var image = {
+	    url: 'img/characters.png',
+	    // This marker is 20 pixels wide by 32 pixels high.
+	    size: new google.maps.Size(50, 50),
+	    // The origin for this image is (0, 0).
+	    origin: new google.maps.Point(50 * IconId, 0),
+	    // The anchor for this image is the base of the flagpole at (0, 32).
+	    anchor: new google.maps.Point(25, 25)
+	 	 };
+		var LatLng = {lat: MapItems[i][2], lng: MapItems[i][3]};
+		var marker = new google.maps.Marker({
+		position: LatLng,
+		map: map,
+		icon: image,
+		});
+		
+		PlayerMarkers.push(marker);	
+	}
 
 }
+
+
 function PickUpObject(i)
 {
 	message = {}
 	var mapitem = availableMapItems[i];
 	if(getdistBetween(mapitem[6], mapitem[7] , myLatLng["lat"] , myLatLng["lng"]) <= mapitem[5])
 	{
-		alert("in range");
-		message["PICKUPITEM"] = {"gamedId" : gameId, "Item" : mapitem, "playerLatLng" : myLatLng}
+		//alert("in range");
+		message["PICKUPITEM"] = {"GameId" : gameId, "Item" : mapitem, "playerLatLng" : myLatLng}
+		ws.send(JSON.stringify(message));
 	}
 	else
 	{
 		alert("Not in range");
 	}
 
+}
+
+function GetMyItems()
+{
+	message = {}
+	message["GETMYITEMS"]  = {"GameId" : gameId,};
+	ws.send(JSON.stringify(message));
 }
 
 function getdistBetween(lat1, lon1 , lat2 , lon2) 
@@ -222,5 +289,18 @@ function UpdatePlayerIcon(dt)
  	 };
 	myPosMarker.setIcon(image);	
 }
+function SetMyItems(pickedUpitems)
+{
+	viewModel.myPickedUpItems.removeAll();
+	for (var i = 0; i < pickedUpitems.length ;i++)
+	{
+		
+		viewModel.myPickedUpItems.push({"Name" : pickedUpitems[i][2] , "Image" : images[pickedUpitems[i][1]] })
+	}
+}
+function SetMyGold(gold)
+{
 
+	viewModel.myGold(gold["Gold"] );
+}
 ko.applyBindings(viewModel);

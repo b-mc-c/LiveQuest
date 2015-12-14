@@ -97,8 +97,6 @@ function showPosition(position) {//initiate the google maps centred on my positi
     // The anchor for this image is the base of the flagpole at (0, 32).
     anchor: new google.maps.Point(25, 25)
  	 };
-
-
 	 myPosMarker = new google.maps.Marker({
 		position: myLatLng,
 		map: map,

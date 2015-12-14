@@ -6,10 +6,12 @@ html
 			|LiveQuest-Play
 	body.homeBody
 		include navbar.jade
-		.col-md-6
-			span(data-bind="text : ItemInfo")
-			include map.jade
-
+		.spacedOut10
+			.col-md-6
+				span(data-bind="text : ItemInfo")
+				include map.jade
+			.col-md-6
+				include MyPickedItems.jade
 	footer
 		include commonScripts.jade
 		script(src="js/PlayGame.js")

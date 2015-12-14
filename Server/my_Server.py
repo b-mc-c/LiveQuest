@@ -1,4 +1,5 @@
 from tornado import websocket, web, ioloop, httpserver
+from math import sin, cos, sqrt, atan2, radians
 import uuid
 import hashlib
 import tornado
@@ -8,7 +9,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '*******', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '******', 'DB' : 'livequest'}
 connections = {}
 
 
@@ -57,6 +58,14 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				AddPlayerToGame(self,data['ADDPLAYERTOGAME'])
 			if 'PLAYERICON' in data.keys():
 				getPlayerIcon(self,data['PLAYERICON'])
+			if 'PICKUPITEM' in data.keys():
+				PickUpItem(self,data['PICKUPITEM'])
+			if 'GETMYITEMS' in data.keys():
+				GetMyItems(self, data['GETMYITEMS'])
+			if 'GETMYGOLD' in data.keys():
+				GetMyGold(self, data['GETMYGOLD'])
+			if 'GETPLAYERSINGAME' in data.keys():
+				GetplayersInGame(self, data["GETPLAYERSINGAME"])
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -272,19 +281,85 @@ def GetAllGames(connection, data):
 	message["GAMESLIST"] = {"myHostedGames" : hostGames, "availableGames" : allGames,}
 	sendToPlayer(connection,message)
 
-
-def DeActivateOldGames():
-	print("Checking for expired Games that are still marked as active")
-	with MyUtils.UseDatabase(config) as cursor:	
-		SQL = '''SELECT id  FROM games WHERE active = 1 AND GameEndTime < now()'''
-		cursor.execute(SQL)
-		expiredGames = cursor.fetchall()
-	print("expired Games : ", expiredGames)
-	for game in expiredGames:
-		print("Deactivating game : ", game[0])
+def PickUpItem(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	print("confrim User ",userID, " already in game ", gameId)
+	if IsUserAlreadyInGame(userID, gameId) == True:
+		print("User in game")
+		print("Get item ", gameId ,"'s LatLong")
 		with MyUtils.UseDatabase(config) as cursor:	
-			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
+			SQL = '''SELECT * FROM game_items WHERE id = %i'''% (data["Item"][0])
+			print(SQL)
 			cursor.execute(SQL)
+			item = cursor.fetchone()
+		dist = getdistBetween(float(data["playerLatLng"]["lat"]),float(data["playerLatLng"]["lng"]),float(item[6]),float(item[7]))
+		print ("dist between is :", dist, "m Pickup range is " , int(item[5]) , "m" )
+		if  dist <= int(item[5]):
+			print("IN RANGE")
+			with MyUtils.UseDatabase(config) as cursor:	
+				SQL = '''UPDATE game_items SET User = %i, PickedUp =1 Where id =%i '''% (userID,data["Item"][0])
+				print(SQL)
+				cursor.execute(SQL)
+			with MyUtils.UseDatabase(config) as cursor:	
+				SQL = '''SELECT gold FROM game_items WHERE id =%i '''% (data["Item"][0])
+				print(SQL)
+				cursor.execute(SQL)
+				gold = cursor.fetchone()[0]
+			print("Adding ", gold ," pieces of gold to user" , userID )
+			with MyUtils.UseDatabase(config) as cursor:	
+				SQL = '''SELECT Gold FROM game_players WHERE GameId =%i AND PlayerId = %i'''% (gameId,userID)
+				print(SQL)
+				cursor.execute(SQL)
+				currentGold = cursor.fetchone()[0]
+			currentGold += gold
+			with MyUtils.UseDatabase(config) as cursor:	
+				SQL = '''UPDATE game_players SET Gold =%i WHERE GameId =%i AND PlayerId = %i'''% (currentGold,gameId,userID)
+				print(SQL)
+				cursor.execute(SQL)
+			GetItemLocations(connection,data)#send back updated items list
+			GetMyItems(connection, data)#sends back updated my items list 
+			GetMyGold(connection, data)#send back the current gold
+		else:
+			print ("item was not in range ")
+
+def GetMyGold(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	print("confrim User ",userID, " already in game ", gameId)
+	if IsUserAlreadyInGame(userID, gameId) == True:
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''SELECT Gold FROM game_players WHERE GameId =%i AND PlayerId = %i'''% (gameId,userID)
+			print(SQL)
+			cursor.execute(SQL)
+			currentGold = cursor.fetchone()[0]
+		message["CurrentGold"] = {"Gold" : currentGold,} 
+		sendToPlayer(connection,message)
+
+def GetMyItems(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	if IsUserAlreadyInGame(userID, gameId) == True:
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''SELECT id , itemIdentifier, Name from Game_items WHERE GameId = %i AND User = %i AND Alive = 1 AND PickedUp = 1'''% (gameId, userID)
+			cursor.execute(SQL)
+			items = cursor.fetchall()
+		message["MyItemsList"] = items
+		sendToPlayer(connection,message)
+
+def GetplayersInGame(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT PlayerId , PlayerIcon , Lat ,Lng  from Game_players WHERE GameId = %i  AND Alive = 1  AND PlayerId NOT IN (%i)'''% (gameId, userID)
+		cursor.execute(SQL)
+		items = cursor.fetchall()
+	message["PlayersInGame"] = items
+	sendToPlayer(connection,message)
 
 def AddPlayerToGame(connection,data):
 	userID = GetUserId(connection)
@@ -300,6 +375,7 @@ def AddPlayerToGame(connection,data):
 	else:
 		print("User" , userID , "already associated with game ", data["GameId"] , " : Do nothing" )
 
+
 def getPlayerIcon(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -312,6 +388,38 @@ def getPlayerIcon(connection, data):
 		message["PLAYERICON"] = icon[0]
 		sendToPlayer(connection,message)
 
+def getdistBetween(lt1, ln1 , lt2 , ln2):
+	#formula source http://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude-python 
+	# approximate radius of earth in km
+	print ("lt1 : ",lt1 ,", ln1 :", ln1,", lt2 :", lt2,", ln2 :", ln2)
+	# approximate radius of earth in m
+	R = 6371000
+
+	lat1 = radians(lt1)
+	lon1 = radians(ln1)
+	lat2 = radians(lt2)
+	lon2 = radians(ln2)
+	dlon = lon2 - lon1
+	dlat = lat2 - lat1
+	a = sin(dlat / 2) * sin(dlat / 2) + cos(lat1) * cos(lat2) * sin(dlon / 2) * sin(dlon / 2)
+	c = 2 * atan2(sqrt(a), sqrt(1 - a))
+	distance = R * c
+	print ("Distance : ",distance ,"m")
+	return distance; # returns distance in meters
+
+def DeActivateOldGames():
+	print("Checking for expired Games that are still marked as active")
+	with MyUtils.UseDatabase(config) as cursor:	
+		SQL = '''SELECT id  FROM games WHERE active = 1 AND GameEndTime < now()'''
+		cursor.execute(SQL)
+		expiredGames = cursor.fetchall()
+	print("expired Games : ", expiredGames)
+	for game in expiredGames:
+		print("Deactivating game : ", game[0])
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
+			cursor.execute(SQL)
+
 
 def IsUserAlreadyInGame(userId,gameId):
 	print("Checking if user" , userId , " is already associated with game ", gameId )
@@ -323,8 +431,6 @@ def IsUserAlreadyInGame(userId,gameId):
 		return True;
 	else:
 		return False;
-
-
 
 
 def GetUserId(connection):

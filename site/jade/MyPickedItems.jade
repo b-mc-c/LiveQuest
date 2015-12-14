@@ -1,0 +1,19 @@
+table.itemsTable.centreHorz
+	thead.itemsTableHead
+		tr
+			th
+				|My picked up items
+			th
+		tr
+			th 
+				|Item name
+			th
+				img.spacedOut10(src="img/Gold.png" style="width : 20px ; height : 20px;")
+				span(data-bind="text: myGold")
+				
+	tbody.itemsTableBody(data-bind='foreach: myPickedUpItems')
+		tr
+			td
+				span(data-bind='text: Name' )
+			td
+				img.spacedOut10(data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;")
