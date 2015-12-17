@@ -2,14 +2,10 @@ table.itemsTable.centreHorz
 	thead.itemsTableHead
 		tr
 			th
-				|My picked up items
+				img.spacedOut10(src="img/bag.png" style="width : 50px ; height : 50px;")
 			th
-		tr
-			th 
-				|Item name
-			th
-				img.spacedOut10(src="img/Gold.png" style="width : 20px ; height : 20px;")
-				span(data-bind="text: myGold")
+				img.spacedOut10(src="img/chest.png" style="width : 50px ; height : 50px;")
+				span(data-bind="text: myGold" style="font-size : xx-large; vertical-align:middle;")
 				
 	tbody.itemsTableBody(data-bind='foreach: myPickedUpItems')
 		tr
