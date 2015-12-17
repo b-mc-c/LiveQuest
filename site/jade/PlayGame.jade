@@ -7,10 +7,10 @@ html
 	body.homeBody
 		include navbar.jade
 		.spacedOut10
-			.col-md-6
+			.col-md-6(style="margin-top: 10px;margin-bottom: 10px;")
 				span(data-bind="text : ItemInfo")
 				include map.jade
-			.col-md-6
+			.col-md-6(style="margin-top: 10px;margin-bottom: 10px;")
 				include MyPickedItems.jade
 	footer
 		include commonScripts.jade
