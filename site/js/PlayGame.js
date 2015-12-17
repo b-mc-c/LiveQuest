@@ -25,7 +25,7 @@ var myLatLng = {};
 
 $(document).ready(function(){
 
-	initMap();/*Call initialise map when page is loaded*/
+	//initMap();/*Call initialise map when page is loaded*/
 	//placeItemsOnMap(1)
 
 });//end document ready
@@ -38,6 +38,10 @@ function Receive(data)
 		if(data["SIGNEDIN"].localeCompare("NOTSIGNEDIN")==0)
 		{
 			document.location.href = "index.html";
+		}
+		else
+		{
+			initMap();/*Call initialise map when page is loaded*/
 		}
 	}
 	if(data["LOGGEDOUT"])
