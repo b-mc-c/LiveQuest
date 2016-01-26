@@ -304,5 +304,5 @@ function showError(error) {
     }
 }
 
-
+/*apply viewmodel knockout js*/
 ko.applyBindings(viewModel);

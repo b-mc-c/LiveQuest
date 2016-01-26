@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="external/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="external/jquery-ui.min.css">
+    <title>LiveQuest-Tutorial</title>
+  </head>
+  <body class="homeBody">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div data-bind="text: currentPageName" class="navbar-brand"></div>
+        <button data-toggle="collapse" data-target=".navHeaderCollapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul data-bind="foreach: menuOptions" class="nav navbar-nav navbar-right">
+            <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="centreHorz">
+      <div id="SetUpGameTut">
+        <h2>Tutorial - How to set up a Game</h2>
+        <div class="step1">Step 1 : Enter a game name. </div>
+        <div class="step2">Step 2 : Enter an end date and time for your game.</div>
+        <div class="step3">Step 3 : Place collectable items on the map.
+          <div class="substep1">(a) Find the mc Hammer Item by scrolling left or right on the item carousel.</div>
+          <div class="substep2">(b) Set the pick up range to 500m (This is how close a player needs to be to the item to pick it up).</div>
+          <div class="substep3">(c) Set the gold value of the item (This sets how much gold a player will receive when they pick up this item).</div>
+          <div class="substep4">(d) Click the place button then click a location on the map within the highlighted area(highlighted area represents 500m radius from your location).</div>
+          <div class="substep5">(e) Place another item, this time outside the highlighted area.</div>
+        </div>
+        <div class="step4">Step 4 : Select the Create Game Button.</div>
+      </div>
+      <div id="PlayGameTut">
+        <h2>Tutorial - Game Play</h2>
+        <div class="step1">Step 5 : Choose a character to represent you in the game 
+          <div class="substep1">(a) Scroll left or right through characters.</div>
+          <div class="substep2">(b) When you are happy with your character choice click the play button.</div>
+        </div>
+        <div class="step2">Step 6 : Pick up items.
+          <div class="substep1">(a) Click on the first item you placed on the map.</div>
+          <div class="substep2">(b) Click the Pick Up button.</div>
+          <div class="substep3">(c) The item will be added to your list of items and the gold added to your gold.</div>
+          <div class="substep4">(d) Click the second item you placed on the map.</div>
+          <div class="substep5">(e) Click the Pick Up button.</div>
+          <div class="substep6">(e) Nothing happens this is because the item is out of range.</div>
+        </div>
+        <div class="step3">Step 7 : using items 
+          <div class="substep1">(a) Another player has appeared on the map near you.</div>
+          <div class="substep2">(b) Click on the mc hammer item in your inventory.</div>
+          <div class="substep3">(c) Click on the other player.</div>
+          <div class="substep4">(d) The Mc Hammer has allowed you to rob gold from the other player and add it to yours.<br>As you move around the real world your characters position will be update on the map.<br>The objective is to get as much gold as possible before the game time runs out.<br>Good luck.<br>
+            <Button class="btn btn-success">Complete </Button>
+          </div>
+        </div>
+        <!--iframe(width='600', height='450', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/view?zoom=6&center=53.4129%2C-8.2439&key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk', allowfullscreen='')-->
+        <div id="map" class="centreHorz"></div>
+        <script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFpCLjX0hV3hCuTs0F7sLEi86946TNNFk&amp;signed_in=true"></script>
+      </div>
+    </div>
+  </body>
+  <footer>
+    <script src="external/jquery-2.1.4.min.js"></script>
+    <script src="external/bootstrap.min.js"></script>
+    <script src="external/knockout-3.3.0.js"></script>
+    <script src="external/jquery-ui.min.js"></script>
+    <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="external/jquery.animateSprite.min.js"></script>
+    <script src="js/server.js"></script>
+    <script src="js/Tutorial.js"></script>
+  </footer>
+</html>
