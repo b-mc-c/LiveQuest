@@ -6,60 +6,69 @@ html
 			|LiveQuest-Tutorial
 	body.homeBody
 		include navbar.jade
-		.centreHorz
-			#SetUpGameTut
+		#SetUpGameTut
+			.centreHorz
 				h2
 					|Tutorial - How to set up a Game
 				.step1
 					|Step 1 : Enter a game name. 
-				.step2
+				.step2(style ="display : none;")
 					|Step 2 : Enter an end date and time for your game.
-				.step3
+				.step3(style ="display : none;")
 					|Step 3 : Place collectable items on the map.
 					.substep1
 						|(a) Find the mc Hammer Item by scrolling left or right on the item carousel.
-					.substep2
+					.substep2(style ="display : none;")
 						|(b) Set the pick up range to 500m (This is how close a player needs to be to the item to pick it up).
-					.substep3
+					.substep3(style ="display : none;")
 						|(c) Set the gold value of the item (This sets how much gold a player will receive when they pick up this item).
-					.substep4
+					.substep4(style ="display : none;")
 						|(d) Click the place button then click a location on the map within the highlighted area(highlighted area represents 500m radius from your location).
-					.substep5
+					.substep5(style ="display : none;")
 						|(e) Place another item, this time outside the highlighted area.
-				.step4
+				.step4(style ="display : none;")
 					|Step 4 : Select the Create Game Button.
-			#PlayGameTut
+			br
+			#setupScreen
+				.col-md-12
+					include NewGame.jade
+				.col-md-6
+					include itemCarousel.jade
+				.col-md-6(style="padding-top: 20px;")
+					include map.jade
+		#PlayGameTut(style ="display : none;")
+			.centreHorz
 				h2
 					|Tutorial - Game Play
 				.step1
-					|Step 5 : Choose a character to represent you in the game 
+					|Step 1 : Choose a character to represent you in the game 
 					.substep1
 						|(a) Scroll left or right through characters.
-					.substep2
+					.substep2(style ="display : none;")
 						|(b) When you are happy with your character choice click the play button.
-				.step2
-					|Step 6 : Pick up items.
+				.step2(style ="display : none;")
+					|Step 2 : Pick up items.
 					.substep1
 						|(a) Click on the first item you placed on the map.
-					.substep2
+					.substep2(style ="display : none;")
 						|(b) Click the Pick Up button.
-					.substep3
+					.substep3(style ="display : none;")
 						|(c) The item will be added to your list of items and the gold added to your gold.
-					.substep4
+					.substep4(style ="display : none;")
 						|(d) Click the second item you placed on the map.
-					.substep5
+					.substep5(style ="display : none;")
 						|(e) Click the Pick Up button.
-					.substep6
+					.substep6(style ="display : none;")
 						|(e) Nothing happens this is because the item is out of range.
-				.step3
-					|Step 7 : using items 
+				.step3(style ="display : none;")
+					|Step 3 : using items 
 					.substep1
 						|(a) Another player has appeared on the map near you.
-					.substep2
+					.substep2(style ="display : none;")
 						|(b) Click on the mc hammer item in your inventory.
-					.substep3
+					.substep3(style ="display : none;")
 						|(c) Click on the other player.
-					.substep4
+					.substep4(style ="display : none;")
 						|(d) The Mc Hammer has allowed you to rob gold from the other player and add it to yours.
 						br
 						|As you move around the real world your characters position will be update on the map.
@@ -68,11 +77,8 @@ html
 						br
 						|Good luck.
 						br
-						Button.btn.btn-success
+						Button.btn.btn-success(data-bind="click: Finish")
 							|Complete 
-					
-
-				include map.jade
 	footer
 		include commonScripts.jade
 		script(src="js/server.js")
