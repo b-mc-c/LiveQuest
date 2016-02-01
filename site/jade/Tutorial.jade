@@ -21,7 +21,7 @@ html
 					.substep2(style ="display : none;")
 						|(b) Set the pick up range to 500m (This is how close a player needs to be to the item to pick it up).
 					.substep3(style ="display : none;")
-						|(c) Set the gold value of the item (This sets how much gold a player will receive when they pick up this item).
+						|(c) Set the gold value of the item to 100 (This sets how much gold a player will receive when they pick up this item).
 					.substep4(style ="display : none;")
 						|(d) Click the place button then click a location on the map within the highlighted area(highlighted area represents 500m radius from your location).
 					.substep5(style ="display : none;")
@@ -46,6 +46,17 @@ html
 						|(a) Scroll left or right through characters.
 					.substep2(style ="display : none;")
 						|(b) When you are happy with your character choice click the play button.
+					button.spacedOut10.btn.btn-success(data-bind="click: JoinGame")
+						|Play
+					br
+					div
+						button.spacedOut10.btn(onclick="UpdateMyIcon(-1)")
+							|&lt;&lt;
+						span
+							|Player Icon
+						button.spacedOut10.btn(onclick="UpdateMyIcon(1)")
+							|&gt;&gt; 
+						#map2.centreHorz(style =" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;")
 				.step2(style ="display : none;")
 					|Step 2 : Pick up items.
 					.substep1
@@ -79,6 +90,11 @@ html
 						br
 						Button.btn.btn-success(data-bind="click: Finish")
 							|Complete 
+				#playgameScreen(style ="display : none;")
+					.col-md-6(style="margin-top: 10px;margin-bottom: 10px;")
+						#map3.centreHorz(style =" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;")
+					.col-md-6(style="margin-top: 10px;margin-bottom: 10px;")
+						include MyPickedItems.jade
 	footer
 		include commonScripts.jade
 		script(src="js/server.js")

@@ -9,7 +9,7 @@ import MyUtils
 
 
 
-config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : '******', 'DB' : 'livequest'}
+config = {'DB_HOST' : 'localhost','DB_USER' : 'liveQuestServer' , 'DB_PASSWD' : 'LiveQuestServerXneon&5255', 'DB' : 'livequest'}
 connections = {}
 
 

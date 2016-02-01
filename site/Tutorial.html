@@ -27,7 +27,7 @@
         <div style="display : none;" class="step3">Step 3 : Place collectable items on the map.
           <div class="substep1">(a) Find the mc Hammer Item by scrolling left or right on the item carousel.</div>
           <div style="display : none;" class="substep2">(b) Set the pick up range to 500m (This is how close a player needs to be to the item to pick it up).</div>
-          <div style="display : none;" class="substep3">(c) Set the gold value of the item (This sets how much gold a player will receive when they pick up this item).</div>
+          <div style="display : none;" class="substep3">(c) Set the gold value of the item to 100 (This sets how much gold a player will receive when they pick up this item).</div>
           <div style="display : none;" class="substep4">(d) Click the place button then click a location on the map within the highlighted area(highlighted area represents 500m radius from your location).</div>
           <div style="display : none;" class="substep5">(e) Place another item, this time outside the highlighted area.</div>
         </div>
@@ -190,6 +190,12 @@
         <div class="step1">Step 1 : Choose a character to represent you in the game 
           <div class="substep1">(a) Scroll left or right through characters.</div>
           <div style="display : none;" class="substep2">(b) When you are happy with your character choice click the play button.</div>
+          <button data-bind="click: JoinGame" class="spacedOut10 btn btn-success">Play</button><br>
+          <div>
+            <button onclick="UpdateMyIcon(-1)" class="spacedOut10 btn">&lt;&lt;</button><span>Player Icon</span>
+            <button onclick="UpdateMyIcon(1)" class="spacedOut10 btn">&gt;&gt; </button>
+            <div id="map2" style=" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;" class="centreHorz"></div>
+          </div>
         </div>
         <div style="display : none;" class="step2">Step 2 : Pick up items.
           <div class="substep1">(a) Click on the first item you placed on the map.</div>
@@ -205,6 +211,27 @@
           <div style="display : none;" class="substep3">(c) Click on the other player.</div>
           <div style="display : none;" class="substep4">(d) The Mc Hammer has allowed you to rob gold from the other player and add it to yours.<br>As you move around the real world your characters position will be update on the map.<br>The objective is to get as much gold as possible before the game time runs out.<br>Good luck.<br>
             <Button data-bind="click: Finish" class="btn btn-success">Complete </Button>
+          </div>
+        </div>
+        <div id="playgameScreen" style="display : none;">
+          <div style="margin-top: 10px;margin-bottom: 10px;" class="col-md-6">
+            <div id="map3" style=" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;" class="centreHorz"></div>
+          </div>
+          <div style="margin-top: 10px;margin-bottom: 10px;" class="col-md-6">
+            <table class="itemsTable centreHorz">
+              <thead class="itemsTableHead">
+                <tr>
+                  <th><img src="img/bag.png" style="width : 50px ; height : 50px;" class="spacedOut10"></th>
+                  <th><img src="img/chest.png" style="width : 50px ; height : 50px;" class="spacedOut10"><span data-bind="text: myGold" style="font-size : xx-large; vertical-align:middle;"></span></th>
+                </tr>
+              </thead>
+              <tbody data-bind="foreach: myPickedUpItems" class="itemsTableBody">
+                <tr>
+                  <td><span data-bind="text: Name"></span></td>
+                  <td><img data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;" class="spacedOut10"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
