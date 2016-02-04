@@ -65,12 +65,16 @@ html
 						|(b) Click the Pick Up button.
 					.substep3(style ="display : none;")
 						|(c) The item will be added to your list of items and the gold added to your gold.
+						Button.btn.btn-success(onclick="next()")
+							|Next
 					.substep4(style ="display : none;")
 						|(d) Click the second item you placed on the map.
 					.substep5(style ="display : none;")
 						|(e) Click the Pick Up button.
 					.substep6(style ="display : none;")
 						|(e) Nothing happens this is because the item is out of range.
+						Button.btn.btn-success(onclick="next()")
+							|Next
 				.step3(style ="display : none;")
 					|Step 3 : using items 
 					.substep1
@@ -97,7 +101,6 @@ html
 						include MyPickedItems.jade
 	footer
 		include commonScripts.jade
-		script(src="js/server.js")
 		script(src="js/Tutorial.js")
 
 		

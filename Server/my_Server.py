@@ -66,6 +66,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				GetMyGold(self, data['GETMYGOLD'])
 			if 'GETPLAYERSINGAME' in data.keys():
 				GetplayersInGame(self, data["GETPLAYERSINGAME"])
+			if 'UPDATEPLAYERLOCATION' in data.keys():
+				UpdatePlayerLocation(self, data["UPDATEPLAYERLOCATION"])	
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
@@ -360,6 +362,23 @@ def GetplayersInGame(connection, data):
 		items = cursor.fetchall()
 	message["PlayersInGame"] = items
 	sendToPlayer(connection,message)
+
+def UpdatePlayerLocation(connection, data):
+	message = {}
+	userID = GetUserId(connection)
+	gameId = int(data["GameId"])
+	Lat = float(data["Lat"])
+	Lng = float(data["Lng"])
+	print("confrim User ",userID, " already in game ", gameId)
+	if IsUserAlreadyInGame(userID, gameId) == True:
+		print("Update Players Location")
+		with MyUtils.UseDatabase(config) as cursor:	
+			SQL = '''UPDATE game_players SET Lat=%.16f, Lng=%.16f WHERE GameId=%i AND PlayerId = %i '''% (Lat,Lng, gameId, userID)
+			print(SQL)
+			cursor.execute(SQL)
+		print("Updated players position : ", userID, ", Lat : ", Lat ,", Lng : ", Lng)
+	else:
+		print("User ",userID, " not already in game ", gameId)
 
 def AddPlayerToGame(connection,data):
 	userID = GetUserId(connection)

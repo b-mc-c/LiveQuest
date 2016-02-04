@@ -1,6 +1,7 @@
 var viewModel = {
 	currentPageName : ko.observable("SignIn"),
-	menuOptions : ko.observableArray([{name:"SignIn",url:"index.html",_class:"active"},]),
+	menuOptions : ko.observableArray([{name:"SignIn",url:"index.html",_class:"active"},
+										{name:"Tutorial",url:"Tutorial.html",_class:""},]),
 	SignInUserNameError: ko.observableArray(),
 	SignInPassError : ko.observableArray(),
 	SignUpUserNameError : ko.observableArray(),

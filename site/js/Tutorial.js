@@ -52,7 +52,7 @@ var viewModel = {
 		var mapItems = markers;
 		placeItemsOnMap(mapItems)
 	},
-};
+};//end viewmodel
 
 var map;
 var map2;
@@ -74,12 +74,16 @@ var image = "img/chainIcon.png";
 /* ID : {Item : Chain, Gold : 50, Range : 100, Lng : 5.00, Lat : 5.00}*/
 var markers = {};
 var itemId = 0; // increments each time an item is added to markers 
+var availableMapItems = [];
 
 var myIconId = 0;
 var myPosMarker;
 
 /* Function gets called when page loaded */
 $(document).ready(function(){
+
+	initMap();
+
 
 	/*highlight the textinput for step 1*/
 	$("#NewGameName").effect( "highlight", {color:"#008000"}, 5000 );
@@ -148,26 +152,6 @@ $(document).ready(function(){
 
 });//end doc ready
 
-
-function Receive(data)
-{
-	console.log(data);
-	if(data["SIGNEDIN"])
-	{
-		if(data["SIGNEDIN"].localeCompare("NOTSIGNEDIN")==0)
-		{
-			document.location.href = "index.html";
-		}
-		else
-		{
-			initMap();/*Call initialise map when page is loaded*/
-		}
-	}
-	if(data["LOGGEDOUT"])
-	{
-		document.location.href = "index.html";
-	}
-}//end recieve
 
 
 /*initialises the google maps api*/
@@ -242,7 +226,10 @@ function showPosition(position) {//initiate the google maps centred on my positi
  	{
  		if(getdistBetween(event.latLng.lat(), event.latLng.lng() , myLatLng["lat"] , myLatLng["lng"]) < 500) 
  		{
- 			next();
+ 			if(dropPin)
+ 			{
+ 				next();
+ 			}
  		}
  		else
  		{
@@ -255,10 +242,15 @@ function showPosition(position) {//initiate the google maps centred on my positi
  	{
  		if(getdistBetween(event.latLng.lat(), event.latLng.lng() , myLatLng["lat"] , myLatLng["lng"]) > 500) 
  		{
- 			next();
- 			/*disable buton so cant drop anymore items */
- 			$("#hammerButton").attr("disabled", true);
- 			$("#CreateNewGame").attr( {disabled: false})
+ 			if(dropPin)
+ 			{
+	 			next();
+	 			/*disable buton so cant drop anymore items */
+	 			$("#hammerButton").attr("disabled", true);
+	 			$("#CreateNewGame").attr( {disabled: false})
+ 			}
+ 			
+ 			
  		}
  		else
  		{
@@ -479,10 +471,10 @@ function placeItemsOnMap(MapItems)
 	}
 	//clear the marker array 
 	markers = [];
-
+	availableMapItems = MapItems;
 	for (var item in MapItems) 
 	{
-		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
+		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ item +")';> Pick Up </button></div>"
 		var LatLng = {lat: MapItems[item].Lat, lng: MapItems[item].Lng};
 		var marker = new google.maps.Marker({
 		position: LatLng,
@@ -500,11 +492,27 @@ function placeItemsOnMap(MapItems)
 		// where I have added .html to the marker object.
 		infowindow.setContent(this.html);
 		infowindow.open(map3, this);
+		next();
+
 		});
 	}
 }
 
-
+function PickUpObject(i)
+{
+	
+	var mapitem = availableMapItems[i];
+	if(getdistBetween(mapitem.Lat, mapitem.Lng , myLatLng["lat"] , myLatLng["lng"]) <= mapitem.Range)
+	{
+		//alert("in range");
+		viewModel.myPickedUpItems.removeAll();
+		viewModel.myPickedUpItems.push({"Name" : "MC Hammer" , "Image" : "img/MCHammer.png" })
+		delete(availableMapItems[i])
+		placeItemsOnMap(availableMapItems)
+		
+	}
+	next();
+}
 
 /*apply viewmodel knockout js*/
 ko.applyBindings(viewModel);

@@ -19,7 +19,6 @@ var myIconId = 0;
 var map; //the google map 
 var infowindow = null;
 var availableMapItems = [];
-
 var myLatLng = {};
 
 
@@ -90,7 +89,7 @@ function initMap()  {
 function showPosition(position) {//initiate the google maps centred on my position
 	myLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
 
-	var image = {
+	var myimage = {
     url: 'img/characters.png',
     // This marker is 20 pixels wide by 32 pixels high.
     size: new google.maps.Size(50, 50),
@@ -108,11 +107,14 @@ function showPosition(position) {//initiate the google maps centred on my positi
 		position: myLatLng,
 		map: map,
 		title: 'Your ass is here.',
-		icon : image,
-
+		icon : myimage,
 		});
 	updateItemlocations();
+	setInterval(updateItemlocations, 15000);/*calls method recursively every 15 seconds to get updates from server*/
+	setInterval(UpdateMyPosition, 15000);/*calls method recursively every 15 seconds to update my position*/
+	
 }
+
 function showError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -129,6 +131,7 @@ function showError(error) {
             break;
     }
 }
+/*calls to server to get updates*/
 function updateItemlocations()
 {
 	message = {}
@@ -137,6 +140,7 @@ function updateItemlocations()
 	message["GETMYITEMS"]  = {"GameId" : gameId};
 	message["GETMYGOLD"] = {"GameId" : gameId};
 	message["GETPLAYERSINGAME"] = {"GameId" : gameId};
+	message["UPDATEPLAYERLOCATION"] = {"GameId" : gameId, "Lat" : myLatLng["lat"] ,"Lng": myLatLng["lng"]};
 	ws.send(JSON.stringify(message));
 }
 function placeItemsOnMap(MapItems)
@@ -157,9 +161,9 @@ function placeItemsOnMap(MapItems)
 	for (i = 0; i < MapItems.length; i++) 
 	{
 		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
-		var myLatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
+		var LatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
 		var marker = new google.maps.Marker({
-		position: myLatLng,
+		position: LatLng,
 		map: map,
 		icon: "img/chestIcon.png",
 		title: 'Gold : ' + MapItems[i][4] + ", Pickup range : " + MapItems[i][5] + "m",
@@ -188,7 +192,7 @@ function placePlayersOnMap(MapItems)
 	PlayerMarkers = [];
 	for (i = 0; i < MapItems.length; i++) 
 	{
-		var IconId = MapItems[i][0]
+		var IconId = MapItems[i][1]
 		var image = {
 	    url: 'img/characters.png',
 	    // This marker is 20 pixels wide by 32 pixels high.
@@ -263,8 +267,12 @@ function Update()
 	message = {};
 	message["ITEMLOCATIONS"] = {"GameId" : gameId};
 
-	
-	/*Get current longLat*/
+	UpdateMyPosition();
+
+}
+function UpdateMyPosition()
+{
+		/*Get current longLat*/
  	if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(UpdatePosition, showError);
     } else 

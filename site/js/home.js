@@ -1,7 +1,8 @@
 var viewModel = {
 	currentPageName : ko.observable("Home"),
 	menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:"active"},
-									{name:"LogOut",url:"LogOut.html",_class:""},]),
+									{name:"Tutorial",url:"Tutorial.html",_class:""},
+									{name:"LogOut",url:"LogOut.html",_class:""}]),
 	availableGames : ko.observableArray(),
 	myHostedGames : ko.observableArray(),
 }
