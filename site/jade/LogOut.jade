@@ -9,7 +9,7 @@ html
 		.centre.centreHorz
 			h1
 				|Are you sure you want to log out?
-			button.btn#LogOutBtn
+			button.btn#LogOutBtn(data-bind="click: LogOut")
 				|Yes
 			button.btn(onclick="parent.location='home.html'")
 				|No
@@ -19,17 +19,20 @@ html
 			var viewModel = {
 				currentPageName : ko.observable("LogOut"),
 				menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:""},
-												{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+							{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+				LogOut: function(){
+				$.ajax({
+				url: '../Server/LogOut.php',
+				type: 'Get',
+				async: false,
+				success: function(data)
+					{
+						data = JSON.parse(data);
+						Receive(data);
+					}
+				});
+				}
 			}
-			$(document).ready(function(){
-
-			$("#LogOutBtn").click(function(){
-				message = {}
-				message["LOGOUT"] = "LogOut";
-				ws.send(JSON.stringify(message));
-			});
-			});//end document ready
-
 			function Receive(data)
 			{
 				console.log(data);

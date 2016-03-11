@@ -8,43 +8,56 @@ var viewModel = {
 	SignUpPassError : ko.observableArray(),
 	SignUpConfPassError: ko.observableArray(),
 	SignUpEmailError : ko.observableArray(),
+	SignUp :function()/*validates sign up data and sends to server  */
+	{
+		if(validateSignUp())
+		{
+			$.ajax({
+		        url: '../Server/SignUp.php',
+		        type: 'POST',
+		        data: 
+		        {
+		            name: $('#NewUserName').val(),
+		            email: $('#NewEmail').val(),
+		            password: $('#NewPassword').val()
+		        },
+		       success: function(data) {
+			    data = JSON.parse(data);
+				Receive(data);
+			    }
+	    	});
+		}
+	}/*end SignUp*/,
+	ShowJoin :function()/*shows the join screen*/ 
+	{
+		$("#existingUser").hide();
+		$("#newUser").show();
+	}/*end ShowJoin*/,
+	ShowSignIn :function()/*shows the SignIn screen*/ 
+	{
+		$("#newUser").hide();
+		$("#existingUser").show();
+	}/*end ShowSignIn*/,
+	SignIn :function()/*shows the SignIn screen*/ 
+	{
+		if(validateSignIn())
+		{
+			$.ajax({
+		        url: '../Server/SignIn.php',
+		        type: 'POST',
+		        data: 
+		        {
+		            name: $('#UserName').val(),
+		            password: $('#Password').val()
+		        },
+		       success: function(data) {
+			    data = JSON.parse(data);
+				Receive(data);
+			    }
+	    	});/*end ajax*/
+		}/*end if  validate signin*/
+	}/*end SignIn*/
 }
-
-$(document).ready(function(){
-   
-$("#SignIn").click(function(){
-	if(validateSignIn())
-	{
-		message = {}
-		message["SignIn"] = {"userName" : $("#UserName").val(), "password": $("#Password").val()};
-		ws.send(JSON.stringify(message));
-	}
-});
-
-$("#Join").click(function(){
-	$("#existingUser").hide();
-	$("#newUser").show();
-});
-
-$("#ReturnToSignIn").click(function(){
-	$("#newUser").hide();
-	$("#existingUser").show();
-});
-
-$("#SignUP").click(function(){
-	
-	if(validateSignUp())
-	{
-		message = {};
-		message["SignUp"] = {"userName" : $("#NewUserName").val(), "password": $("#NewPassword").val(), "Email" : $("#NewEmail").val()};
-		ws.send(JSON.stringify(message));
-	}
-});
-
-
-
-});//end document ready
-
 function Receive(data)
 {
 	console.log(data);

@@ -22,6 +22,27 @@ var viewModel = {
 	pocketRange : ko.observable("100"),
 	chainGold : ko.observable("50"),
 	chainRange : ko.observable("100"),
+	CreateNewGame : function()/* Create new game button click*/
+	{
+		if(validateNewGame())
+		{
+			$.ajax({
+		        url: '../Server/CreateGame.php',
+		        type: 'POST',
+		        async: false,
+		        data: 
+		        {
+		            GameName: $("#NewGameName").val(),
+		            EndTime: $("#NewgameEndTime").val(),
+		            placedItems : markers,
+		        },
+		       success: function(data) {
+			    data = JSON.parse(data);
+				Receive(data);
+			    }
+	    	});/*end ajax*/
+		}
+	}/*End Create new game button click*/,
 }
 var FIREFOX = /Firefox/i.test(navigator.userAgent);
 /* Info for markers being placed on map */
@@ -41,15 +62,6 @@ $(document).ready(function(){
 		viewModel["NewGameTimeError"].push("Enter DateTime format yyyy-mm-ddThh:mm exmp '2015-01-01T00:00'")
 	}
 	initMap();/*Call initialise map when page is loaded*/
-	/* Create new game button click*/
-	$("#CreateNewGame").click(function(){
-		if(validateNewGame())
-		{
-			message = {}
-			message["CREATENEWGAME"] = {"GameName" : $("#NewGameName").val(), "EndTime": $("#NewgameEndTime").val(), placedItems : markers};
-			ws.send(JSON.stringify(message));
-		}
-	});/*End Create new game button click*/
 	/*Click events for placing items */
 	$("#chainButton").click(function(){
 		item = {Name : "Purse Chain", ID : 1 , Gold : viewModel.chainGold() , Range : viewModel.chainRange()};
@@ -221,6 +233,11 @@ function validateNewGame()
 	{
 		viewModel["NewGameNameError"].push("Invalid, Games Names cannot contain the following characters ' ; \" ");
 		canSend = false;
+	}
+	if(Object.keys(markers).length == 0)
+	{
+		canSend = false;
+		viewModel["NewGameNameError"].push("Invalid, No Items have been placed ' ; \" ");
 	}
 	return canSend;
 }//end validateNewGame()

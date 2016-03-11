@@ -17,7 +17,7 @@ connections = {}
 class WSHandler(tornado.websocket.WebSocketHandler):
 	def check_origin(self,origin):
 		return True
-
+'''
 	def open(self):
 		message = {}
 		print("Websocket opened")
@@ -37,7 +37,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 			print("Ip not already assigned with user")
 			message["SIGNEDIN"] = "NOTSIGNEDIN"
 			sendToPlayer(self,message)
-
+'''
 	def on_message(self, message):
 		#print(message)
 		if self.request.remote_ip in connections:
@@ -68,30 +68,34 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 				GetplayersInGame(self, data["GETPLAYERSINGAME"])
 			if 'UPDATEPLAYERLOCATION' in data.keys():
 				UpdatePlayerLocation(self, data["UPDATEPLAYERLOCATION"])	
+'''
 	def on_close(self):
 		print("Websocket closed")
 		print( self.request.remote_ip)
 		del connections[self.request.remote_ip]
 		print("remaining connections : ",connections)
 		#TODO remove connection from connections table in db (maybe no need)
-
+'''
+'''
 def sendToAll(message):
 	json.dumps(message)
 	for key in connections:
 		connections[key].write_message(message)
-
+'''
+'''
 def sendToPlayer(connection,message):
 	print("Sending : ", message, " to :", connection.request.remote_ip)
 	json.dumps(message)
 	connection.write_message(message)
-
-
+'''
+'''
 def sendToAllButPlayer(self,message):
 	json.dumps(message)
 	for key in connections:
 		if key != self.request.remote_ip:
 			connections[key].write_message(message)
-
+'''
+'''
 def SignIn(connection,data):
 	print("User signing in : ",data["userName"])
 	#check that the character are safe before executing the mysql command
@@ -146,8 +150,9 @@ def SignIn(connection,data):
 		print("Warning unsafe characters recieved : message " ,data)
 		message["ERROR"] = "INVALIDCHARSSIGNIN"
 		sendToPlayer(connection,message)
-		
+'''		
 
+'''
 def SignUp(connection,data):
 	message = {}
 	print("New User Signing up UserName =" ,data["userName"])
@@ -195,7 +200,7 @@ def SignUp(connection,data):
 		print("Warning unsafe characters recieved : message " ,data)
 		message["ERROR"] = "INVALIDCHARSSIGNUP"
 		sendToPlayer(connection,message)
-
+'''
 def LogOut(connection):
 	message = {}
 	print("Logging out user :", connection.request.remote_ip)
@@ -249,7 +254,7 @@ def GetItemLocations(connection, data):
 		result = cursor.fetchall()
 	message["ITEMSFOUND"] = result
 	sendToPlayer(connection,message)
-
+'''
 def GetAllGames(connection, data):
 	DeActivateOldGames()
 	print("Getting all games for : ",connection.request.remote_ip)
@@ -282,7 +287,7 @@ def GetAllGames(connection, data):
 		allGames.append(temp)
 	message["GAMESLIST"] = {"myHostedGames" : hostGames, "availableGames" : allGames,}
 	sendToPlayer(connection,message)
-
+'''
 def PickUpItem(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -425,7 +430,7 @@ def getdistBetween(lt1, ln1 , lt2 , ln2):
 	distance = R * c
 	print ("Distance : ",distance ,"m")
 	return distance; # returns distance in meters
-
+'''
 def DeActivateOldGames():
 	print("Checking for expired Games that are still marked as active")
 	with MyUtils.UseDatabase(config) as cursor:	
@@ -438,7 +443,7 @@ def DeActivateOldGames():
 		with MyUtils.UseDatabase(config) as cursor:	
 			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
 			cursor.execute(SQL)
-
+'''
 
 def IsUserAlreadyInGame(userId,gameId):
 	print("Checking if user" , userId , " is already associated with game ", gameId )
@@ -451,7 +456,7 @@ def IsUserAlreadyInGame(userId,gameId):
 	else:
 		return False;
 
-
+'''
 def GetUserId(connection):
 	print("Getting userId ")
 	with MyUtils.UseDatabase(config) as cursor:		
@@ -460,6 +465,8 @@ def GetUserId(connection):
 		userID = cursor.fetchone()
 	return userID[0]
 #validate the data the ensure character which could allow users to modify mysql database are not present 
+'''
+'''
 def validateCharacter(val):
 	if ";" in val:
 		return False
@@ -469,19 +476,21 @@ def validateCharacter(val):
 		return False
 	else:
 		return True
-
+'''
+'''
 def hash_password(password):
     # uuid is used to generate a random number
     salt = uuid.uuid4().hex
     return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
-    
+ '''
+ '''   
 def check_password(hashed_password, user_password):
     password, salt = hashed_password.split(':')
     return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()	
+'''
 
 
-
-
+'''
 app = tornado.web.Application([
 	(r'/test', WSHandler),
 	])
@@ -490,5 +499,5 @@ if __name__ == '__main__':
 	#what is 8080?
 	app.listen(8080)
 	tornado.ioloop.IOLoop.instance().start()
-
+'''
 	

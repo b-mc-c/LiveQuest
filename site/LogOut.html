@@ -21,7 +21,7 @@
     </div>
     <div class="centre centreHorz">
       <h1>Are you sure you want to log out?</h1>
-      <button id="LogOutBtn" class="btn">Yes</button>
+      <button id="LogOutBtn" data-bind="click: LogOut" class="btn">Yes</button>
       <button onclick="parent.location='home.html'" class="btn">No</button>
     </div>
   </body>
@@ -36,17 +36,20 @@
       var viewModel = {
       	currentPageName : ko.observable("LogOut"),
       	menuOptions : ko.observableArray([{name:"Home",url:"home.html",_class:""},
-      									{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+      				{name:"LogOut",url:"LogOut.html",_class:"active"},]),
+      	LogOut: function(){
+      	$.ajax({
+      	url: '../Server/LogOut.php',
+      	type: 'Get',
+      	async: false,
+      	success: function(data)
+      		{
+      			data = JSON.parse(data);
+      			Receive(data);
+      		}
+      	});
+      	}
       }
-      $(document).ready(function(){
-      
-      $("#LogOutBtn").click(function(){
-      	message = {}
-      	message["LOGOUT"] = "LogOut";
-      	ws.send(JSON.stringify(message));
-      });
-      });//end document ready
-      
       function Receive(data)
       {
       	console.log(data);

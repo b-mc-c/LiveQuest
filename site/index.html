@@ -47,8 +47,8 @@
           <tr>
             <td></td>
             <td>
-              <input id="SignIn" type="button" value="Submit" class="btn">
-              <input id="Join" type="button" value="Join" class="btn">
+              <input id="SignIn" type="button" value="Submit" data-bind="click: SignIn" class="btn">
+              <input id="Join" type="button" value="Join" data-bind="click: ShowJoin" class="btn">
             </td>
           </tr>
         </tbody>
@@ -98,8 +98,8 @@
           <tr>
             <td></td>
             <td>
-              <input id="SignUP" type="button" value="Sign Up" class="btn">
-              <input id="ReturnToSignIn" type="button" value="Return to Sign In" class="btn">
+              <input id="SignUP" type="button" value="Sign Up" data-bind="click: SignUp" class="btn">
+              <input id="ReturnToSignIn" type="button" value="Return to Sign In" data-bind="click: ShowSignIn" class="btn">
             </td>
           </tr>
         </tbody>

@@ -7,10 +7,6 @@ var viewModel = {
 	myHostedGames : ko.observableArray(),
 }
 
-$(document).ready(function(){
-	
-});//end document ready
-
 function Receive(data)
 {
 	console.log(data);
@@ -37,9 +33,16 @@ function Receive(data)
 
 function GetGames()
 {
-	message = {}
-	message["GETGAMES"] = "ALL";
-	ws.send(JSON.stringify(message));
+	$.ajax(
+	{
+		url: '../Server/GetAllGames.php',
+		type: 'Get',
+		success: function(data) 
+		{
+			data = JSON.parse(data);
+			Receive(data);
+		}
+	});
 }
 function SetGames(data)
 {
@@ -47,17 +50,23 @@ function SetGames(data)
 	viewModel.availableGames.removeAll();
 	viewModel.myHostedGames.removeAll();
 
-	var a = data["availableGames"]
-	var h = data["myHostedGames"]
-	for (i = 0; i < a.length; i++) 
+	var a = data[0]["availableGames"]
+	var h = data[0]["myHostedGames"]
+	if(a != null)
 	{
-		var temp = {Name:a[i]["name"],end:a[i]["time"],url:"ViewGame.html#" + a[i]["id"], hostName: a[i]["host"]};
-		viewModel.availableGames.push(temp);
+		for (i = 0; i < a.length; i++) 
+		{
+			var temp = {Name:a[i]["GameName"],end:a[i]["GameEndTime"],url:"ViewGame.html#" + a[i]["id"], hostName: a[i]["HostId"]};
+			viewModel.availableGames.push(temp);
+		}
 	}
-	for (i = 0; i < h.length; i++) 
+	if(h != null)
 	{
-		var temp = {Name:h[i]["name"],end:h[i]["time"],url:"ViewGame.html#" + h[i]["id"]};
-		viewModel.myHostedGames.push(temp);
+		for (i = 0; i < h.length; i++) 
+		{
+			var temp = {Name:h[i]["GameName"],end:h[i]["GameEndTime"],url:"ViewGame.html#" + h[i]["id"]};
+			viewModel.myHostedGames.push(temp);
+		}
 	}
 }
 
