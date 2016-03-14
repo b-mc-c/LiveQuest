@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="external/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/site.css">
     <link rel="stylesheet" href="external/jquery-ui.min.css">
-    <title>LiveQuest-Play</title>
+    <title>LiveQuest-View game</title>
   </head>
   <body class="homeBody">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -17,6 +17,13 @@
             <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
           </ul>
         </div>
+      </div>
+    </div>
+    <div class="centreHorz">
+      <button data-bind="click: JoinGame" class="spacedOut10 btn btn-success">Play</button><br>
+      <div data-bind="visible: showChangeCharcter">
+        <button onclick="UpdateMyIcon(-1)" class="spacedOut10 btn">&lt;&lt;</button><span>Player Icon</span>
+        <button onclick="UpdateMyIcon(1)" class="spacedOut10 btn">&gt;&gt; </button>
       </div>
     </div>
     <!--iframe(width='600', height='450', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/view?zoom=6&center=53.4129%2C-8.2439&key=AIzaSyDBkbavEZrxRy9xx2C2MuxWslbUlcV5JPk', allowfullscreen='')-->

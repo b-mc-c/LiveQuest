@@ -5,12 +5,21 @@ var viewModel = {
 									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	ItemInfo: ko.observable(""),
 	JoinGame : function(){
-
-		//nedd to add player to the game on server 
-		message = {}
-		message["ADDPLAYERTOGAME"] = {"GameId" : window.location.hash.substring(1), "PlayerIconId" : myIconId };
-		ws.send(JSON.stringify(message));
-		document.location.href = "PlayGame.html#"+window.location.hash.substring(1) ;
+		$.ajax({
+		        url: '../Server/AddPlayerToGame.php',
+		        type: 'POST',
+		        data: 
+		        {
+		            gameId: gameId,
+		            playerIconId: myIconId,
+		        },
+		       success: function(data) {
+				    if(data == true)
+				    {
+				    	document.location.href = "PlayGame.html#"+gameId ;
+				    }
+				},
+	    	});		
 	},
 	showChangeCharcter : ko.observable(true),
 }
@@ -64,7 +73,7 @@ function Receive(data)
 	}
 	if (data["PLAYERICON"])
 	{
-		UpdatePlayerIcon(data["PLAYERICON"]);
+		UpdatePlayerIcon(parseInt(data["PLAYERICON"]));
 		viewModel.showChangeCharcter(false);
 	};
 }//end recieve
@@ -128,11 +137,18 @@ function showError(error) {
 function updateItemlocations()
 {
 	//alert("update item locations called ")
-	message = {}
-	message["ITEMLOCATIONS"] = {"GameId" : gameId};
-	message["PLAYERICON"] = {"GameId" : gameId};
-	//alert(JSON.stringify(message))
-	ws.send(JSON.stringify(message));
+	$.ajax({
+        url: '../Server/GetViewGameInfo.php',
+        type: 'POST',
+        data: 
+        {
+            gameId: gameId,
+        },
+       success: function(data) {
+			data = JSON.parse(data);
+			Receive(data);
+		},
+	});	
 }
 function placeItemsOnMap(MapItems)
 {
@@ -144,12 +160,12 @@ function placeItemsOnMap(MapItems)
 	availableMapItems = MapItems;
 	for (i = 0; i < MapItems.length; i++) 
 	{
-		var myLatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
+		var myLatLng = {lat: parseFloat(MapItems[i].Lat), lng: parseFloat(MapItems[i].Lng)};
 		var marker = new google.maps.Marker({
 		position: myLatLng,
 		map: map,
 		icon: "img/chestIcon.png",
-		title: 'Gold : ' + MapItems[i][4] + ", Pickup range : " + MapItems[i][5] + "m",
+		title: 'Gold : ' + parseFloat(MapItems[i].Gold) + ", Pickup range : " + parseFloat(MapItems[i].PickUpRange) + "m",
 		});	
 		markers.push(marker);	
 	}
