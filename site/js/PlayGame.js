@@ -198,7 +198,7 @@ function placePlayersOnMap(MapItems)
 	PlayerMarkers = [];
 	for (i = 0; i < MapItems.length; i++) 
 	{
-		var IconId = MapItems[i][1]
+		var IconId = parseInt(MapItems[i].PlayerIcon)
 		var image = {
 	    url: 'img/characters.png',
 	    // This marker is 20 pixels wide by 32 pixels high.
@@ -208,7 +208,7 @@ function placePlayersOnMap(MapItems)
 	    // The anchor for this image is the base of the flagpole at (0, 32).
 	    anchor: new google.maps.Point(25, 25)
 	 	 };
-		var LatLng = {lat: MapItems[i][2], lng: MapItems[i][3]};
+		var LatLng = {lat: parseFloat(MapItems[i].Lat), lng: parseFloat(MapItems[i].Lng)};
 		var marker = new google.maps.Marker({
 		position: LatLng,
 		map: map,
