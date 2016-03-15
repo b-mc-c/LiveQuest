@@ -201,6 +201,7 @@ def SignUp(connection,data):
 		message["ERROR"] = "INVALIDCHARSSIGNUP"
 		sendToPlayer(connection,message)
 '''
+'''
 def LogOut(connection):
 	message = {}
 	print("Logging out user :", connection.request.remote_ip)
@@ -211,7 +212,8 @@ def LogOut(connection):
 	print("User Logged Out assigned with user")
 	message["LOGGEDOUT"] = True
 	sendToPlayer(connection,message)
-
+'''
+'''
 def CreateNewGame(connection, data):
 	message = {}
 	print("Atempting to create new game ")
@@ -244,7 +246,8 @@ def CreateNewGame(connection, data):
 		print("Warning unsafe characters recieved : message " ,data)
 		message["ERROR"] = "INVALIDCHARSNEWGAME"
 		sendToPlayer(connection,message)
-
+'''
+'''
 def GetItemLocations(connection, data):
 	message = {}
 	gameId = data["GameId"]
@@ -254,6 +257,7 @@ def GetItemLocations(connection, data):
 		result = cursor.fetchall()
 	message["ITEMSFOUND"] = result
 	sendToPlayer(connection,message)
+'''
 '''
 def GetAllGames(connection, data):
 	DeActivateOldGames()
@@ -287,6 +291,7 @@ def GetAllGames(connection, data):
 		allGames.append(temp)
 	message["GAMESLIST"] = {"myHostedGames" : hostGames, "availableGames" : allGames,}
 	sendToPlayer(connection,message)
+'''
 '''
 def PickUpItem(connection, data):
 	message = {}
@@ -330,7 +335,8 @@ def PickUpItem(connection, data):
 			GetMyGold(connection, data)#send back the current gold
 		else:
 			print ("item was not in range ")
-
+'''
+'''
 def GetMyGold(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -344,7 +350,8 @@ def GetMyGold(connection, data):
 			currentGold = cursor.fetchone()[0]
 		message["CurrentGold"] = {"Gold" : currentGold,} 
 		sendToPlayer(connection,message)
-
+'''
+'''
 def GetMyItems(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -356,7 +363,8 @@ def GetMyItems(connection, data):
 			items = cursor.fetchall()
 		message["MyItemsList"] = items
 		sendToPlayer(connection,message)
-
+'''
+'''
 def GetplayersInGame(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -367,7 +375,8 @@ def GetplayersInGame(connection, data):
 		items = cursor.fetchall()
 	message["PlayersInGame"] = items
 	sendToPlayer(connection,message)
-
+'''
+'''
 def UpdatePlayerLocation(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -384,7 +393,8 @@ def UpdatePlayerLocation(connection, data):
 		print("Updated players position : ", userID, ", Lat : ", Lat ,", Lng : ", Lng)
 	else:
 		print("User ",userID, " not already in game ", gameId)
-
+'''
+'''
 def AddPlayerToGame(connection,data):
 	userID = GetUserId(connection)
 	gameID = int(data["GameId"])
@@ -398,8 +408,8 @@ def AddPlayerToGame(connection,data):
 		print("Successfully added user" , userID , " to game ", data["GameId"])
 	else:
 		print("User" , userID , "already associated with game ", data["GameId"] , " : Do nothing" )
-
-
+'''
+'''
 def getPlayerIcon(connection, data):
 	message = {}
 	userID = GetUserId(connection)
@@ -411,7 +421,8 @@ def getPlayerIcon(connection, data):
 			icon = cursor.fetchone()
 		message["PLAYERICON"] = icon[0]
 		sendToPlayer(connection,message)
-
+'''
+'''
 def getdistBetween(lt1, ln1 , lt2 , ln2):
 	#formula source http://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude-python 
 	# approximate radius of earth in km
@@ -431,6 +442,7 @@ def getdistBetween(lt1, ln1 , lt2 , ln2):
 	print ("Distance : ",distance ,"m")
 	return distance; # returns distance in meters
 '''
+'''
 def DeActivateOldGames():
 	print("Checking for expired Games that are still marked as active")
 	with MyUtils.UseDatabase(config) as cursor:	
@@ -444,7 +456,7 @@ def DeActivateOldGames():
 			SQL = '''UPDATE games SET active=0 WHERE id=%i'''% (game[0])
 			cursor.execute(SQL)
 '''
-
+'''
 def IsUserAlreadyInGame(userId,gameId):
 	print("Checking if user" , userId , " is already associated with game ", gameId )
 	with MyUtils.UseDatabase(config) as cursor:	
@@ -455,7 +467,7 @@ def IsUserAlreadyInGame(userId,gameId):
 		return True;
 	else:
 		return False;
-
+'''
 '''
 def GetUserId(connection):
 	print("Getting userId ")
