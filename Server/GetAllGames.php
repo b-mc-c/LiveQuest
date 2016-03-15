@@ -18,7 +18,7 @@
 		{
 			$rows['availableGames'][] = $r;
 		}
-		$message['GAMESLIST'][] = $rows;
+		$message['GAMESLIST'] = $rows;
 	}	
 	echo json_encode($message);/*return the message as ajson encoded object*/
 ?>

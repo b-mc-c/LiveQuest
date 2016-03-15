@@ -151,7 +151,7 @@
 	{
 		foreach ($items as $item) 
 		{
-			$sql = sprintf("INSERT INTO game_Items (GameId, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
+			$sql = sprintf("INSERT INTO game_items (GameId, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
 											VALUES ( %d, %d , '%s',%d , %d, %.20f , %.20f , 0, 1)", $gameId,
 											$item["Item"], $item["Name"], $item["Gold"], $item["Range"], $item["Lat"], $item["Lng"]);
 			RunSql($sql);
@@ -173,7 +173,7 @@
 	{
 		/*check if player currently in game*/
 		
-		$sql = sprintf("SELECT count(*)  FROM Game_Players WHERE PlayerId = %d AND GameId = %d",$userId, $gameId);									
+		$sql = sprintf("SELECT count(*)  FROM game_players WHERE PlayerId = %d AND GameId = %d",$userId, $gameId);									
 		$result = RunSql($sql);
 		$COUNT_NUMBER = $result->fetch_array(); 
 		$count = $COUNT_NUMBER[0]; 
@@ -190,22 +190,110 @@
 	/*Get list of items in a game */
 	function GetActiveItems($gameId)
 	{
-		$sql = sprintf("SELECT * FROM game_Items WHERE GameId = %d AND pickedUp = 0 AND Alive > 0;", $gameId);
+		$sql = sprintf("SELECT * FROM game_items WHERE GameId = %d AND pickedUp = 0 AND Alive > 0;", $gameId);
 		return RunSql($sql);
 	}
 	/*Get list of players in a game */
 	function GetPlayersInGame($gameId,$userId)
 	{
-		$sql = sprintf("SELECT PlayerId , PlayerIcon , Lat ,Lng  from Game_players WHERE GameId = %d  AND Alive = 1  AND PlayerId NOT IN (%d)", $gameId,$userId);
+		$sql = sprintf("SELECT PlayerId , PlayerIcon , Lat ,Lng  from game_players WHERE GameId = %d  AND Alive = 1  AND PlayerId NOT IN (%d)", $gameId,$userId);
 		return RunSql($sql);
 	}
 	
 	/*Get players icon for game */
 	function GetPlayerIcon($gameId,$userId)
 	{
-		$sql = sprintf("SELECT PlayerIcon from Game_players WHERE GameId = %d AND PlayerId = %d", $gameId, $userId);
+		$sql = sprintf("SELECT PlayerIcon from game_players WHERE GameId = %d AND PlayerId = %d", $gameId, $userId);
 		$result = RunSql($sql);
 		$row = $result->fetch_assoc();
 		return $row['PlayerIcon'];
 	}
+	/*Update the players location */
+	function UpdatePlayerLocation($gameId,$userId,$lat,$lng)
+	{
+		$sql = sprintf("UPDATE game_players SET Lat=%.16f, Lng=%.16f WHERE GameId=%d AND PlayerId = %d ", $lat,$lng, $gameId, $userId);
+		RunSql($sql);
+	}
+	/*gets the players items associated with this game*/
+	function GetPlayersItems($gameId,$userId)
+	{
+		
+		$sql = sprintf("SELECT id , itemIdentifier, Name from game_items WHERE GameId = %d AND User = %d AND Alive = 1 AND PickedUp = 1 ", $gameId, $userId);
+		return RunSql($sql);
+	}
+	/*Gets the players gold assocaited with this game*/
+	function GetPlayersGold($gameId,$userId)
+	{
+		
+		$sql = sprintf("SELECT Gold FROM game_players WHERE GameId =%d AND PlayerId = %d", $gameId, $userId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		return $row['Gold'];
+	}
+	/*Sets the players gold assocaited with this game*/
+	function SetPlayersGold($gameId,$userId, $value)
+	{
+		$sql = sprintf("UPDATE game_players SET Gold = %d WHERE GameId =%d AND PlayerId = %d",$value , $gameId, $userId);
+		RunSql($sql);
+	}
+	/*Check if the user is in range of an item */
+	function UserInRangeOfItem($gameId,$userId,$itemId)
+	{
+		/*Get items data from db*/
+		$sql = sprintf("SELECT * FROM game_items WHERE id = %d", $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$itemLat = $row['Lat'];
+		$itemLng = $row['Lng'];
+		$itemRange = $row['PickUpRange'];
+		/*Get users data from db*/
+		$sql = sprintf("SELECT * FROM game_players WHERE PlayerId = %d and GameId = %d", $userId , $gameId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$userLat = $row['Lat'];
+		$userLng = $row['Lng'];
+		if(DistanceBetween($itemLat,$itemLng,$userLat,$userLng) <= $itemRange)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	/*distance between to lat lng points in meters*/
+	function DistanceBetween($itemLat,$itemLng,$userLat,$userLng)
+	{
+		$R = 6371000;/*approx radius of earth in meters*/
+		$lat1 = deg2rad($itemLat);/*Convert to radians*/
+		$lon1 = deg2rad($itemLng);/*Convert to radians*/
+		$lat2 = deg2rad($userLat);/*Convert to radians*/
+		$lon2 = deg2rad($userLng);/*Convert to radians*/
+		$dlon = $lon2 - $lon1;
+		$dlat = $lat2 - $lat1;
+		$a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlon / 2) * sin($dlon / 2);
+		$c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+		$distance = $R * $c;
+		return $distance; /* returns distance in meters */
+	}
+	/* asigns the item with id $itemId to $userId and icreases plaers gold by itemsGold*/
+	function AsignItemToPlayer($gameId,$userId,$itemId)
+	{
+		/*Assign*/
+		$sql = sprintf("UPDATE game_items SET User = %d, PickedUp =1 Where id =%d", $userId, $itemId);
+		RunSql($sql);	
+		$itemGold = GetitemsGold($itemId);/*get items gold value*/
+		$playersGold = GetPlayersGold($gameId,$userId);/*get the players gold value*/
+		$newValue = $itemGold + $playersGold;/*add the items gold to the players gold*/
+		SetPlayersGold($gameId,$userId, $newValue); /*sets the players new gold in db*/
+	}
+	/*gets the gold value of an item*/
+	function GetitemsGold($itemId)
+	{
+		$sql = sprintf("SELECT Gold FROM game_items WHERE id =%d", $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		return $row['Gold'];
+	}
+
 ?>

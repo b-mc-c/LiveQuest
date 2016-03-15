@@ -4,6 +4,7 @@
 	$gameId = $_POST['gameId'];/*get game id*/ 
 	$userId = GetIdFromConnections($ip);/*get user id associated with this ip*/
 	$message = array();/*message to be returned*/
+	$message['ITEMSFOUND'] = null;
 	if($userId != null)
 	{
 

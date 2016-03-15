@@ -134,14 +134,20 @@ function showError(error) {
 /*calls to server to get updates*/
 function updateItemlocations()
 {
-	message = {}
-	message["ITEMLOCATIONS"] = {"GameId" : gameId};
-	message["PLAYERICON"] = {"GameId" : gameId};
-	message["GETMYITEMS"]  = {"GameId" : gameId};
-	message["GETMYGOLD"] = {"GameId" : gameId};
-	message["GETPLAYERSINGAME"] = {"GameId" : gameId};
-	message["UPDATEPLAYERLOCATION"] = {"GameId" : gameId, "Lat" : myLatLng["lat"] ,"Lng": myLatLng["lng"]};
-	ws.send(JSON.stringify(message));
+	$.ajax({
+        url: '../Server/UpdateGameState.php',
+        type: 'POST',
+        data: 
+        {
+            gameId: gameId,
+            lat: myLatLng["lat"],
+            lng: myLatLng["lng"],
+        },
+       success: function(data) {
+			data = JSON.parse(data);
+			Receive(data);
+		},
+	});	/*end ajax*/
 }
 function placeItemsOnMap(MapItems)
 {
@@ -161,12 +167,12 @@ function placeItemsOnMap(MapItems)
 	for (i = 0; i < MapItems.length; i++) 
 	{
 		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
-		var LatLng = {lat: MapItems[i][6], lng: MapItems[i][7]};
+		var LatLng = {lat: parseFloat(MapItems[i].Lat), lng: parseFloat(MapItems[i].Lng)};
 		var marker = new google.maps.Marker({
 		position: LatLng,
 		map: map,
 		icon: "img/chestIcon.png",
-		title: 'Gold : ' + MapItems[i][4] + ", Pickup range : " + MapItems[i][5] + "m",
+		title: 'Gold : ' + parseFloat(MapItems[i].Gold) + ", Pickup range : " + parseFloat(MapItems[i].PickUpRange) + "m",
 		html: contentString,
 		});
 		
@@ -219,11 +225,22 @@ function PickUpObject(i)
 {
 	message = {}
 	var mapitem = availableMapItems[i];
-	if(getdistBetween(mapitem[6], mapitem[7] , myLatLng["lat"] , myLatLng["lng"]) <= mapitem[5])
+	if(getdistBetween(parseFloat(mapitem.Lat), parseFloat(mapitem.Lng), myLatLng["lat"] , myLatLng["lng"]) <= parseInt(mapitem.PickUpRange))
 	{
-		//alert("in range");
-		message["PICKUPITEM"] = {"GameId" : gameId, "Item" : mapitem, "playerLatLng" : myLatLng}
-		ws.send(JSON.stringify(message));
+		$.ajax({
+	        url: '../Server/PickUpObject.php',
+	        type: 'POST',
+	        data: 
+	        {
+	            gameId: gameId,
+	            item: parseInt(mapitem.id),
+	            latLng: myLatLng,
+	        },
+	       success: function(data) {
+				data = JSON.parse(data);
+				Receive(data);
+			},
+		});	/*end ajax*/
 	}
 	else
 	{
@@ -231,14 +248,6 @@ function PickUpObject(i)
 	}
 
 }
-
-function GetMyItems()
-{
-	message = {}
-	message["GETMYITEMS"]  = {"GameId" : gameId,};
-	ws.send(JSON.stringify(message));
-}
-
 function getdistBetween(lat1, lon1 , lat2 , lon2) 
 {
 	/** Converts numeric degrees to radians */
@@ -261,15 +270,6 @@ function getdistBetween(lat1, lon1 , lat2 , lon2)
 	return d; // returns distance in meters
 
 }
-
-function Update()
-{
-	message = {};
-	message["ITEMLOCATIONS"] = {"GameId" : gameId};
-
-	UpdateMyPosition();
-
-}
 function UpdateMyPosition()
 {
 		/*Get current longLat*/
@@ -280,7 +280,7 @@ function UpdateMyPosition()
         alert( "Geolocation is not supported by this browser.");
 	}
 
-	ws.send(JSON.stringify(message));
+//	ws.send(JSON.stringify(message));
 }
 
 function UpdatePosition(position) {//initiate the google maps centred on my position
@@ -307,12 +307,12 @@ function SetMyItems(pickedUpitems)
 	for (var i = 0; i < pickedUpitems.length ;i++)
 	{
 		
-		viewModel.myPickedUpItems.push({"Name" : pickedUpitems[i][2] , "Image" : images[pickedUpitems[i][1]] })
+		viewModel.myPickedUpItems.push({"Name" : pickedUpitems[i].Name , "Image" : images[parseInt(pickedUpitems[i].itemIdentifier)] })
 	}
 }
 function SetMyGold(gold)
 {
 
-	viewModel.myGold(gold["Gold"] );
+	viewModel.myGold(parseInt(gold));
 }
 ko.applyBindings(viewModel);

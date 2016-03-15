@@ -50,8 +50,8 @@ function SetGames(data)
 	viewModel.availableGames.removeAll();
 	viewModel.myHostedGames.removeAll();
 
-	var a = data[0]["availableGames"]
-	var h = data[0]["myHostedGames"]
+	var a = data["availableGames"]
+	var h = data["myHostedGames"]
 	if(a != null)
 	{
 		for (i = 0; i < a.length; i++) 
