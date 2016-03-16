@@ -144,6 +144,11 @@ function updateItemlocations()
             lng: myLatLng["lng"],
         },
        success: function(data) {
+       		viewModel.myPickedUpItems.removeAll();
+			for (i = 0; i < markers.length; i++) 
+			{
+				markers[i].setMap(null);
+			}
 			data = JSON.parse(data);
 			Receive(data);
 		},
@@ -237,8 +242,13 @@ function PickUpObject(i)
 	            latLng: myLatLng,
 	        },
 	       success: function(data) {
+	       		for (i = 0; i < markers.length; i++) 
+				{
+					markers[i].setMap(null);
+				}
 				data = JSON.parse(data);
 				Receive(data);
+				
 			},
 		});	/*end ajax*/
 	}

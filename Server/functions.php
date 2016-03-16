@@ -279,13 +279,21 @@
 	/* asigns the item with id $itemId to $userId and icreases plaers gold by itemsGold*/
 	function AsignItemToPlayer($gameId,$userId,$itemId)
 	{
-		/*Assign*/
-		$sql = sprintf("UPDATE game_items SET User = %d, PickedUp =1 Where id =%d", $userId, $itemId);
-		RunSql($sql);	
-		$itemGold = GetitemsGold($itemId);/*get items gold value*/
-		$playersGold = GetPlayersGold($gameId,$userId);/*get the players gold value*/
-		$newValue = $itemGold + $playersGold;/*add the items gold to the players gold*/
-		SetPlayersGold($gameId,$userId, $newValue); /*sets the players new gold in db*/
+		/*confirm that item has not alread been asigned*/
+		$sql = sprintf("Select PickedUp from game_items Where id =%d", $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$pickedUp = $row['PickedUp'];
+		if($pickedUp == 0)
+		{
+			/*Assign*/
+			$sql = sprintf("UPDATE game_items SET User = %d, PickedUp =1 Where id =%d", $userId, $itemId);
+			RunSql($sql);	
+			$itemGold = GetitemsGold($itemId);/*get items gold value*/
+			$playersGold = GetPlayersGold($gameId,$userId);/*get the players gold value*/
+			$newValue = $itemGold + $playersGold;/*add the items gold to the players gold*/
+			SetPlayersGold($gameId,$userId, $newValue); /*sets the players new gold in db*/
+		}
 	}
 	/*gets the gold value of an item*/
 	function GetitemsGold($itemId)
