@@ -6,12 +6,28 @@ var viewModel = {
 	ItemInfo: ko.observable(""),
 	myPickedUpItems: ko.observableArray(),
 	myGold : ko.observable("0"), 
+	ShowItemDescitpion :function(item, event)/**/ 
+	{
+		$(event.target).parent().parent().parent().show().find(".BottomInfo").toggle() 
+	}/*end ShowItemDescitpion*/,
+	UseItem : function(item, event)/**/ 
+	{
+		alert("use Item");
+	},
 }
 var gameId = parseInt(window.location.hash.substring(1));
 /* Markers list*/
-
-var images = ["","img/chain.png","img/pocket.png","img/MCHammer.png","img/fishing-rod.png","img/gold_digger.png","img/thieves.png","img/book.png","img/basket.png"];
-
+var itemInfo =  
+	{
+		1 : {Identifier : 1, Useable : false, Name: "Purse Chain", Image: "img/chain.png", Description: "Prevents your purse from being stolen but snaps after one use."},
+		2 : {Identifier : 2, Useable : false, Name: "Fake Pocket", Image: "img/pocket.png", Description: "A fake pocket sewn into you jacket fools potential thieves attempting to relieve you of your gold."},
+		3 : {Identifier : 3, Useable : true, Name: "Mc Hammer", Image: "img/MCHammer.png", Description: "Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold."},
+		4 : {Identifier : 4, Useable : true, Name: "Fishing rod", Image: "img/fishing-rod..png", Description: "The fishing rod allows you to fish out another players coin purse."},
+		5 : {Identifier : 5, Useable : true, Name: "Gold Digger", Image: "img/gold_digger.png", Description: "So you think she's a gold digger, Release the gold digger on another player to relieve them of some of their gold."},
+		6 : {Identifier : 6, Useable : true, Name: "40 Thieves", Image: "img/thieves.png", Description: "Dispatch Ali Baba's 40 thieves to steal gold from players in range."},
+		7 : {Identifier : 7, Useable : true, Name: "Oldest trick in the book", Image: "img/book.png", Description: "Distract a player by shouting ''Look over there'' while they look away help yourself to their gold."},
+		8 : {Identifier : 8, Useable : false, Name: "Baby in a Basket", Image: "img/basket.png", Description: "When a player attempts to steal from you A baby in basket appears and with a booming voice shouts ''Thou shalt not steal!!'' scaring off any thief."},
+	};
 var markers = [];
 var PlayerMarkers = [];
 var myPosMarker;
@@ -317,7 +333,7 @@ function SetMyItems(pickedUpitems)
 	for (var i = 0; i < pickedUpitems.length ;i++)
 	{
 		
-		viewModel.myPickedUpItems.push({"Name" : pickedUpitems[i].Name , "Image" : images[parseInt(pickedUpitems[i].itemIdentifier)] })
+		viewModel.myPickedUpItems.push(itemInfo[parseInt(pickedUpitems[i].itemIdentifier)])
 	}
 }
 function SetMyGold(gold)

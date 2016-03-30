@@ -35,8 +35,18 @@
           </thead>
           <tbody data-bind="foreach: myPickedUpItems" class="itemsTableBody">
             <tr>
-              <td><span data-bind="text: Name"></span></td>
-              <td><img data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;" class="spacedOut10"></td>
+              <td colspan="2">
+                <div data-bind="click: $root.ShowItemDescitpion" class="topInfo">
+                  <div style="float: left; width: 50%;  height : 70px;"><span data-bind="text: Name"></span></div>
+                  <div style="float: left; width: 50%;  height : 70px;"><img data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;" class="spacedOut10"></div>
+                </div>
+                <div style="display: none;" class="BottomInfo">
+                  <div style="float: left; width: 85%;"><span data-bind="text: Description"></span></div>
+                  <div data-bind="visible: Useable" style="float: left; width: 15%;">
+                    <div data-bind="click: $root.UseItem" class="btn btn-success">Use</div>
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
