@@ -12,21 +12,24 @@ var viewModel = {
 	}/*end ShowItemDescitpion*/,
 	UseItem : function(item, event)/**/ 
 	{
-		alert("use Item");
+		useItem = true;
+		selectedItem = item;
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
+		playSound("");
 	},
 }
 var gameId = parseInt(window.location.hash.substring(1));
 /* Markers list*/
 var itemInfo =  
 	{
-		1 : {Identifier : 1, Useable : false, Name: "Purse Chain", Image: "img/chain.png", Description: "Prevents your purse from being stolen but snaps after one use."},
-		2 : {Identifier : 2, Useable : false, Name: "Fake Pocket", Image: "img/pocket.png", Description: "A fake pocket sewn into you jacket fools potential thieves attempting to relieve you of your gold."},
-		3 : {Identifier : 3, Useable : true, Name: "Mc Hammer", Image: "img/MCHammer.png", Description: "Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold."},
-		4 : {Identifier : 4, Useable : true, Name: "Fishing rod", Image: "img/fishing-rod..png", Description: "The fishing rod allows you to fish out another players coin purse."},
-		5 : {Identifier : 5, Useable : true, Name: "Gold Digger", Image: "img/gold_digger.png", Description: "So you think she's a gold digger, Release the gold digger on another player to relieve them of some of their gold."},
-		6 : {Identifier : 6, Useable : true, Name: "40 Thieves", Image: "img/thieves.png", Description: "Dispatch Ali Baba's 40 thieves to steal gold from players in range."},
-		7 : {Identifier : 7, Useable : true, Name: "Oldest trick in the book", Image: "img/book.png", Description: "Distract a player by shouting ''Look over there'' while they look away help yourself to their gold."},
-		8 : {Identifier : 8, Useable : false, Name: "Baby in a Basket", Image: "img/basket.png", Description: "When a player attempts to steal from you A baby in basket appears and with a booming voice shouts ''Thou shalt not steal!!'' scaring off any thief."},
+		1 : {Identifier : 1, 	Useable : false, 	EffectRange : 0, 	TheftAmount: 100,	Name: "Purse Chain", 				Image: "img/chain.png", 		Description: "Prevents your purse from being stolen but snaps after one use."},
+		2 : {Identifier : 2, 	Useable : false, 	EffectRange : 0, 	TheftAmount: 100,	Name: "Fake Pocket", 				Image: "img/pocket.png", 		Description: "A fake pocket sewn into you jacket fools potential thieves attempting to relieve you of your gold."},
+		3 : {Identifier : 3, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "Mc Hammer", 					Image: "img/MCHammer.png", 		Description: "Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold."},
+		4 : {Identifier : 4, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "Fishing rod", 				Image: "img/fishing-rod.png", 	Description: "The fishing rod allows you to fish out another players coin purse."},
+		5 : {Identifier : 5, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "Gold Digger", 				Image: "img/gold_digger.png", 	Description: "So you think she's a gold digger, Release the gold digger on another player to relieve them of some of their gold."},
+		6 : {Identifier : 6, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "40 Thieves", 				Image: "img/thieves.png", 		Description: "Dispatch Ali Baba's 40 thieves to steal gold from players in range."},
+		7 : {Identifier : 7, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "Oldest trick in the book", 	Image: "img/book.png", 			Description: "Distract a player by shouting ''Look over there'' while they look away help yourself to their gold."},
+		8 : {Identifier : 8, 	Useable : false, 	EffectRange : 0,  	TheftAmount: 100,	Name: "Baby in a Basket", 			Image: "img/basket.png", 		Description: "When a player attempts to steal from you A baby in basket appears and with a booming voice shouts ''Thou shalt not steal!!'' scaring off any thief."},
 	};
 var markers = [];
 var PlayerMarkers = [];
@@ -37,6 +40,8 @@ var infowindow = null;
 var availableMapItems = [];
 var myLatLng = {};
 
+var useItem = false;
+var selectedItem = 0;
 
 $(document).ready(function(){
 
@@ -44,6 +49,22 @@ $(document).ready(function(){
 	//placeItemsOnMap(1)
 
 });//end document ready
+
+/*Set up SoundManager*/
+
+
+soundManager.setup({
+  url: 'external/swf/',
+  flashVersion: 9, // optional: shiny features (default = 8)
+  // optional: ignore Flash where possible, use 100% HTML5 mode
+  // preferFlash: false,
+});/*end soundmanager.setup*/
+soundManager.onready(function() {
+    soundManager.createSound({
+        id: 'no',
+        url: 'sounds/no.mp3'
+    });
+});/*end soundmanager.onready*/
 
 function Receive(data)
 {
@@ -234,14 +255,45 @@ function placePlayersOnMap(MapItems)
 		position: LatLng,
 		map: map,
 		icon: image,
+		playerId : parseInt(MapItems[i].Lat)
 		});
-		
+		google.maps.event.addListener(marker,'click',function() {/*click event for when a player icon is clicked */
+ 			if(useItem)
+ 			{
+ 				if(getdistBetween(marker.getPosition().lat(),marker.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
+ 				{
+ 					/*if player in range call to database to confirm action */
+ 					$.ajax({
+	        			url: '../Server/UseItem.php',
+	        			type: 'POST',
+	        			data: 
+	        			{
+	            			gameId: gameId,
+	            			item: selectedItem.Id,
+	            			latLng: myLatLng,
+	            			target : marker.playerId,
+	        			},
+	       				success: function(data) {
+							data = JSON.parse(data);
+							Receive(data);
+						},
+					});	/*end ajax*/
+ 				}/*End if(getdistBetween(lat1, lon1 , lat2 , lon2) <= selectedItem.EffectRange)*/
+ 				else/*if not in range, play dud sound*/
+ 				{
+ 					//playSound('no')
+ 					playSound("no")
+ 				}
+ 			}/*end if (useitem)*/
+ 			useItem = false;
+ 		});/*end google.maps.event.addListener*/
 		PlayerMarkers.push(marker);	
 	}
-
 }
-
-
+function playSound(sound)
+{
+	soundManager.play(sound);
+}
 function PickUpObject(i)
 {
 	message = {}
@@ -332,8 +384,9 @@ function SetMyItems(pickedUpitems)
 	viewModel.myPickedUpItems.removeAll();
 	for (var i = 0; i < pickedUpitems.length ;i++)
 	{
-		
-		viewModel.myPickedUpItems.push(itemInfo[parseInt(pickedUpitems[i].itemIdentifier)])
+		var item = itemInfo[parseInt(pickedUpitems[i].itemIdentifier)];
+		item["Id"] = parseInt(pickedUpitems[i].id);
+		viewModel.myPickedUpItems.push(item);
 	}
 }
 function SetMyGold(gold)
