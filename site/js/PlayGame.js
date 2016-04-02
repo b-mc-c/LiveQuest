@@ -14,8 +14,7 @@ var viewModel = {
 	{
 		useItem = true;
 		selectedItem = item;
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-		playSound("");
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');/*for centreing phone screen on the map*/
 	},
 }
 var gameId = parseInt(window.location.hash.substring(1));
@@ -255,7 +254,7 @@ function placePlayersOnMap(MapItems)
 		position: LatLng,
 		map: map,
 		icon: image,
-		playerId : parseInt(MapItems[i].Lat)
+		playerId : parseInt(MapItems[i].PlayerId)
 		});
 		google.maps.event.addListener(marker,'click',function() {/*click event for when a player icon is clicked */
  			if(useItem)
@@ -270,10 +269,10 @@ function placePlayersOnMap(MapItems)
 	        			{
 	            			gameId: gameId,
 	            			item: selectedItem.Id,
-	            			latLng: myLatLng,
 	            			target : marker.playerId,
 	        			},
 	       				success: function(data) {
+	       					viewModel.myPickedUpItems.removeAll();
 							data = JSON.parse(data);
 							Receive(data);
 						},

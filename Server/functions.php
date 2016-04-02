@@ -303,5 +303,69 @@
 		$row = $result->fetch_assoc();
 		return $row['Gold'];
 	}
-
+	/*verify item is accoitated with user in this game and has not been used*/
+	function UserHasActiveItem($userId, $itemId, $gameId)
+	{
+		$sql = sprintf("SELECT count(*)  FROM game_items WHERE id = %d AND User = %d AND GameId = %d AND Alive = 1",$itemId, $userId, $gameId);									
+		$result = RunSql($sql);
+		$COUNT_NUMBER = $result->fetch_array(); 
+		$count = $COUNT_NUMBER[0]; 
+		/*if count == 1 then item is alive and associated with user in game*/
+		if($count == 0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}	
+	}
+	/*get distance between the user and the target, verify it is less than the range of the item*/
+	function IsTargetInRange($userId, $itemId, $targetId, $gameId)
+	{
+		/*step 1 get range of item*/
+		$sql = sprintf("SELECT ItemIdentifier FROM game_items WHERE id =%d", $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$itemIdentifier = $row['ItemIdentifier'];
+		$itemRanges = array(0,0, 0,100,100,100,100,100,0);
+		$range = $itemRanges[$itemIdentifier] ;
+		/*step 2 get position of user*/
+		$sql = sprintf("SELECT * FROM game_players WHERE PlayerId = %d and GameId = %d", $userId , $gameId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$userLat = $row['Lat'];
+		$userLng = $row['Lng'];
+		/*step 3 get position of target*/
+		$sql = sprintf("SELECT * FROM game_players WHERE PlayerId = %d and GameId = %d", $targetId , $gameId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$targetLat = $row['Lat'];
+		$targetLng = $row['Lng'];
+		/*step 4 get distance between user and target return true if less than item range else return false*/
+		if(DistanceBetween($targetLat,$targetLng,$userLat,$userLng) <= $range)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	function SetItemActiveToFalse($itemId)
+	{
+		$sql = sprintf("UPDATE game_items SET Alive = 0 Where id =%d", $itemId);
+		RunSql($sql);	
+	}
+	/*Get the amount of gold that this item allows you to steal*/
+	function GetItemsTheftAmount($itemId)
+	{
+		$sql = sprintf("SELECT ItemIdentifier FROM game_items WHERE id =%d", $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$itemIdentifier = $row['ItemIdentifier'];
+		$itemTheftAmounts = array(0,100, 100,100,100,100,100,100,100);
+		$amount = $itemTheftAmounts[$itemIdentifier];
+		return $amount;
+	}
 ?>
