@@ -33,6 +33,7 @@
 			{
 				$message['PlayersInGame'][] = $r;
 			}
+			$message['gameOver'] = checkGameOver($gameId);
 		}
 		
 	}	

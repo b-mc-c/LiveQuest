@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="external/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="external/jquery-ui.min.css">
+    <title>LiveQuest-Results</title>
+  </head>
+  <body class="homeBody">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div data-bind="text: currentPageName" class="navbar-brand"></div>
+        <button data-toggle="collapse" data-target=".navHeaderCollapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul data-bind="foreach: menuOptions" class="nav navbar-nav navbar-right">
+            <li data-bind=" attr: {class: _class}"><a data-bind="text: name , attr: {href: url}"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="centreHorz">
+        <table class="gamesTable centreHorz">
+          <thead class="gamesTableHead">
+            <tr>
+              <th>Results</th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>User Name</th>
+              <th>Gold</th>
+            </tr>
+          </thead>
+          <tbody data-bind="foreach: results" class="gamesTableBody">
+            <tr>
+              <td data-bind="text: Name"></td>
+              <td data-bind="text: Gold"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+  <footer>
+    <script src="external/jquery-2.1.4.min.js"></script>
+    <script src="external/bootstrap.min.js"></script>
+    <script src="external/knockout-3.3.0.js"></script>
+    <script src="external/jquery-ui.min.js"></script>
+    <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="external/jquery.animateSprite.min.js"></script>
+    <script src="external/soundmanager2-nodebug-jsmin.js"></script>
+    <script src="js/ViewResults.js"></script>
+    <script src="js/server.js"></script>
+  </footer>
+</html>

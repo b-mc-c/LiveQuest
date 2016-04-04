@@ -393,4 +393,49 @@
 		$row = $result->fetch_assoc();
 		return $row["userName"];
 	}
+	/*check if target has a protection item if so uses one and sets its used value to true , returns true if one is used else false*/
+	function UseProtection($targetId,$gameId)
+	{
+		$sql = sprintf("SELECT count(*)  FROM game_items WHERE User = %d AND GameId = %d AND Alive = 1
+						AND (ItemIdentifier = 2 or ItemIdentifier =1 or ItemIdentifier = 8)", $targetId, $gameId);									
+		$result = RunSql($sql);
+		$COUNT_NUMBER = $result->fetch_array(); 
+		$count = $COUNT_NUMBER[0]; 
+		/*if count == 1 then item is alive and associated with user in game*/
+		if($count == 0)
+		{
+			return false;
+		}
+		else
+		{
+			/*remove a signle protection item*/ 
+			$sql = sprintf("Update game_items set Alive = 0  WHERE User = %d AND GameId = %d AND Alive = 1
+						AND (ItemIdentifier = 2 or ItemIdentifier =1 or ItemIdentifier = 8) limit 1", $targetId, $gameId);									
+			$result = RunSql($sql);
+			return true;
+		}	
+	}
+	/*returns true if game over and deacitivates the game, else returns false*/
+	function checkGameOver($gameId)
+	{
+		$sql = sprintf("Select count(*) FROM games WHERE id = %d AND GameEndTime < now()", $gameId);
+		$result = RunSql($sql);
+		$COUNT_NUMBER = $result->fetch_array(); 
+		$count = $COUNT_NUMBER[0]; 
+			if($count == 0)
+		{
+			return false;
+		}
+		else
+		{
+			DeActivateOldGames();
+			return true;
+		}	
+	}
+	/*return list of players name and gold order by most gold */
+	function GetGameResults($gameId)
+	{
+		$sql = sprintf("Select PlayerId , Gold FROM game_players WHERE GameId = %d ORDER BY Gold DESC", $gameId);
+		return RunSql($sql);	
+	}
 ?>

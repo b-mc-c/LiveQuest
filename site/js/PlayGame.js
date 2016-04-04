@@ -104,6 +104,10 @@ function Receive(data)
 	{
 		placePlayersOnMap(data["PlayersInGame"])
 	}
+	if(data["gameOver"])
+	{
+		document.location.href = "ViewResults.html#" + gameId;
+	}
 }//end recieve
 /* validate the manually entered data is ok before sending to server*/
 
