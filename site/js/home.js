@@ -56,7 +56,8 @@ function SetGames(data)
 	{
 		for (i = 0; i < a.length; i++) 
 		{
-			var temp = {Name:a[i]["GameName"],end:a[i]["GameEndTime"],url:"ViewGame.html#" + a[i]["id"], hostName: a[i]["HostId"]};
+			var temp = {Name:a[i]["GameName"],end:a[i]["GameEndTime"],url:"ViewGame.html#" + a[i]["id"], hostName: a[i]["HostId"],
+			 leaderName :  a[i]["highestPlayer"]["name"] , leaderGold :  a[i]["highestPlayer"]["Gold"]};
 			viewModel.availableGames.push(temp);
 		}
 	}
@@ -64,7 +65,8 @@ function SetGames(data)
 	{
 		for (i = 0; i < h.length; i++) 
 		{
-			var temp = {Name:h[i]["GameName"],end:h[i]["GameEndTime"],url:"ViewGame.html#" + h[i]["id"]};
+			var temp = {Name:h[i]["GameName"],end:h[i]["GameEndTime"],url:"ViewGame.html#" + h[i]["id"],
+			leaderName :  a[i]["highestPlayer"]["name"] , leaderGold :  a[i]["highestPlayer"]["Gold"]};
 			viewModel.myHostedGames.push(temp);
 		}
 	}

@@ -5,13 +5,25 @@ table.gamesTable.centreHorz
 				|All Activae Games
 			th
 			th
+			th
 		tr
 			th Game name
 			th Game End
 			th Host
+			th Leader
 	tbody.gamesTableBody(data-bind='foreach: availableGames')
 		tr
 			td
 				a(data-bind='text: Name , attr: { href: url}' )
 			td(data-bind='text: end')
 			td(data-bind='text: hostName')
+			td
+				table
+					thead
+						th
+							|User
+						th
+							|Gold
+					tbody
+						td(data-bind='text: leaderName')
+						td(data-bind='text: leaderGold')

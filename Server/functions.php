@@ -368,4 +368,29 @@
 		$amount = $itemTheftAmounts[$itemIdentifier];
 		return $amount;
 	}
+	/*Get the highest ranked player in game */
+	function GetInfoForHigestPlayer($gameId)
+	{
+		$message = array();/*message to be returned*/
+		$r =  GetHighScoreInGame($gameId, 1);
+		$message["Gold"] = $r["Gold"];
+		$message["name"] = GetPlayersName($r["PlayerId"]);/*get name stuff here */
+		return $message;
+	}
+	
+	/* gets the players in descending order of gold in a specified game to a specified limit returns associative array*/
+	function GetHighScoreInGame($GameId, $limit)
+	{
+		$sql = sprintf("SELECT * FROM game_players Where GameId = %d ORDER BY Gold DESC Limit %d", $GameId, $limit);
+		$result = RunSql($sql);
+		return $result->fetch_assoc();
+	}
+	/*returns the users name with the id = $userId*/
+	function GetPlayersName($userId)
+	{
+		$sql = sprintf("SELECT userName FROM users Where id = %d", $userId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		return $row["userName"];
+	}
 ?>

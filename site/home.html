@@ -30,11 +30,13 @@
               <th>All Activae Games</th>
               <th></th>
               <th></th>
+              <th></th>
             </tr>
             <tr>
               <th>Game name</th>
               <th>Game End</th>
               <th>Host</th>
+              <th>Leader</th>
             </tr>
           </thead>
           <tbody data-bind="foreach: availableGames" class="gamesTableBody">
@@ -42,6 +44,18 @@
               <td><a data-bind="text: Name , attr: { href: url}"></a></td>
               <td data-bind="text: end"></td>
               <td data-bind="text: hostName"></td>
+              <td>
+                <table>
+                  <thead>
+                    <th>User</th>
+                    <th>Gold</th>
+                  </thead>
+                  <tbody>
+                    <td data-bind="text: leaderName"></td>
+                    <td data-bind="text: leaderGold"></td>
+                  </tbody>
+                </table>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -52,16 +66,30 @@
             <tr>
               <th>My Activae Games</th>
               <th></th>
+              <th></th>
             </tr>
             <tr>
               <th>Game name</th>
               <th>Game End</th>
+              <th>Leader</th>
             </tr>
           </thead>
           <tbody data-bind="foreach: myHostedGames" class="gamesTableBody">
             <tr>
               <td><a data-bind="text: Name , attr: { href: url}"></a></td>
               <td data-bind="text: end"></td>
+              <td>
+                <table>
+                  <thead>
+                    <th>User</th>
+                    <th>Gold</th>
+                  </thead>
+                  <tbody>
+                    <td data-bind="text: leaderName"></td>
+                    <td data-bind="text: leaderGold"></td>
+                  </tbody>
+                </table>
+              </td>
             </tr>
           </tbody>
         </table>

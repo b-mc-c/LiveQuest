@@ -1,15 +1,33 @@
 
-<table>
-  <thead>
+<table class="gamesTable centreHorz">
+  <thead class="gamesTableHead">
+    <tr>
+      <th>My Activae Games</th>
+      <th></th>
+      <th></th>
+    </tr>
     <tr>
       <th>Game name</th>
       <th>Game End</th>
+      <th>Leader</th>
     </tr>
   </thead>
-  <tbody data-bind="foreach: myHostedGames">
+  <tbody data-bind="foreach: myHostedGames" class="gamesTableBody">
     <tr>
       <td><a data-bind="text: Name , attr: { href: url}"></a></td>
       <td data-bind="text: end"></td>
+      <td>
+        <table style="background-color: transparent;">
+          <thead style="background-color: transparent;">
+            <th style="background-color: transparent;">User</th>
+            <th style="background-color: transparent;">Gold</th>
+          </thead>
+          <tbody style="background-color: transparent;">
+            <td data-bind="text: leaderName" style="background-color: transparent;"></td>
+            <td data-bind="text: leaderGold" style="background-color: transparent;"></td>
+          </tbody>
+        </table>
+      </td>
     </tr>
   </tbody>
 </table>
