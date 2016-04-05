@@ -18,27 +18,32 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-12">
-      <div class="centreHorz">
-        <table class="gamesTable centreHorz">
-          <thead class="gamesTableHead">
-            <tr>
-              <th>Results</th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>User Name</th>
-              <th>Gold</th>
-            </tr>
-          </thead>
-          <tbody data-bind="foreach: results" class="gamesTableBody">
-            <tr>
-              <td data-bind="text: Name"></td>
-              <td data-bind="text: Gold"></td>
-            </tr>
-          </tbody>
-        </table>
+    </div><br>
+    <div class="spacedOut10">
+      <div class="col-md-12">
+        <div class="centreHorz">
+          <table class="gamesTable centreHorz">
+            <thead class="gamesTableHead">
+              <tr>
+                <th>Results</th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Position</th>
+                <th>User Name</th>
+                <th>Gold</th>
+              </tr>
+            </thead>
+            <tbody data-bind="foreach: results" class="gamesTableBody">
+              <tr>
+                <td data-bind="text: Position"></td>
+                <td data-bind="text: Name"></td>
+                <td data-bind="text: Gold"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>

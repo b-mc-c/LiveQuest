@@ -43,6 +43,23 @@ function Receive(data)
 		var results = data["Results"];
 		for (i = 0; i < results.length; i++) 
 		{
+			
+			if(i+1 == 1)
+			{
+				results[i]["Position"] = "1st";
+			}
+			else if(i+1 == 2)
+			{
+				results[i]["Position"] = "2nd";
+			}
+			else if(i+1 == 3)
+			{
+				results[i]["Position"] = "3rd";
+			}
+			else 
+			{
+				results[i]["Position"] = (i+1) + "th";
+			}
 			viewModel.results.push(results[i]);	
 		}
 	}

@@ -6,21 +6,26 @@ html
 			|LiveQuest-Results
 	body.homeBody
 		include navbar.jade
-		.col-md-12
-			.centreHorz
-				table.gamesTable.centreHorz
-					thead.gamesTableHead
-						tr
-							th
-								|Results
-							th
-						tr
-							th User Name
-							th Gold
-					tbody.gamesTableBody(data-bind='foreach: results')
-						tr
-							td(data-bind='text: Name')
-							td(data-bind='text: Gold')
+		br
+		.spacedOut10
+			.col-md-12
+				.centreHorz
+					table.gamesTable.centreHorz
+						thead.gamesTableHead
+							tr
+								th
+									|Results
+								th
+								th
+							tr
+								th Position
+								th User Name
+								th Gold
+						tbody.gamesTableBody(data-bind='foreach: results')
+							tr
+								td(data-bind='text: Position')
+								td(data-bind='text: Name')
+								td(data-bind='text: Gold')
 	footer
 		include commonScripts.jade
 		script(src="js/ViewResults.js")

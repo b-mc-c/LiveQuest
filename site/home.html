@@ -94,6 +94,26 @@
           </tbody>
         </table>
       </div>
+      <div class="spacedOut10">
+        <table class="gamesTable centreHorz">
+          <thead class="gamesTableHead">
+            <tr>
+              <th>All inactive games I've played</th>
+              <th></th>
+            </tr>
+            <tr>
+              <th>Game name</th>
+              <th>MyRank</th>
+            </tr>
+          </thead>
+          <tbody data-bind="foreach: inactiveGames" class="gamesTableBody">
+            <tr>
+              <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+              <td data-bind="text : myRank"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
   <footer>

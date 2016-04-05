@@ -5,6 +5,7 @@ var viewModel = {
 									{name:"LogOut",url:"LogOut.html",_class:""}]),
 	availableGames : ko.observableArray(),
 	myHostedGames : ko.observableArray(),
+	inactiveGames : ko.observableArray(),
 }
 
 function Receive(data)
@@ -52,6 +53,7 @@ function SetGames(data)
 
 	var a = data["availableGames"]
 	var h = data["myHostedGames"]
+	var n = data["myInactiveGames"]
 	if(a != null)
 	{
 		for (i = 0; i < a.length; i++) 
@@ -68,6 +70,15 @@ function SetGames(data)
 			var temp = {Name:h[i]["GameName"],end:h[i]["GameEndTime"],url:"ViewGame.html#" + h[i]["id"],
 			leaderName :  a[i]["highestPlayer"]["name"] , leaderGold :  a[i]["highestPlayer"]["Gold"]};
 			viewModel.myHostedGames.push(temp);
+		}
+	}
+	if(n != null)
+	{
+		for (i = 0; i < n.length; i++) 
+		{
+			var temp = {Name:n[i]["GameName"],url:"ViewResults.html#" + n[i]["id"],
+			myRank :  n[i]["Rank"]};
+			viewModel.inactiveGames.push(temp);
 		}
 	}
 }

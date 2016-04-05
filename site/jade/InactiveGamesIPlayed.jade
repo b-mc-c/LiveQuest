@@ -1,0 +1,15 @@
+table.gamesTable.centreHorz
+	thead.gamesTableHead
+		tr
+			th
+				|All inactive games I've played
+			th
+		tr
+			th Game name
+			th MyRank
+	tbody.gamesTableBody(data-bind='foreach: inactiveGames')
+		tr
+			td
+				a(data-bind='text: Name , attr: { href: url}' )
+			td(data-bind="text : myRank")
+				

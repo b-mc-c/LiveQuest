@@ -10,6 +10,7 @@
 	{
 		$myGames= GetGamesHostedByUser($userId);
 		$allGames = GetAllGames();
+		$allCompletedGames = GetAllcompletedGames($userId);
 		$rows = array();
 		while($r = $myGames->fetch_assoc()) 
 		{
@@ -21,6 +22,11 @@
 		{
 			$r["highestPlayer"] = GetInfoForHigestPlayer($r["id"]);
 			$rows['availableGames'][] = $r;
+		}
+		foreach($allCompletedGames as $r) 
+		{
+			//$r["rank"] = GetInfoForHigestPlayer($r["id"]);
+			$rows['myInactiveGames'][] = $r;
 		}
 		$message['GAMESLIST'] = $rows;
 	}	

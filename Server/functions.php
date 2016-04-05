@@ -126,6 +126,58 @@
 		$sql = sprintf("SELECT id ,GameName, GameEndTime, HostId FROM games WHERE active = 1 AND GameEndTime > now()");
 		return RunSql($sql);			
 	}
+	/*return array of games that the user has participated in that are complete*/
+	function GetAllcompletedGames($userId)
+	{
+		$sql = sprintf("SELECT GameId FROM game_players WHERE  PlayerId = %d", $userId);
+		$games = RunSql($sql);
+		
+		$rows = array();
+		while($r = $games->fetch_assoc()) 
+		{
+			$sql = sprintf("SELECT id ,GameName FROM games WHERE  id = %d and active = 0", $r["GameId"]);
+			$result = RunSql($sql);
+			if (mysqli_num_rows($result)!=0)
+			{
+				$row = $result->fetch_assoc();
+				$row["Rank"] = getUserRankInGame($userId,$r["GameId"]);
+				$rows[] = $row;
+			}
+		}			
+		return $rows;	
+	}
+	/*get a users rank in a given game*/
+	function getUserRankInGame($userId,$gameId)
+	{
+		$results = GetGameResults($gameId);
+		$i = 1;
+		while($r = $results->fetch_assoc()) 
+		{
+			
+			if($r["PlayerId"] == $userId)
+			{
+				break 1;
+			}
+			$i += 1;
+		}
+		if($i == 1)
+		{
+			return "1st";
+		}
+		else if($i == 2)
+		{
+			return "2nd";
+		}
+		else if($i == 3)
+		{
+			return "3rd";
+		}
+		else
+		{
+			return $i."th";
+		}
+		
+	}
 	/*remove the users ip from connections*/
 	function RemoveIp($ip)
 	{

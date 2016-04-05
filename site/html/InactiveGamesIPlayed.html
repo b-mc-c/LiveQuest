@@ -1,0 +1,32 @@
+
+<table class="gamesTable centreHorz">
+  <thead class="gamesTableHead">
+    <tr>
+      <th>All inactive games I've played</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>Game name</th>
+      <th>MyRank</th>
+    </tr>
+  </thead>
+  <tbody data-bind="foreach: availableGames" class="gamesTableBody">
+    <tr>
+      <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+      <td>
+        <table>
+          <thead>
+            <th>User</th>
+            <th>Gold</th>
+          </thead>
+          <tbody>
+            <td data-bind="text: leaderName"></td>
+            <td data-bind="text: leaderGold"></td>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
