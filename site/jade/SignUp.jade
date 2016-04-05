@@ -36,5 +36,7 @@ table#newUser(style="display:none;")
 		tr
 			td
 			td
-				input#SignUP.btn(type="button" value="Sign Up" data-bind="click: SignUp")
-				input#ReturnToSignIn.btn(type="button" value="Return to Sign In" data-bind="click: ShowSignIn")
+				#SignUP.btn.btn-default(data-bind="click: SignUp")
+					|Sign Up
+				#ReturnToSignIn.btn.btn-default(data-bind="click: ShowSignIn")
+					|Return to sign in

@@ -9,9 +9,9 @@ html
 		.centre.centreHorz
 			h1
 				|Are you sure you want to log out?
-			button.btn#LogOutBtn(data-bind="click: LogOut")
+			.btn.btn-default#LogOutBtn(data-bind="click: LogOut")
 				|Yes
-			button.btn(onclick="parent.location='home.html'")
+			.btn.btn-default(onclick="parent.location='home.html'")
 				|No
 	footer
 		include commonScripts.jade

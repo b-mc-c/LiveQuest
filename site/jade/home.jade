@@ -6,16 +6,15 @@ html
 			|LiveQuest-Home
 	body.homeBody
 		include navbar.jade
-		.col-md-12
-			.centreHorz
-				button.spacedOut10.btn(onclick="parent.location='setUpGame.html'")
-					|Create NewGame
-			.spacedOut10
-				include ActiveGames.jade
-			.spacedOut10
-				include MyHostedGames.jade
-			.spacedOut10
-				include InactiveGamesIPlayed.jade
+		.centreHorz
+			.spacedOut10.btn.btn-success(onclick="parent.location='setUpGame.html'")
+				|Create NewGame
+		.spacedOut10
+			include ActiveGames.jade
+		.spacedOut10
+			include MyHostedGames.jade
+		.spacedOut10
+			include InactiveGamesIPlayed.jade
 	footer
 		include commonScripts.jade
 		script(src="js/home.js")

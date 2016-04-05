@@ -4,19 +4,19 @@ table.gamesTable.centreHorz
 			th
 				|All Activae Games
 			th
-			th
+			th.hidden-xs
 			th
 		tr
 			th Game name
 			th Game End
-			th Host
+			th.hidden-xs Host
 			th Leader
 	tbody.gamesTableBody(data-bind='foreach: availableGames')
 		tr
 			td
 				a(data-bind='text: Name , attr: { href: url}' )
 			td(data-bind='text: end')
-			td(data-bind='text: hostName')
+			td.hidden-xs(data-bind='text: hostName')
 			td
 				table
 					thead

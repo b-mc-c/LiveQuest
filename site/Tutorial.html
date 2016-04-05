@@ -62,7 +62,7 @@
               <tr>
                 <td></td>
                 <td>
-                  <button id="CreateNewGame" data-bind="click: CreateNewGame" class="btn">Create</button>
+                  <div id="CreateNewGame" data-bind="click: CreateNewGame" class="btn btn-success">Create</div>
                 </td>
               </tr>
             </tbody>
@@ -87,7 +87,7 @@
                 <div class="item active">
                   <div class="itemTitle">Purse chain</div>
                   <div class="itemImage"><img src="img/chain.png" alt="chain Slide" width="200" height="200" class="centreItem"></div>
-                  <div class="itemDescription">Prevents your purse from being stolen but snaps after one use</div>
+                  <div class="itemDescription">Prevents your purse from being stolen but snaps after one use.</div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : chainGold"></span>
                       <div id="GoldChain" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : chainRange"></span>m
                       <div id="RangeChain" class="Range"></div></span></div><br>
@@ -109,7 +109,7 @@
                 <div class="item">
                   <div class="itemTitle">MC Hammer</div>
                   <div class="itemImage"><img src="img/MCHammer.png" alt="hammer Slide" width="200" height="200" class="centreItem"></div>
-                  <div class="itemDescription">Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold<br></div>
+                  <div class="itemDescription">Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold.<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : hammerGold"></span>
                       <div id="GoldHammer" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : hammerRange"></span>m
                       <div id="RangeHammer" class="Range"></div></span></div><br>
@@ -231,8 +231,18 @@
               </thead>
               <tbody data-bind="foreach: myPickedUpItems" class="itemsTableBody">
                 <tr>
-                  <td><span data-bind="text: Name"></span></td>
-                  <td><img data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;" class="spacedOut10"></td>
+                  <td colspan="2">
+                    <div data-bind="click: $root.ShowItemDescitpion" class="topInfo">
+                      <div style="float: left; width: 50%;  height : 70px;"><span data-bind="text: Name"></span></div>
+                      <div style="float: left; width: 50%;  height : 70px;"><img data-bind="attr: { src: Image}" style="width : 50px ; height : 50px;" class="spacedOut10"></div>
+                    </div>
+                    <div style="display: none;" class="BottomInfo">
+                      <div style="float: left; width: 85%;"><span data-bind="text: Description"></span></div>
+                      <div data-bind="visible: Useable" style="float: left; width: 15%;">
+                        <div data-bind="click: $root.UseItem" class="btn btn-success">Use</div>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -248,6 +258,7 @@
     <script src="external/jquery-ui.min.js"></script>
     <script src="external/jquery.ui.touch-punch.min.js"></script>
     <script src="external/jquery.animateSprite.min.js"></script>
+    <script src="external/soundmanager2-nodebug-jsmin.js"></script>
     <script src="js/Tutorial.js"></script>
   </footer>
 </html>

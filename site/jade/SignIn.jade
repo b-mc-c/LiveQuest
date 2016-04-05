@@ -21,5 +21,7 @@ table#existingUser
 		tr
 			td
 			td
-				input#SignIn.btn(type="button" value="Submit" data-bind="click: SignIn")
-				input#Join.btn(type="button" value="Join"  data-bind="click: ShowJoin")
+				#SignIn.btn.btn-default(data-bind="click: SignIn")
+					|Submit
+				#Join.btn.btn-default(data-bind="click: ShowJoin")
+					|Join

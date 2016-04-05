@@ -19,101 +19,99 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12">
-      <div class="centreHorz">
-        <button onclick="parent.location='setUpGame.html'" class="spacedOut10 btn">Create NewGame</button>
-      </div>
-      <div class="spacedOut10">
-        <table class="gamesTable centreHorz">
-          <thead class="gamesTableHead">
-            <tr>
-              <th>All Activae Games</th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>Game name</th>
-              <th>Game End</th>
-              <th>Host</th>
-              <th>Leader</th>
-            </tr>
-          </thead>
-          <tbody data-bind="foreach: availableGames" class="gamesTableBody">
-            <tr>
-              <td><a data-bind="text: Name , attr: { href: url}"></a></td>
-              <td data-bind="text: end"></td>
-              <td data-bind="text: hostName"></td>
-              <td>
-                <table>
-                  <thead>
-                    <th>User</th>
-                    <th>Gold</th>
-                  </thead>
-                  <tbody>
-                    <td data-bind="text: leaderName"></td>
-                    <td data-bind="text: leaderGold"></td>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="spacedOut10">
-        <table class="gamesTable centreHorz">
-          <thead class="gamesTableHead">
-            <tr>
-              <th>My Activae Games</th>
-              <th></th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>Game name</th>
-              <th>Game End</th>
-              <th>Leader</th>
-            </tr>
-          </thead>
-          <tbody data-bind="foreach: myHostedGames" class="gamesTableBody">
-            <tr>
-              <td><a data-bind="text: Name , attr: { href: url}"></a></td>
-              <td data-bind="text: end"></td>
-              <td>
-                <table>
-                  <thead>
-                    <th>User</th>
-                    <th>Gold</th>
-                  </thead>
-                  <tbody>
-                    <td data-bind="text: leaderName"></td>
-                    <td data-bind="text: leaderGold"></td>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="spacedOut10">
-        <table class="gamesTable centreHorz">
-          <thead class="gamesTableHead">
-            <tr>
-              <th>All inactive games I've played</th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>Game name</th>
-              <th>MyRank</th>
-            </tr>
-          </thead>
-          <tbody data-bind="foreach: inactiveGames" class="gamesTableBody">
-            <tr>
-              <td><a data-bind="text: Name , attr: { href: url}"></a></td>
-              <td data-bind="text : myRank"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="centreHorz">
+      <div onclick="parent.location='setUpGame.html'" class="spacedOut10 btn btn-success">Create NewGame</div>
+    </div>
+    <div class="spacedOut10">
+      <table class="gamesTable centreHorz">
+        <thead class="gamesTableHead">
+          <tr>
+            <th>All Activae Games</th>
+            <th></th>
+            <th class="hidden-xs"></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Game name</th>
+            <th>Game End</th>
+            <th class="hidden-xs">Host</th>
+            <th>Leader</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: availableGames" class="gamesTableBody">
+          <tr>
+            <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+            <td data-bind="text: end"></td>
+            <td data-bind="text: hostName" class="hidden-xs"></td>
+            <td>
+              <table>
+                <thead>
+                  <th>User</th>
+                  <th>Gold</th>
+                </thead>
+                <tbody>
+                  <td data-bind="text: leaderName"></td>
+                  <td data-bind="text: leaderGold"></td>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="spacedOut10">
+      <table class="gamesTable centreHorz">
+        <thead class="gamesTableHead">
+          <tr>
+            <th>My Activae Games</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Game name</th>
+            <th>Game End</th>
+            <th>Leader</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: myHostedGames" class="gamesTableBody">
+          <tr>
+            <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+            <td data-bind="text: end"></td>
+            <td>
+              <table>
+                <thead>
+                  <th>User</th>
+                  <th>Gold</th>
+                </thead>
+                <tbody>
+                  <td data-bind="text: leaderName"></td>
+                  <td data-bind="text: leaderGold"></td>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="spacedOut10">
+      <table class="gamesTable centreHorz">
+        <thead class="gamesTableHead">
+          <tr>
+            <th>All inactive games I've played</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Game name</th>
+            <th>MyRank</th>
+          </tr>
+        </thead>
+        <tbody data-bind="foreach: inactiveGames" class="gamesTableBody">
+          <tr>
+            <td><a data-bind="text: Name , attr: { href: url}"></a></td>
+            <td data-bind="text : myRank"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </body>
   <footer>
