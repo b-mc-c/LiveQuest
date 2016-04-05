@@ -20,7 +20,7 @@ function Receive(data)
 		else
 		{
 			$.ajax({
-		        url: '../Server/Getresults.php',
+		        url: '../Server/GetResults.php',
 		        type: 'POST',
 		        data: 
 		        {

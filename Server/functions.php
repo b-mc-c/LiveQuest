@@ -21,7 +21,7 @@
 	/*returns true if username is available else false*/
 	function UsernameAvailable($userName) 
 	{
-		$sql = sprintf("SELECT COUNT(*) FROM Users WHERE userName = '%s'" , $userName);
+		$sql = sprintf("SELECT COUNT(*) FROM users WHERE userName = '%s'" , $userName);
 		$result = RunSql($sql);
 		$COUNT_NUMBER = $result->fetch_array(); 
 		$count = $COUNT_NUMBER[0]; 
@@ -38,13 +38,13 @@
 	/*add new user to users table returns result */
 	function AddNewUser($userName,$passWord,$email) 
 	{
-		$sql = sprintf("INSERT INTO Users (userName , password, email) VALUES ( '%s' , '%s', '%s')" , $userName, $passWord ,$email);
+		$sql = sprintf("INSERT INTO users (userName , password, email) VALUES ( '%s' , '%s', '%s')" , $userName, $passWord ,$email);
 		return $result = RunSql($sql);
 	}
 	/*get the user id from user table associated with userName */	
 	function GetUserid($userName)
 	{
-		$sql = sprintf("SELECT id FROM Users WHERE userName ='%s'" ,$userName);
+		$sql = sprintf("SELECT id FROM users WHERE userName ='%s'" ,$userName);
 		$result = RunSql($sql);
 		$row = $result->fetch_assoc();
 		return $row['id'];
@@ -59,7 +59,7 @@
 	/*returns true if user password is correct or fasle if it is not */	
 	function ConfirmPassword($userName,$password)
 	{
-		$sql = sprintf("SELECT * FROM Users WHERE userName ='%s'",$userName);
+		$sql = sprintf("SELECT * FROM users WHERE userName ='%s'",$userName);
 		$result = RunSql($sql);
 		$row = $result->fetch_assoc();
 		if (password_verify($password, $row['password'])) 
