@@ -190,10 +190,10 @@
         <div class="step1">Step 1 : Choose a character to represent you in the game 
           <div class="substep1">(a) Scroll left or right through characters.</div>
           <div style="display : none;" class="substep2">(b) When you are happy with your character choice click the play button.</div>
-          <button data-bind="click: JoinGame" class="spacedOut10 btn btn-success">Play</button><br>
+          <div data-bind="click: JoinGame" class="spacedOut10 btn btn-success">Play</div><br>
           <div>
-            <button onclick="UpdateMyIcon(-1)" class="spacedOut10 btn">&lt;&lt;</button><span>Player Icon</span>
-            <button onclick="UpdateMyIcon(1)" class="spacedOut10 btn">&gt;&gt; </button>
+            <div onclick="UpdateMyIcon(-1)" class="spacedOut10 btn btn-default">&lt;&lt;</div><span>Player Icon</span>
+            <div onclick="UpdateMyIcon(1)" class="spacedOut10 btn btn-default">&gt;&gt; </div>
             <div id="map2" style=" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;" class="centreHorz"></div>
           </div>
         </div>
@@ -201,12 +201,12 @@
           <div class="substep1">(a) Click on the first item you placed on the map.</div>
           <div style="display : none;" class="substep2">(b) Click the Pick Up button.</div>
           <div style="display : none;" class="substep3">(c) The item will be added to your list of items and the gold added to your gold.
-            <Button onclick="next()" class="btn btn-success">Next</Button>
+            <div onclick="next()" class="btn btn-success">Next</div>
           </div>
           <div style="display : none;" class="substep4">(d) Click the second item you placed on the map.</div>
           <div style="display : none;" class="substep5">(e) Click the Pick Up button.</div>
           <div style="display : none;" class="substep6">(e) Nothing happens this is because the item is out of range.
-            <Button onclick="next()" class="btn btn-success">Next</Button>
+            <div onclick="next()" class="btn btn-success">Next</div>
           </div>
         </div>
         <div style="display : none;" class="step3">Step 3 : using items 
@@ -214,7 +214,7 @@
           <div style="display : none;" class="substep2">(b) Click on the mc hammer item in your inventory.</div>
           <div style="display : none;" class="substep3">(c) Click on the other player.</div>
           <div style="display : none;" class="substep4">(d) The Mc Hammer has allowed you to rob gold from the other player and add it to yours.<br>As you move around the real world your characters position will be update on the map.<br>The objective is to get as much gold as possible before the game time runs out.<br>Good luck.<br>
-            <Button data-bind="click: Finish" class="btn btn-success">Complete </Button>
+            <div data-bind="click: Finish" class="btn btn-success">Complete </div>
           </div>
         </div>
         <div id="playgameScreen" style="display : none;">

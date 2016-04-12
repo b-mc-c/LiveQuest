@@ -52,6 +52,24 @@ var viewModel = {
 		var mapItems = markers;
 		placeItemsOnMap(mapItems)
 	},
+	CreateNewGame : function()
+	{
+		next();	
+		/*need to trigger resize or map does not load correctly */
+		google.maps.event.trigger(map2, 'resize');
+		// Recenter the map now that it's been redrawn               
+		map2.setCenter(myLatLng);
+	},
+	ShowItemDescitpion :function(item, event)/**/ 
+	{
+		$(event.target).parent().parent().parent().show().find(".BottomInfo").toggle() 
+	}/*end ShowItemDescitpion*/,
+	UseItem : function(item, event)/**/ 
+	{
+		useItem = true;
+		selectedItem = item;
+		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');/*for centreing phone screen on the map*/
+	},
 };//end viewmodel
 
 var map;
@@ -78,6 +96,11 @@ var availableMapItems = [];
 
 var myIconId = 0;
 var myPosMarker;
+
+var PlayerMarkers = [];
+var useItem = false;
+var selectedItem = 0;
+
 
 /* Function gets called when page loaded */
 $(document).ready(function(){
@@ -140,15 +163,6 @@ $(document).ready(function(){
 	$("#CreateNewGame").attr( {disabled: true})
 
 	/*Detect change to textinput for step 3 (a) */
-	$('#CreateNewGame').click(function(e){ 
-		next();	
-		/*need to trigger resize or map does not load correctly */
-		google.maps.event.trigger(map2, 'resize');
-		// Recenter the map now that it's been redrawn               
-		map2.setCenter(myLatLng);
-
-
-	});/*end Detect change to textinput for step 3 (a)*/
 
 });//end doc ready
 
@@ -506,13 +520,67 @@ function PickUpObject(i)
 	{
 		//alert("in range");
 		viewModel.myPickedUpItems.removeAll();
-		viewModel.myPickedUpItems.push({"Name" : "MC Hammer" , "Image" : "img/MCHammer.png" })
+		viewModel.myPickedUpItems.push({Identifier : 3, 
+										Useable : true, 
+										EffectRange : 100,
+										TheftAmount: 100,	
+										Name: "Mc Hammer",
+										Image: "img/MCHammer.png",
+										Description: "Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold."})
 		delete(availableMapItems[i])
 		placeItemsOnMap(availableMapItems)
 		
 	}
 	next();
 }
+
+function AddPlayer()
+{
+		var IconId = 1
+		var image = {
+	    url: 'img/characters.png',
+	    // This marker is 20 pixels wide by 32 pixels high.
+	    size: new google.maps.Size(50, 50),
+	    // The origin for this image is (0, 0).
+	    origin: new google.maps.Point(50 * IconId, 0),
+	    // The anchor for this image is the base of the flagpole at (0, 32).
+	    anchor: new google.maps.Point(25, 25)
+	 	 };
+		var LatLng = {lat: (myLatLng["lat"] + 0.0005), lng: (myLatLng["lng"] + 0.0005)};
+		var marker = new google.maps.Marker({
+		position: LatLng,
+		map: map,
+		icon: image,
+		playerId : 1
+		});
+		google.maps.event.addListener(marker,'click',function() {/*click event for when a player icon is clicked */
+ 			if(useItem)
+ 			{
+ 				if(getdistBetween(marker.getPosition().lat(),marker.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
+ 				{
+ 					/*if player in range call to database to confirm action */
+ 					$.ajax({
+	        			url: '../Server/UseItem.php',
+	        			type: 'POST',
+	        			data: 
+	        			{
+	            			gameId: gameId,
+	            			item: selectedItem.Id,
+	            			target : marker.playerId,
+	        			},
+	       				success: function(data) {
+	       					viewModel.myPickedUpItems.removeAll();
+							data = JSON.parse(data);
+							Receive(data);
+						},
+					});	/*end ajax*/
+ 				}/*End if(getdistBetween(lat1, lon1 , lat2 , lon2) <= selectedItem.EffectRange)*/
+ 			}/*end if (useitem)*/
+ 			useItem = false;
+ 		});/*end google.maps.event.addListener*/
+		PlayerMarkers.push(marker);	
+}
+
 
 /*apply viewmodel knockout js*/
 ko.applyBindings(viewModel);

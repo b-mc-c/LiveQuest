@@ -46,15 +46,15 @@ html
 						|(a) Scroll left or right through characters.
 					.substep2(style ="display : none;")
 						|(b) When you are happy with your character choice click the play button.
-					button.spacedOut10.btn.btn-success(data-bind="click: JoinGame")
+					.spacedOut10.btn.btn-success(data-bind="click: JoinGame")
 						|Play
 					br
 					div
-						button.spacedOut10.btn(onclick="UpdateMyIcon(-1)")
+						.spacedOut10.btn.btn-default(onclick="UpdateMyIcon(-1)")
 							|&lt;&lt;
 						span
 							|Player Icon
-						button.spacedOut10.btn(onclick="UpdateMyIcon(1)")
+						.spacedOut10.btn.btn-default(onclick="UpdateMyIcon(1)")
 							|&gt;&gt; 
 						#map2.centreHorz(style =" width : 600px; height : 450px; max-width : 95vw; max-height : 70vh;")
 				.step2(style ="display : none;")
@@ -65,7 +65,7 @@ html
 						|(b) Click the Pick Up button.
 					.substep3(style ="display : none;")
 						|(c) The item will be added to your list of items and the gold added to your gold.
-						Button.btn.btn-success(onclick="next()")
+						.btn.btn-success(onclick="next()")
 							|Next
 					.substep4(style ="display : none;")
 						|(d) Click the second item you placed on the map.
@@ -73,7 +73,7 @@ html
 						|(e) Click the Pick Up button.
 					.substep6(style ="display : none;")
 						|(e) Nothing happens this is because the item is out of range.
-						Button.btn.btn-success(onclick="next()")
+						.btn.btn-success(onclick="next()")
 							|Next
 				.step3(style ="display : none;")
 					|Step 3 : using items 
@@ -92,7 +92,7 @@ html
 						br
 						|Good luck.
 						br
-						Button.btn.btn-success(data-bind="click: Finish")
+						.btn.btn-success(data-bind="click: Finish")
 							|Complete 
 				#playgameScreen(style ="display : none;")
 					.col-md-6(style="margin-top: 10px;margin-bottom: 10px;")
