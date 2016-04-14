@@ -1,16 +1,5 @@
 .centreItem
 	#myCarousel.carousel.slide(data-ride='carousel',data-interval="false")
-		// Carousel indicators
-		//ol.carousel-indicators
-			li.active(data-target='#myCarousel', data-slide-to='0')
-			li(data-target='#myCarousel', data-slide-to='1')
-			li(data-target='#myCarousel', data-slide-to='2')
-			li(data-target='#myCarousel', data-slide-to='3')
-			li(data-target='#myCarousel', data-slide-to='4')
-			li(data-target='#myCarousel', data-slide-to='5')
-			li(data-target='#myCarousel', data-slide-to='7')
-
-		// Wrapper for carousel items
 		.carousel-inner
 			.item.active
 				.itemTitle
@@ -23,16 +12,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : chainGold")
-						#GoldChain.Gold
+						.Gold(data-bind="slider: { value: chainGold, realtime: true, min: 5, max: 100,}")
 					br
 					span
 						|Pick up Range : 
 						span(data-bind="text : chainRange")
 						|m
-						#RangeChain.Range
+						.Range(data-bind="slider: { value: chainRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#chainButton.btn
+					#chainButton.btn.btn-default(data-bind="click: Place.bind($data, 'CHAIN')")
 						|Place
 			.item
 				.itemTitle
@@ -46,16 +35,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : pocketGold")
-						#GoldPocket.Gold
+						.Gold(data-bind="slider: { value: pocketGold, realtime: true, min: 5, max: 100,}")
 					br
 					span
 						|Pick up Range : 
 						span(data-bind="text : pocketRange")
 						|m
-						#RangePocket.Range
+						.Range(data-bind="slider: { value: pocketRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#pocketButton.btn
+					#pocketButton.btn.btn-default(data-bind="click: Place.bind($data, 'POCKET')")
 						|Place
 			.item
 				.itemTitle
@@ -69,16 +58,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : hammerGold")
-						#GoldHammer.Gold
+						.Gold(data-bind="slider: { value: hammerGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range : 
 						span(data-bind="text : hammerRange")
 						|m
-						#RangeHammer.Range
+						.Range(data-bind="slider: { value: hammerRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#hammerButton.btn
+					#hammerButton.btn.btn-default(data-bind="click: Place.bind($data, 'HAMMER')")
 						|Place
 			.item
 				.itemTitle
@@ -92,16 +81,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : fishingGold")
-						#GoldFishing.Gold
+						.Gold(data-bind="slider: { value: fishingGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range : 
 						span(data-bind="text : fishingRange")
 						|m
-						#RangeFishing.Range
+						.Range(data-bind="slider: { value: fishingRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#rodButton.btn
+					#rodButton.btn.btn-default(data-bind="click: Place.bind($data, 'ROD')")
 						|Place
 			.item
 				.itemTitle
@@ -115,16 +104,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : diggerGold")
-						#GoldDigger.Gold
+						.Gold(data-bind="slider: { value: diggerGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range :  
 						span(data-bind="text : diggerRange")
 						|m
-						#RangeDigger.Range
+						.Range(data-bind="slider: { value: diggerRange, realtime: true, min: 0, max: 500,}")
 				br
 				.itemBtns
-					button#diggerButton.btn
+					#diggerButton.btn.btn-default(data-bind="click: Place.bind($data, 'DIGGER')")
 						|Place
 			.item
 				.itemTitle
@@ -138,16 +127,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : thievesGold")
-						#GoldThieves.Gold
+						.Gold(data-bind="slider: { value: thievesGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range :  
 						span(data-bind="text : thievesRange")
 						|m
-						#RangeThieves.Range
+						.Range(data-bind="slider: { value: thievesRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#aliButton.btn
+					#aliButton.btn.btn-default(data-bind="click: Place.bind($data, 'ALI')")
 						|Place
 			.item
 				.itemTitle
@@ -161,16 +150,16 @@
 					span
 						|Gold : 
 						span(data-bind="text : bookGold")
-						#GoldBook.Gold
+						.Gold(data-bind="slider: { value: bookGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range :  
 						span(data-bind="text : bookRange")
 						|m
-						#RangeBook.Range
+						.Range(data-bind="slider: { value: bookRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#bookButton.btn
+					#bookButton.btn.btn-default(data-bind="click: Place.bind($data, 'BOOK')")
 						|Place
 			.item
 				.itemTitle
@@ -178,22 +167,42 @@
 				.itemImage
 					img.centreItem(src='img/basket.png', alt='basket Slide',width="200" height="200")
 				.itemDescription
-					|When a player attempts to steal from you A baby in basket appears and with a booming voice shouts &apos;&apos;Thou shalt not steal!! &apos;&apos; scaring off any thief.
+					|When a player attempts to steal from you A baby in basket appears and with a booming voice shouts &apos;&apos;Thou shalt not steal!! &apos;&apos; |scaring off any thief.
 					br
 				.itemSliders
 					span
 						|Gold : 
 						span(data-bind="text : basketGold")
-						#GoldBasket.Gold
+						.Gold(data-bind="slider: { value: basketGold, realtime: true, min: 0, max: 100,}")
 					br
 					span
 						|Pick up Range :  
 						span(data-bind="text : basketRange")
 						|m
-						#RangeBasket.Range
+						.Range(data-bind="slider: { value: basketRange, realtime: true, min: 5, max: 500,}")
 				br
 				.itemBtns
-					button#basketButton.btn
+					#basketButton.btn.btn-default(data-bind="click: Place.bind($data, 'BASKET')")
+						|Place
+			.item
+				.itemTitle
+					|Key
+				.itemImage
+					img.centreItem(src='img/Key.png', alt='basket Slide',width="200" height="200")
+				.itemDescription
+					|Use a key to lock a chest. a player wont be able to pick up the chest unless they are in range and have the key.
+					|Place the key then click on the chest you want this key to unlock.
+					br
+				.itemSliders
+					span
+						|Pick up Range :  
+						span(data-bind="text : keyRange")
+						|m
+						br
+						.Range(data-bind="slider: { value: keyRange, realtime: true, min: 5, max: 500,}")
+				br
+				.itemBtns
+					#KeyButton.btn.btn-default(data-bind="click: Place.bind($data, 'KEY')")
 						|Place
 		// Carousel controls
 		a.carousel-control.left(href='#myCarousel', data-slide='prev')

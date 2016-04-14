@@ -203,9 +203,9 @@
 	{
 		foreach ($items as $item) 
 		{
-			$sql = sprintf("INSERT INTO game_items (GameId, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng ,PickedUp ,Alive) 
-											VALUES ( %d, %d , '%s',%d , %d, %.20f , %.20f , 0, 1)", $gameId,
-											$item["Item"], $item["Name"], $item["Gold"], $item["Range"], $item["Lat"], $item["Lng"]);
+			$sql = sprintf("INSERT INTO game_items (GameId,ItemIdInGame, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng, KeyUnlocks ,PickedUp ,Alive) 
+											VALUES ( %d, %d, %d , '%s',%d , %d, %.20f , %.20f,%d , 0, 1)", $gameId,
+											$item["InGameId"], $item["Item"], $item["Name"], $item["Gold"], $item["Range"], $item["Lat"], $item["Lng"], $item["Unlocks"]);
 			RunSql($sql);
 		}
 	}

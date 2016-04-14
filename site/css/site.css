@@ -109,11 +109,11 @@ iframe
 	overflow-y: auto;
 }
 .Gold, .Range{
-    float: left;
-    clear: left;
-    width: 100%;
+    width: 90%;
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
   }
   .Gold .ui-slider-range { background: #FFD700; }
   .Gold .ui-slider-handle { border-color: #FFD700; }

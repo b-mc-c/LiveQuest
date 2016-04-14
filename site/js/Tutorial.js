@@ -9,22 +9,23 @@ var viewModel = {
 	},
 	NewGameNameError: ko.observableArray(),
 	NewGameTimeError : ko.observableArray(),
-	fishingGold : ko.observable("50"),
-	fishingRange : ko.observable("100"),
-	hammerGold : ko.observable("50"),
-	hammerRange : ko.observable("100"),
-	diggerGold : ko.observable("50"),
-	diggerRange : ko.observable("100"),
-	thievesGold : ko.observable("50"),
-	thievesRange : ko.observable("100"),
-	bookGold : ko.observable("50"),
-	bookRange : ko.observable("100"),
-	basketGold : ko.observable("50"),
-	basketRange : ko.observable("100"),
-	pocketGold : ko.observable("50"),
-	pocketRange : ko.observable("100"),
-	chainGold : ko.observable("50"),
-	chainRange : ko.observable("100"),
+	fishingGold : ko.observable(50),
+	fishingRange : ko.observable(100),
+	hammerGold : ko.observable(50),
+	hammerRange : ko.observable(100),
+	diggerGold : ko.observable(50),
+	diggerRange : ko.observable(100),
+	thievesGold : ko.observable(50),
+	thievesRange : ko.observable(100),
+	bookGold : ko.observable(50),
+	bookRange : ko.observable(100),
+	basketGold : ko.observable(50),
+	basketRange : ko.observable(100),
+	pocketGold : ko.observable(50),
+	pocketRange : ko.observable(100),
+	chainGold : ko.observable(50),
+	chainRange : ko.observable(100),
+	keyRange: ko.observable(100),
 	myGold : ko.observable("0"),
 	myPickedUpItems :  ko.observableArray(),
 	JoinGame: function(dir)
@@ -70,6 +71,11 @@ var viewModel = {
 		selectedItem = item;
 		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');/*for centreing phone screen on the map*/
 	},
+	Place : function(value)
+	{
+	},
+
+
 };//end viewmodel
 
 var map;
@@ -106,7 +112,31 @@ var selectedItem = 0;
 $(document).ready(function(){
 
 	initMap();
-
+	viewModel.hammerGold.subscribe(function () {
+		/*for step 3 (c)*/
+		if (currentStep == 3 && currentSubStep == 3)
+		{
+			if(viewModel.hammerGold() == 100)
+				{
+					next();	
+					/*lock slider so cannot be changed */
+					$(".Gold").slider( {disabled: true})
+				}
+		}
+  	});
+  	viewModel.hammerRange.subscribe(function () {
+		/*for step 3 (b)*/
+		if (currentStep == 3 && currentSubStep == 2)
+		{
+			if(viewModel.hammerRange() == 500)
+				{
+					next();	
+					/*lock slider so cannot be changed */
+					$(".Range").slider( {disabled: true})
+				}
+		}
+        
+  	});
 
 	/*highlight the textinput for step 1*/
 	$("#NewGameName").effect( "highlight", {color:"#008000"}, 5000 );
@@ -135,18 +165,6 @@ $(document).ready(function(){
 		}
 	});/*end Detect change to textinput for step 3 (a)*/
 	
-	/*sets up the sliders*/
-	 $(function() {
-	    $( "#GoldHammer, #GoldFishing, #GoldDigger, #GoldThieves, #GoldBook, #GoldBasket, #GoldPocket, #GoldChain").slider({
-	      orientation: "horizontal",
-	      range: "min",max: 100, value: 50,slide: refresh,change: refresh
-	    });
-	    $( "#RangeHammer, #RangeFishing, #RangeDigger , #RangeThieves, #RangeBook, #RangeBasket, #RangePocket,#RangeChain").slider({
-	      orientation: "horizontal",
-	      range: "min", min: 5, max: 500,value: 100,slide: refresh,change: refresh
-	    });
-  	});
-	/*End sets up the sliders*/
 	/*code for dropping hammer pin */
 	$("#hammerButton").click(function(){
 		if($("#hammerButton").is(":disabled") == false){
@@ -373,46 +391,7 @@ function next()
 	
 }
 
-/* mehod gets called every time a slide is moved to set the observable value to its corrisponding slider value */
-function refresh() {
-    viewModel.fishingGold( $("#GoldFishing").slider( "value" ));
-    viewModel.fishingRange( $("#RangeFishing").slider( "value" ));
-    viewModel.hammerGold( $("#GoldHammer").slider( "value" ));
-    viewModel.hammerRange( $("#RangeHammer").slider( "value" ));
-    viewModel.diggerGold( $("#GoldDigger").slider( "value" ));
-    viewModel.diggerRange( $("#RangeDigger").slider( "value" ));
-    viewModel.thievesGold( $("#GoldThieves").slider( "value" ));
-    viewModel.thievesRange( $("#RangeThieves").slider( "value" ));
-    viewModel.bookGold( $("#GoldBook").slider( "value" ));
-    viewModel.bookRange( $("#RangeBook").slider( "value" ));
-    viewModel.basketGold( $("#GoldBasket").slider( "value" ));
-    viewModel.basketRange( $("#RangeBasket").slider( "value" ));
-	viewModel.chainGold( $("#GoldChain").slider( "value" ));
-	viewModel.chainRange( $("#RangeChain").slider( "value" ));
-	viewModel.pocketGold( $("#GoldPocket").slider( "value" ));
-	viewModel.pocketRange( $("#RangePocket").slider( "value" ));
-	/*for step 3 (b)*/
-	if (currentStep == 3 && currentSubStep == 2)
-	{
-		if($("#RangeHammer").slider( "value" ) == 500)
-			{
-				next();	
-				/*lock slider so cannot be changed */
-				$("#RangeHammer").slider( {disabled: true})
-			}
-	}
-	/*for step 3 (c)*/
-	if (currentStep == 3 && currentSubStep == 3)
-	{
-		if($("#GoldHammer").slider( "value" ) == 100)
-			{
-				next();	
-				/*lock slider so cannot be changed */
-				$("#GoldHammer").slider( {disabled: true})
-			}
-	}
 
-  }//end refresh
 /*get distance between two latlngs*/
 function getdistBetween(lat1, lon1 , lat2 , lon2) 
 {

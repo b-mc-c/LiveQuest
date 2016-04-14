@@ -6,22 +6,24 @@ var viewModel = {
 									{name:"LogOut",url:"LogOut.html",_class:""},]),
 	NewGameNameError: ko.observableArray(),
 	NewGameTimeError : ko.observableArray(),
-	fishingGold : ko.observable("50"),
-	fishingRange : ko.observable("100"),
-	hammerGold : ko.observable("50"),
-	hammerRange : ko.observable("100"),
-	diggerGold : ko.observable("50"),
-	diggerRange : ko.observable("100"),
-	thievesGold : ko.observable("50"),
-	thievesRange : ko.observable("100"),
-	bookGold : ko.observable("50"),
-	bookRange : ko.observable("100"),
-	basketGold : ko.observable("50"),
-	basketRange : ko.observable("100"),
-	pocketGold : ko.observable("50"),
-	pocketRange : ko.observable("100"),
-	chainGold : ko.observable("50"),
-	chainRange : ko.observable("100"),
+	fishingGold : ko.observable(50),
+	fishingRange : ko.observable(100),
+	hammerGold : ko.observable(50),
+	hammerRange : ko.observable(100),
+	diggerGold : ko.observable(50),
+	diggerRange : ko.observable(100),
+	thievesGold : ko.observable(50),
+	thievesRange : ko.observable(100),
+	bookGold : ko.observable(50),
+	bookRange : ko.observable(100),
+	basketGold : ko.observable(50),
+	basketRange : ko.observable(100),
+	pocketGold : ko.observable(50),
+	pocketRange : ko.observable(100),
+	chainGold : ko.observable(50),
+	chainRange : ko.observable(100),
+	keyRange: ko.observable(100),
+	markers: ko.observableArray(),
 	CreateNewGame : function()/* Create new game button click*/
 	{
 		if(validateNewGame())
@@ -34,7 +36,7 @@ var viewModel = {
 		        {
 		            GameName: $("#NewGameName").val(),
 		            EndTime: $("#NewgameEndTime").val(),
-		            placedItems : markers,
+		            placedItems : this.markers(),
 		        },
 		       success: function(data) {
 			    data = JSON.parse(data);
@@ -43,6 +45,63 @@ var viewModel = {
 	    	});/*end ajax*/
 		}
 	}/*End Create new game button click*/,
+	Place : function(value)
+	{
+		
+		if(!associateKey)
+		{
+			dropPin = true;
+			switch(value) {
+	   			case "CHAIN":
+					item = {Name : "Purse Chain", ID : 1 , Gold : viewModel.chainGold() , Range : viewModel.chainRange()};
+					image = "img/chainIcon.png";
+					break;
+				case "POCKET":
+					item = {Name : "Fake Pocket", ID : 2 , Gold : viewModel.pocketGold() , Range : viewModel.pocketRange()};
+					image = "img/pocketIcon.png";
+					break;
+				case "HAMMER":
+					item = {Name : "Mc Hammer", ID : 3 , Gold : viewModel.hammerGold() , Range : viewModel.hammerRange()};
+					image = "img/MCHammerIcon.png";
+					break;
+				case "ROD":
+					item = {Name : "Fishing rod", ID : 4 , Gold : viewModel.fishingGold() , Range : viewModel.fishingRange()};
+					image = "img/fishing-rodIcon.png";
+					break;
+				case "DIGGER":
+					item = {Name : "Gold Digger", ID : 5 , Gold : viewModel.diggerGold() , Range : viewModel.diggerRange()};
+					image = "img/gold_diggerIcon.png";
+					break;
+				case "ALI":
+					item = {Name : "40 Thieves", ID : 6 , Gold : viewModel.thievesGold() , Range : viewModel.thievesRange()};
+					image = "img/thievesIcon.png";
+					break;
+				case "BOOK":
+					item = {Name : "Oldest trick in the book ", ID : 7 , Gold : viewModel.bookGold() , Range : viewModel.bookRange()};
+					image = "img/bookIcon.png";
+					break;
+				case "BASKET":
+					item = {Name : "Baby in a Basket ", ID : 8 , Gold : viewModel.basketGold() , Range : viewModel.basketRange()};
+					image = "img/basketIcon.png";
+					break;
+				case "KEY":
+					if(Object.keys(viewModel.markers()).length == 0)
+					{
+						
+						dropPin = false;
+					}
+					else 
+					{
+						item = {Name : "Key ", ID : 9 , Gold : 0 , Range : viewModel.keyRange()};
+						image = "img/keyIcon.png";
+					}
+					break;
+			}//end switch
+			$('html,body').animate({scrollTop: $("#map").offset().top},'slow');	
+		}//end if
+	},
+
+
 }
 var FIREFOX = /Firefox/i.test(navigator.userAgent);
 /* Info for markers being placed on map */
@@ -52,9 +111,9 @@ var image = "img/chainIcon.png";
 
 /* Markers list*/
 /* ID : {Item : Chain, Gold : 50, Range : 100, Lng : 5.00, Lat : 5.00}*/
-var markers = {};
 var itemId = 0; // increments each time an item is added to markers 
-
+var key = ""
+var associateKey = false; /*set to true when user places key and needs to associate a key with an item*/
 /* Function gets called when page loaded */
 $(document).ready(function(){
 
@@ -62,98 +121,9 @@ $(document).ready(function(){
 		viewModel["NewGameTimeError"].push("Enter DateTime format yyyy-mm-ddThh:mm exmp '2015-01-01T00:00'")
 	}
 	initMap();/*Call initialise map when page is loaded*/
-	/*Click events for placing items */
-	$("#chainButton").click(function(){
-		item = {Name : "Purse Chain", ID : 1 , Gold : viewModel.chainGold() , Range : viewModel.chainRange()};
-		dropPin = true;
-		image = "img/chainIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#pocketButton").click(function(){
-		item = {Name : "Fake Pocket", ID : 2 , Gold : viewModel.pocketGold() , Range : viewModel.pocketRange()};
-		dropPin = true;
-		image = "img/pocketIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#hammerButton").click(function(){
-		item = {Name : "Mc Hammer", ID : 3 , Gold : viewModel.hammerGold() , Range : viewModel.hammerRange()};
-		dropPin = true;
-		image = "img/MCHammerIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#rodButton").click(function(){
-		item = {Name : "Fishing rod", ID : 4 , Gold : viewModel.fishingGold() , Range : viewModel.fishingRange()};
-		dropPin = true;
-		image = "img/fishing-rodIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#diggerButton").click(function(){
-		item = {Name : "Gold Digger", ID : 5 , Gold : viewModel.diggerGold() , Range : viewModel.diggerRange()};
-		dropPin = true;
-		image = "img/gold_diggerIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#aliButton").click(function(){
-		item = {Name : "40 Thieves", ID : 6 , Gold : viewModel.thievesGold() , Range : viewModel.thievesRange()};
-		dropPin = true;
-		image = "img/thievesIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#bookButton").click(function(){
-		item = {Name : "Oldest trick in the book ", ID : 7 , Gold : viewModel.bookGold() , Range : viewModel.bookRange()};
-	
-		dropPin = true;
-		image = "img/bookIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	$("#basketButton").click(function(){
-		item = {Name : "Baby in a Basket ", ID : 8 , Gold : viewModel.basketGold() , Range : viewModel.basketRange()};
-		dropPin = true;
-		image = "img/basketIcon.png";
-		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');
-	});
-	/*End Click events for placing items */
-	/*sets up the sliders*/
-	 $(function() {
-	    $( "#GoldHammer, #GoldFishing, #GoldDigger, #GoldThieves, #GoldBook, #GoldBasket, #GoldPocket, #GoldChain").slider({
-	      orientation: "horizontal",
-	      range: "min",
-	      max: 100,
-	      value: 50,
-	      slide: refresh,
-	      change: refresh
-	    });
-	    $( "#RangeHammer, #RangeFishing, #RangeDigger , #RangeThieves, #RangeBook, #RangeBasket, #RangePocket,#RangeChain").slider({
-	      orientation: "horizontal",
-	      range: "min",
-	      min: 5,
-	      max: 500,
-	      value: 100,
-	      slide: refresh,
-	      change: refresh
-	    });
-  	});
-	/*End sets up the sliders*/
 });//end document ready
-/* mehod gets called every time a slide is moved to set the observable value to its corrisponding slider value */
-function refresh() {
-    viewModel.fishingGold( $("#GoldFishing").slider( "value" ));
-    viewModel.fishingRange( $("#RangeFishing").slider( "value" ));
-    viewModel.hammerGold( $("#GoldHammer").slider( "value" ));
-    viewModel.hammerRange( $("#RangeHammer").slider( "value" ));
-    viewModel.diggerGold( $("#GoldDigger").slider( "value" ));
-    viewModel.diggerRange( $("#RangeDigger").slider( "value" ));
-    viewModel.thievesGold( $("#GoldThieves").slider( "value" ));
-    viewModel.thievesRange( $("#RangeThieves").slider( "value" ));
-    viewModel.bookGold( $("#GoldBook").slider( "value" ));
-    viewModel.bookRange( $("#RangeBook").slider( "value" ));
-    viewModel.basketGold( $("#GoldBasket").slider( "value" ));
-    viewModel.basketRange( $("#RangeBasket").slider( "value" ));
-	viewModel.chainGold( $("#GoldChain").slider( "value" ));
-	viewModel.chainRange( $("#RangeChain").slider( "value" ));
-	viewModel.pocketGold( $("#GoldPocket").slider( "value" ));
-	viewModel.pocketRange( $("#RangePocket").slider( "value" ));
-  }//end refresh
+
+
 /* Handles recieved messages from server for this screen  */
 function Receive(data)
 {
@@ -179,32 +149,6 @@ function Receive(data)
 	}
 }//end recieve
 /* validate the manually entered data is ok before sending to server*/
-
-
-function getdistBetween(lat1, lon1 , lat2 , lon2) 
-{
-	/** Converts numeric degrees to radians */
-	if (typeof(Number.prototype.toRadians) === "undefined") {
-	  Number.prototype.toRadians = function() {
-	    return this * Math.PI / 180;
-	  }
-	}
-	/*formula source http://www.movable-type.co.uk/scripts/latlong.html*/ 
-	var R = 6371000; // metres
-	var lt1 = lat1.toRadians();
-	var lt2 = lat2.toRadians();
-	var dt = (lat2-lat1).toRadians();
-	var dp = (lon2-lon1).toRadians();
-	var a = Math.sin(dt/2) * Math.sin(dt/2) +
-	        Math.cos(lt1) * Math.cos(lt2) *
-	        Math.sin(dp/2) * Math.sin(dp/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	var d = R * c;
-	return d; // returns distance in meters
-
-}
-
-
 function validateNewGame()
 {
 	//clear the error list 
@@ -234,7 +178,7 @@ function validateNewGame()
 		viewModel["NewGameNameError"].push("Invalid, Games Names cannot contain the following characters ' ; \" ");
 		canSend = false;
 	}
-	if(Object.keys(markers).length == 0)
+	if(Object.keys(viewModel.markers()).length == 0)
 	{
 		canSend = false;
 		viewModel["NewGameNameError"].push("Invalid, No Items have been placed ' ; \" ");
@@ -293,11 +237,27 @@ function showPosition(position) {//initiate the google maps centred on my positi
 				position: myLatLng,
 				map: map,
 				title: item.Name +", Gold :" + item.Gold + ", Range : " + item.Range + "m",
-				icon: image
+				icon: image,
+				itemId : itemId
 				});
-
-		 	markers[itemId] = {Item : item.ID, Name :item.Name, Gold : parseInt(item.Gold), Range: parseInt(item.Range), Lat: event.latLng.lat(), Lng : event.latLng.lng()};
+		 	viewModel.markers()[itemId] = {InGameId : itemId ,Item : item.ID, Name :item.Name, Gold : parseInt(item.Gold), Range: parseInt(item.Range), Lat: event.latLng.lat(), Lng : event.latLng.lng(), Unlocks : 0};
 		 	/* ID : {Item : Chain, Gold : 50, Range : 100, Lng : 5.00, Lat : 5.00}*/
+		 	if(item.ID == 9)
+		 	{
+		 		key = viewModel.markers()[itemId]
+		 		associateKey = true;
+		 	}
+		 	else
+		 	{
+		 		google.maps.event.addListener(marker,'click',function() 
+		 		{
+		 			if(associateKey)
+		 			{
+		 				key["Unlocks"] = this.itemId;
+		 				associateKey = false;
+		 			}
+		 		});
+		 	}
 		 	itemId +=1;
 		 	dropPin = false;
 	 	}

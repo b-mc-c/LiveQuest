@@ -71,28 +71,16 @@
         <div class="col-md-6">
           <div class="centreItem">
             <div id="myCarousel" data-ride="carousel" data-interval="false" class="carousel slide">
-              <!-- Carousel indicators-->
-              <!--ol.carousel-indicators
-              li.active(data-target='#myCarousel', data-slide-to='0')
-              li(data-target='#myCarousel', data-slide-to='1')
-              li(data-target='#myCarousel', data-slide-to='2')
-              li(data-target='#myCarousel', data-slide-to='3')
-              li(data-target='#myCarousel', data-slide-to='4')
-              li(data-target='#myCarousel', data-slide-to='5')
-              li(data-target='#myCarousel', data-slide-to='7')
-              
-              -->
-              <!-- Wrapper for carousel items-->
               <div class="carousel-inner">
                 <div class="item active">
                   <div class="itemTitle">Purse chain</div>
                   <div class="itemImage"><img src="img/chain.png" alt="chain Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">Prevents your purse from being stolen but snaps after one use.</div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : chainGold"></span>
-                      <div id="GoldChain" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : chainRange"></span>m
-                      <div id="RangeChain" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: chainGold, realtime: true, min: 5, max: 100,}" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : chainRange"></span>m
+                      <div data-bind="slider: { value: chainRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="chainButton" class="btn">Place</button>
+                    <div id="chainButton" data-bind="click: Place.bind($data, 'CHAIN')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -100,10 +88,10 @@
                   <div class="itemImage"><img src="img/pocket.png" alt="basket Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">A fake pocket sewn into you jacket fools potential thieves attempting to relieve you of your gold.<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : pocketGold"></span>
-                      <div id="GoldPocket" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : pocketRange"></span>m
-                      <div id="RangePocket" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: pocketGold, realtime: true, min: 5, max: 100,}" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : pocketRange"></span>m
+                      <div data-bind="slider: { value: pocketRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="pocketButton" class="btn">Place</button>
+                    <div id="pocketButton" data-bind="click: Place.bind($data, 'POCKET')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -111,10 +99,10 @@
                   <div class="itemImage"><img src="img/MCHammer.png" alt="hammer Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">Mc Hammer parachute pants his way to a player breaks their piggy bank and steals their gold.<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : hammerGold"></span>
-                      <div id="GoldHammer" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : hammerRange"></span>m
-                      <div id="RangeHammer" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: hammerGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : hammerRange"></span>m
+                      <div data-bind="slider: { value: hammerRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="hammerButton" class="btn">Place</button>
+                    <div id="hammerButton" data-bind="click: Place.bind($data, 'HAMMER')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -122,10 +110,10 @@
                   <div class="itemImage"><img src="img/fishing-rod.png" alt="rod Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">The fishing rod allows you to fish out another players coin purse<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : fishingGold"></span>
-                      <div id="GoldFishing" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : fishingRange"></span>m
-                      <div id="RangeFishing" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: fishingGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range : <span data-bind="text : fishingRange"></span>m
+                      <div data-bind="slider: { value: fishingRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="rodButton" class="btn">Place</button>
+                    <div id="rodButton" data-bind="click: Place.bind($data, 'ROD')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -133,10 +121,10 @@
                   <div class="itemImage"><img src="img/gold_digger.png" alt="digger Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">So you think she&apos;s a gold digger , Release the gold digger on another player to relieve them of some of their gold. <br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : diggerGold"></span>
-                      <div id="GoldDigger" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : diggerRange"></span>m
-                      <div id="RangeDigger" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: diggerGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : diggerRange"></span>m
+                      <div data-bind="slider: { value: diggerRange, realtime: true, min: 0, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="diggerButton" class="btn">Place</button>
+                    <div id="diggerButton" data-bind="click: Place.bind($data, 'DIGGER')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -144,10 +132,10 @@
                   <div class="itemImage"><img src="img/thieves.png" alt="alibaba Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">Dispatch Ali Baba&apos;s 40 thieves to steal gold from players in range.<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : thievesGold"></span>
-                      <div id="GoldThieves" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : thievesRange"></span>m
-                      <div id="RangeThieves" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: thievesGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : thievesRange"></span>m
+                      <div data-bind="slider: { value: thievesRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="aliButton" class="btn">Place</button>
+                    <div id="aliButton" data-bind="click: Place.bind($data, 'ALI')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
@@ -155,21 +143,34 @@
                   <div class="itemImage"><img src="img/book.png" alt="book Slide" width="200" height="200" class="centreItem"></div>
                   <div class="itemDescription">Distract a player by shouting &apos;&apos;Look over there&apos;&apos; while they look away help yourself to their gold<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : bookGold"></span>
-                      <div id="GoldBook" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : bookRange"></span>m
-                      <div id="RangeBook" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: bookGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : bookRange"></span>m
+                      <div data-bind="slider: { value: bookRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="bookButton" class="btn">Place</button>
+                    <div id="bookButton" data-bind="click: Place.bind($data, 'BOOK')" class="btn btn-default">Place</div>
                   </div>
                 </div>
                 <div class="item">
                   <div class="itemTitle">Baby in a Basket</div>
                   <div class="itemImage"><img src="img/basket.png" alt="basket Slide" width="200" height="200" class="centreItem"></div>
-                  <div class="itemDescription">When a player attempts to steal from you A baby in basket appears and with a booming voice shouts &apos;&apos;Thou shalt not steal!! &apos;&apos; scaring off any thief.<br></div>
+                  <div class="itemDescription">When a player attempts to steal from you A baby in basket appears and with a booming voice shouts &apos;&apos;Thou shalt not steal!! &apos;&apos; |scaring off any thief.<br></div>
                   <div class="itemSliders"><span>Gold : <span data-bind="text : basketGold"></span>
-                      <div id="GoldBasket" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : basketRange"></span>m
-                      <div id="RangeBasket" class="Range"></div></span></div><br>
+                      <div data-bind="slider: { value: basketGold, realtime: true, min: 0, max: 100,}" class="Gold"></div></span><br><span>Pick up Range :  <span data-bind="text : basketRange"></span>m
+                      <div data-bind="slider: { value: basketRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
                   <div class="itemBtns">
-                    <button id="basketButton" class="btn">Place</button>
+                    <div id="basketButton" data-bind="click: Place.bind($data, 'BASKET')" class="btn btn-default">Place</div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="itemTitle">Key</div>
+                  <div class="itemImage"><img src="img/Key.png" alt="basket Slide" width="200" height="200" class="centreItem"></div>
+                  <div class="itemDescription">
+                    Use a key to lock a chest. a player wont be able to pick up the chest unless they are in range and have the key.
+                    Place the key then click on the chest you want this key to unlock.<br>
+                  </div>
+                  <div class="itemSliders"><span>Pick up Range :  <span data-bind="text : keyRange"></span>m<br>
+                      <div data-bind="slider: { value: keyRange, realtime: true, min: 5, max: 500,}" class="Range"></div></span></div><br>
+                  <div class="itemBtns">
+                    <div id="KeyButton" data-bind="click: Place.bind($data, 'KEY')" class="btn btn-default">Place</div>
                   </div>
                 </div>
               </div>
@@ -257,6 +258,7 @@
     <script src="external/knockout-3.3.0.js"></script>
     <script src="external/jquery-ui.min.js"></script>
     <script src="external/jquery.ui.touch-punch.min.js"></script>
+    <script src="external/knockout-jqueryui.min.js"></script>
     <script src="external/jquery.animateSprite.min.js"></script>
     <script src="external/soundmanager2-nodebug-jsmin.js"></script>
     <script src="js/Tutorial.js"></script>

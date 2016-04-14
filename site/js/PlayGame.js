@@ -213,10 +213,15 @@ function placeItemsOnMap(MapItems)
 	{
 		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
 		var LatLng = {lat: parseFloat(MapItems[i].Lat), lng: parseFloat(MapItems[i].Lng)};
+		var itemIcon = "img/chestIcon.png"
+		if(parseInt(MapItems[i].ItemIdentifier) == 9)
+		{
+			var itemIcon = "img/keyIcon2.png"
+		}
 		var marker = new google.maps.Marker({
 		position: LatLng,
 		map: map,
-		icon: "img/chestIcon.png",
+		icon: itemIcon,
 		title: 'Gold : ' + parseFloat(MapItems[i].Gold) + ", Pickup range : " + parseFloat(MapItems[i].PickUpRange) + "m",
 		html: contentString,
 		});
