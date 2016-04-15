@@ -203,9 +203,9 @@
 	{
 		foreach ($items as $item) 
 		{
-			$sql = sprintf("INSERT INTO game_items (GameId,ItemIdInGame, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng, KeyUnlocks ,PickedUp ,Alive) 
-											VALUES ( %d, %d, %d , '%s',%d , %d, %.20f , %.20f,%d , 0, 1)", $gameId,
-											$item["InGameId"], $item["Item"], $item["Name"], $item["Gold"], $item["Range"], $item["Lat"], $item["Lng"], $item["Unlocks"]);
+			$sql = sprintf("INSERT INTO game_items (GameId,ItemIdInGame, ItemIdentifier , Name, Gold ,PickUpRange ,Lat ,Lng, KeyUnlocks, locked ,PickedUp ,Alive) 
+											VALUES ( %d, %d, %d , '%s',%d , %d, %.20f , %.20f,%d , %d , 0, 1)", $gameId,
+											$item["InGameId"], $item["Item"], $item["Name"], $item["Gold"], $item["Range"], $item["Lat"], $item["Lng"], $item["Unlocks"],$item["Locked"] );
 			RunSql($sql);
 		}
 	}
@@ -270,7 +270,7 @@
 	function GetPlayersItems($gameId,$userId)
 	{
 		
-		$sql = sprintf("SELECT id , itemIdentifier, Name from game_items WHERE GameId = %d AND User = %d AND Alive = 1 AND PickedUp = 1 ", $gameId, $userId);
+		$sql = sprintf("SELECT id , itemIdentifier, Name, KeyUnlocks from game_items WHERE GameId = %d AND User = %d AND Alive = 1 AND PickedUp = 1 ", $gameId, $userId);
 		return RunSql($sql);
 	}
 	/*Gets the players gold assocaited with this game*/
@@ -489,5 +489,48 @@
 	{
 		$sql = sprintf("Select PlayerId , Gold FROM game_players WHERE GameId = %d ORDER BY Gold DESC", $gameId);
 		return RunSql($sql);	
+	}
+	/*checks if the item needs a key if it doesn't return true else check if the player has associated key with item 
+	if so set the key alive to false and return true else return false */
+	function UseKeyIfNeeded($gameId,$userId,$itemId)
+	{
+		/*checks if the item needs a key*/
+		$sql = sprintf("Select locked FROM game_items WHERE GameId = %d and id = %d", $gameId, $itemId);
+		$result = RunSql($sql);
+		$row = $result->fetch_assoc();
+		$locked = $row["locked"];
+		if($locked == 1)
+		{
+			/*key is needed*/
+			/*get the type of key required*/
+			$sql = sprintf("Select ItemIdInGame FROM game_items WHERE GameId = %d and id = %d", $gameId, $itemId);
+			$result = RunSql($sql);
+			$row = $result->fetch_assoc();
+			$keyNeeded = $row["ItemIdInGame"];
+			/*check if player has the key*/
+			$sql = sprintf("Select count(*) FROM game_items WHERE GameId = %d and KeyUnlocks = %d and itemIdentifier = 9 and User = %d and Alive = 1", $gameId,$keyNeeded,$userId);
+			$result = RunSql($sql);
+			$COUNT_NUMBER = $result->fetch_array(); 
+			$count = $COUNT_NUMBER[0]; 
+				if($count == 0)
+			{
+				/*The user doesnt have the key */
+				return false;
+			}
+			else
+			{
+				/*The user has the key */
+				/*remove the key from the players active items */
+				$sql = sprintf("Update game_items set Alive = 0  WHERE User = %d AND GameId = %d AND Alive = 1
+						AND ItemIdentifier = 9  AND KeyUnlocks = %d", $userId, $gameId, $keyNeeded);									
+				$result = RunSql($sql);
+				return true;
+			}	
+		}
+		else 
+		{
+			/*No Key needed*/
+			return true;
+		}
 	}
 ?>

@@ -11,6 +11,9 @@ html
 		.col-md-6
 			include itemCarousel.jade
 		.col-md-6(style="padding-top: 20px;")
+			span(data-bind="visible: associateKey")
+				|Select an item to lock with the key.
+			br
 			include map.jade
 
 	footer

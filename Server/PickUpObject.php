@@ -6,9 +6,9 @@
 	$userId = GetIdFromConnections($ip);	/*get user id associated with this ip*/
 	$player_Pos = $_POST['latLng'];			/*get the players current lat, lng*/ 
 	$itemId = $_POST['item'];				/*get the itemId to be picked up*/
+	/*validate ip is associated with a user*/
 	$message['ITEMSFOUND'] = null;
 	$message['MyItemsList'] = null;
-	/*validate ip is associated with a user*/
 	if($userId != null)
 	{
 		/*Verify the user is part of this game*/
@@ -18,19 +18,28 @@
 			/*Verify that user is in range of item to be picked up*/
 			if(UserInRangeOfItem($gameId,$userId,$itemId) == true)
 			{
-				AsignItemToPlayer($gameId,$userId,$itemId);/*asign the item to the player*/
-				$activeItems = GetActiveItems($gameId);/*get the items in game*/
-				while($r = $activeItems->fetch_assoc()) 
+				/*Check if item needs a key and use if needed and player has key */
+				if(UseKeyIfNeeded($gameId,$userId,$itemId) == true)
 				{
-					$message['ITEMSFOUND'][] = $r;
+					
+					AsignItemToPlayer($gameId,$userId,$itemId);/*asign the item to the player*/
 				}
-				$playerItems = GetPlayersItems($gameId,$userId);/*get the Players picked up items*/
-				while($r = $playerItems->fetch_assoc()) 
+				else 
 				{
-					$message['MyItemsList'][] = $r;
+					$message['NOKEY'] = "need the key";
 				}
-				$message['CurrentGold'] = GetPlayersGold($gameId,$userId);//*get the current players gold*/
 			}
+			$activeItems = GetActiveItems($gameId);/*get the items in game*/
+			while($r = $activeItems->fetch_assoc()) 
+			{
+				$message['ITEMSFOUND'][] = $r;
+			}
+			$playerItems = GetPlayersItems($gameId,$userId);/*get the Players picked up items*/
+			while($r = $playerItems->fetch_assoc()) 
+			{
+				$message['MyItemsList'][] = $r;
+			}
+			$message['CurrentGold'] = GetPlayersGold($gameId,$userId);//*get the current players gold*/
 		}	
 	}	
 	echo json_encode($message);/*return the message as ajson encoded object*/

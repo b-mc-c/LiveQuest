@@ -29,6 +29,7 @@ var itemInfo =
 		6 : {Identifier : 6, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "40 Thieves", 				Image: "img/thieves.png", 		Description: "Dispatch Ali Baba's 40 thieves to steal gold from players in range."},
 		7 : {Identifier : 7, 	Useable : true, 	EffectRange : 100, 	TheftAmount: 100,	Name: "Oldest trick in the book", 	Image: "img/book.png", 			Description: "Distract a player by shouting ''Look over there'' while they look away help yourself to their gold."},
 		8 : {Identifier : 8, 	Useable : false, 	EffectRange : 0,  	TheftAmount: 100,	Name: "Baby in a Basket", 			Image: "img/basket.png", 		Description: "When a player attempts to steal from you A baby in basket appears and with a booming voice shouts ''Thou shalt not steal!!'' scaring off any thief."},
+		9 : {Identifier : 9, 	Useable : false, 	EffectRange : 0,  	TheftAmount: 0,		Name: "Key", 						Image: "img/Key.png", 			Description: "Unlocks Chest associated Type : ."},
 	};
 var markers = [];
 var PlayerMarkers = [];
@@ -85,6 +86,10 @@ function Receive(data)
 	}
 	if(data["ITEMSFOUND"])
 	{
+		for (i = 0; i < markers.length; i++) 
+		{
+			markers[i].setMap(null);
+		}
 		placeItemsOnMap(data["ITEMSFOUND"])
 	}
 	if (data["PLAYERICON"])
@@ -107,6 +112,10 @@ function Receive(data)
 	if(data["gameOver"])
 	{
 		document.location.href = "ViewResults.html#" + gameId;
+	}
+	if(data["NOKEY"])
+	{
+		alert("You don't have the approiate key.")
 	}
 }//end recieve
 /* validate the manually entered data is ok before sending to server*/
@@ -212,6 +221,10 @@ function placeItemsOnMap(MapItems)
 	for (i = 0; i < MapItems.length; i++) 
 	{
 		var contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button></div>"
+		if(parseInt(MapItems[i].locked) == 1)
+		{
+			contentString = "<div><button class = 'btn btn-success' onclick='PickUpObject("+ i +")';> Pick Up </button><br><span>Locked needs Key " + MapItems[i].ItemIdInGame +"</span></div>"
+		}
 		var LatLng = {lat: parseFloat(MapItems[i].Lat), lng: parseFloat(MapItems[i].Lng)};
 		var itemIcon = "img/chestIcon.png"
 		if(parseInt(MapItems[i].ItemIdentifier) == 9)
@@ -318,10 +331,6 @@ function PickUpObject(i)
 	            latLng: myLatLng,
 	        },
 	       success: function(data) {
-	       		for (i = 0; i < markers.length; i++) 
-				{
-					markers[i].setMap(null);
-				}
 				data = JSON.parse(data);
 				Receive(data);
 				
@@ -394,6 +403,11 @@ function SetMyItems(pickedUpitems)
 	{
 		var item = itemInfo[parseInt(pickedUpitems[i].itemIdentifier)];
 		item["Id"] = parseInt(pickedUpitems[i].id);
+		if(parseInt(pickedUpitems[i].itemIdentifier) == 9)/*if the item is a key */
+		{
+			item["Name"] = "Key : " +  pickedUpitems[i].KeyUnlocks ;
+			item["Description"] = "Unlocks Chest No : " + pickedUpitems[i].KeyUnlocks ;
+		}
 		viewModel.myPickedUpItems.push(item);
 	}
 }

@@ -24,6 +24,7 @@ var viewModel = {
 	chainRange : ko.observable(100),
 	keyRange: ko.observable(100),
 	markers: ko.observableArray(),
+	associateKey : ko.observable(false), /*set to true when user places key and needs to associate a key with an item*/
 	CreateNewGame : function()/* Create new game button click*/
 	{
 		if(validateNewGame())
@@ -48,7 +49,7 @@ var viewModel = {
 	Place : function(value)
 	{
 		
-		if(!associateKey)
+		if(!viewModel.associateKey())
 		{
 			dropPin = true;
 			switch(value) {
@@ -113,7 +114,6 @@ var image = "img/chainIcon.png";
 /* ID : {Item : Chain, Gold : 50, Range : 100, Lng : 5.00, Lat : 5.00}*/
 var itemId = 0; // increments each time an item is added to markers 
 var key = ""
-var associateKey = false; /*set to true when user places key and needs to associate a key with an item*/
 /* Function gets called when page loaded */
 $(document).ready(function(){
 
@@ -240,21 +240,22 @@ function showPosition(position) {//initiate the google maps centred on my positi
 				icon: image,
 				itemId : itemId
 				});
-		 	viewModel.markers()[itemId] = {InGameId : itemId ,Item : item.ID, Name :item.Name, Gold : parseInt(item.Gold), Range: parseInt(item.Range), Lat: event.latLng.lat(), Lng : event.latLng.lng(), Unlocks : 0};
+		 	viewModel.markers()[itemId] = {InGameId : itemId ,Item : item.ID, Name :item.Name, Gold : parseInt(item.Gold), Range: parseInt(item.Range), Lat: event.latLng.lat(), Lng : event.latLng.lng(),Locked : 0 , Unlocks : 0};
 		 	/* ID : {Item : Chain, Gold : 50, Range : 100, Lng : 5.00, Lat : 5.00}*/
 		 	if(item.ID == 9)
 		 	{
 		 		key = viewModel.markers()[itemId]
-		 		associateKey = true;
+		 		viewModel.associateKey(true);
 		 	}
 		 	else
 		 	{
 		 		google.maps.event.addListener(marker,'click',function() 
 		 		{
-		 			if(associateKey)
+		 			if(viewModel.associateKey())
 		 			{
 		 				key["Unlocks"] = this.itemId;
-		 				associateKey = false;
+		 				viewModel.markers()[this.itemId].Locked = 1
+		 				viewModel.associateKey(false);
 		 			}
 		 		});
 		 	}
