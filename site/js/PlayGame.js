@@ -86,10 +86,6 @@ function Receive(data)
 	}
 	if(data["ITEMSFOUND"])
 	{
-		for (i = 0; i < markers.length; i++) 
-		{
-			markers[i].setMap(null);
-		}
 		placeItemsOnMap(data["ITEMSFOUND"])
 	}
 	if (data["PLAYERICON"])
@@ -331,6 +327,10 @@ function PickUpObject(i)
 	            latLng: myLatLng,
 	        },
 	       success: function(data) {
+	       		for (i = 0; i < markers.length; i++) 
+				{
+					markers[i].setMap(null);
+				}
 				data = JSON.parse(data);
 				Receive(data);
 				

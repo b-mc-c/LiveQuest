@@ -70,6 +70,14 @@ var viewModel = {
 		useItem = true;
 		selectedItem = item;
 		$('html,body').animate({scrollTop: $("#map").offset().top},'slow');/*for centreing phone screen on the map*/
+		if(currentStep == 3)
+		{
+			if(currentSubStep == 2)
+			{
+				next();
+			}
+		}
+
 	},
 	Place : function(value)
 	{
@@ -376,6 +384,14 @@ function next()
 			{//the step is complete move to next step and reset sub step
 				currentStep +=1; 
 				currentSubStep = 1;
+				AddPlayer();
+			}
+		}
+		else if(currentStep == 3)
+		{
+			if(currentSubStep == 1)
+			{
+
 			}
 		}
 	}
@@ -515,47 +531,38 @@ function PickUpObject(i)
 
 function AddPlayer()
 {
-		var IconId = 1
 		var image = {
 	    url: 'img/characters.png',
 	    // This marker is 20 pixels wide by 32 pixels high.
 	    size: new google.maps.Size(50, 50),
 	    // The origin for this image is (0, 0).
-	    origin: new google.maps.Point(50 * IconId, 0),
+	    origin: new google.maps.Point(50, 0),
 	    // The anchor for this image is the base of the flagpole at (0, 32).
 	    anchor: new google.maps.Point(25, 25)
 	 	 };
 		var LatLng = {lat: (myLatLng["lat"] + 0.0005), lng: (myLatLng["lng"] + 0.0005)};
 		var marker = new google.maps.Marker({
 		position: LatLng,
-		map: map,
+		map: map3,
 		icon: image,
 		playerId : 1
 		});
 		google.maps.event.addListener(marker,'click',function() {/*click event for when a player icon is clicked */
- 			if(useItem)
- 			{
- 				if(getdistBetween(marker.getPosition().lat(),marker.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
- 				{
- 					/*if player in range call to database to confirm action */
- 					$.ajax({
-	        			url: '../Server/UseItem.php',
-	        			type: 'POST',
-	        			data: 
-	        			{
-	            			gameId: gameId,
-	            			item: selectedItem.Id,
-	            			target : marker.playerId,
-	        			},
-	       				success: function(data) {
-	       					viewModel.myPickedUpItems.removeAll();
-							data = JSON.parse(data);
-							Receive(data);
-						},
-					});	/*end ajax*/
- 				}/*End if(getdistBetween(lat1, lon1 , lat2 , lon2) <= selectedItem.EffectRange)*/
- 			}/*end if (useitem)*/
- 			useItem = false;
+ 			if(currentStep == 3)
+		{
+			if(currentSubStep == 3)
+			{
+	 			if(useItem)
+	 			{
+	 				if(getdistBetween(marker.getPosition().lat(),marker.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
+	 				{
+	 					viewModel.myGold(100);
+	 					next();
+	 				}/*End if(getdistBetween(lat1, lon1 , lat2 , lon2) <= selectedItem.EffectRange)*/
+	 			}/*end if (useitem)*/
+	 			useItem = false;
+ 			}
+		}
  		});/*end google.maps.event.addListener*/
 		PlayerMarkers.push(marker);	
 }
