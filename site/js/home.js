@@ -68,7 +68,7 @@ function SetGames(data)
 		for (i = 0; i < h.length; i++) 
 		{
 			var temp = {Name:h[i]["GameName"],end:h[i]["GameEndTime"],url:"ViewGame.html#" + h[i]["id"],
-			leaderName :  a[i]["highestPlayer"]["name"] , leaderGold :  a[i]["highestPlayer"]["Gold"]};
+			leaderName :  h[i]["highestPlayer"]["name"] , leaderGold :  h[i]["highestPlayer"]["Gold"]};
 			viewModel.myHostedGames.push(temp);
 		}
 	}

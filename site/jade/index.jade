@@ -6,9 +6,13 @@ html
 			|LiveQuest-Log In
 	body
 		include navbar.jade
-		.centre
-			include SignIn.jade
-			include SignUp.jade
+		.col-sm-4
+			//img(src="img/sampleGame.png")
+		.col-sm-4
+			.centre
+				include SignIn.jade
+				include SignUp.jade
+		.col-sm-4
 	footer
 		include commonScripts.jade
 		script(src="js/index.js")

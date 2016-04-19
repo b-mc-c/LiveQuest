@@ -277,7 +277,7 @@ function placePlayersOnMap(MapItems)
 		google.maps.event.addListener(marker,'click',function() {/*click event for when a player icon is clicked */
  			if(useItem)
  			{
- 				if(getdistBetween(marker.getPosition().lat(),marker.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
+ 				if(getdistBetween(this.getPosition().lat(),this.getPosition().lng() , myLatLng.lat , myLatLng.lng) <= selectedItem.EffectRange) /*Check if player is in range*/
  				{
  					/*if player in range call to database to confirm action */
  					$.ajax({
@@ -287,7 +287,7 @@ function placePlayersOnMap(MapItems)
 	        			{
 	            			gameId: gameId,
 	            			item: selectedItem.Id,
-	            			target : marker.playerId,
+	            			target : this.playerId,
 	        			},
 	       				success: function(data) {
 	       					viewModel.myPickedUpItems.removeAll();

@@ -1,0 +1,50 @@
+doctype html
+html
+	head
+		include commonLinks.jade
+		title
+			|LiveQuest-Monitor
+	body
+		.col-sm-6
+			br
+			include map.jade
+			br
+			.centreHorz
+				table.gamesTable.centreHorz
+					thead.gamesTableHead
+						tr
+							th
+								|Results
+							th
+							th
+						tr
+							th Position
+							th User Name
+							th Gold
+					tbody.gamesTableBody(data-bind='foreach: results')
+						tr
+							td(data-bind='text: Position')
+							td(data-bind='text: Name')
+							td(data-bind='text: Gold')
+		.col-sm-6
+			div(data-bind='foreach: playersInfo')
+				br
+				table.itemsTable.centreHorz
+					thead.itemsTableHead
+						tr
+							th
+								img.spacedOut10(src="img/bag.png" style="width : 50px ; height : 50px;")
+							th
+								img.spacedOut10(src="img/chest.png" style="width : 50px ; height : 50px;")
+								span(data-bind="text: Gold" style="font-size : xx-large; vertical-align:middle;")			
+					tbody.itemsTableBody(data-bind="foreach : {data: Items, as: 'item'}")
+						tr
+							td(colspan="2")
+								div(style="float: left; width: 50%;  height : 70px;")
+									span(data-bind='text: item.Name' )
+								div(style="float: left; width: 50%;  height : 70px;")
+									img.spacedOut10(data-bind="attr: { src: item.Image}" style="width : 50px ; height : 50px;")
+
+	footer
+		include commonScripts.jade
+		script(src="js/Monitor.js")

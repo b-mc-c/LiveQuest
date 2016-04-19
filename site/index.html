@@ -19,92 +19,98 @@
         </div>
       </div>
     </div>
-    <div class="centre">
-      <table id="existingUser">
-        <tbody>
-          <tr>
-            <td></td>
-            <td>Sign In</td>
-          </tr>
-          <tr>
-            <td>Usename</td>
-            <td>
-              <input id="UserName" type="text">
-              <ul data-bind="foreach: SignInUserNameError">
-                <li data-bind="text: $data" style="color : red;"></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>Password</td>
-            <td>
-              <input id="Password" type="password">
-              <ul data-bind="foreach: SignInPassError">
-                <li data-bind="text: $data" style="color : red;"></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <div id="SignIn" data-bind="click: SignIn" class="btn btn-default">Submit</div>
-              <div id="Join" data-bind="click: ShowJoin" class="btn btn-default">Join</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <table id="newUser" style="display:none;">
-        <tbody>
-          <tr>
-            <td></td>
-            <td>Enter new user details</td>
-          </tr>
-          <tr>
-            <td>Username</td>
-            <td>
-              <input id="NewUserName" type="text" name="username">
-              <ul data-bind="foreach: SignUpUserNameError">
-                <li data-bind="text: $data" style="color : red;"></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>Password</td>
-            <td>
-              <input id="NewPassword" type="password">
-              <ul data-bind="foreach: SignUpPassError">
-                <li data-bind="text: $data" style="color : red;"></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>Confirm Password </td>
-            <td>
-              <input id="ConfPassword" type="password">
-              <ul data-bind="foreach: SignUpConfPassError">
-                <li data-bind="text: $data" style="color : red;">		</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>
-              <input id="NewEmail" type="email">
-              <ul data-bind="foreach: SignUpEmailError">
-                <li data-bind="text: $data" style="color : red;"></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <div id="SignUP" data-bind="click: SignUp" class="btn btn-default">Sign Up</div>
-              <div id="ReturnToSignIn" data-bind="click: ShowSignIn" class="btn btn-default">Return to sign in</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-sm-4">
+      <!--img(src="img/sampleGame.png")-->
     </div>
+    <div class="col-sm-4">
+      <div class="centre">
+        <table id="existingUser">
+          <tbody>
+            <tr>
+              <td></td>
+              <td>Sign In</td>
+            </tr>
+            <tr>
+              <td>Usename</td>
+              <td>
+                <input id="UserName" type="text">
+                <ul data-bind="foreach: SignInUserNameError">
+                  <li data-bind="text: $data" style="color : red;"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Password</td>
+              <td>
+                <input id="Password" type="password">
+                <ul data-bind="foreach: SignInPassError">
+                  <li data-bind="text: $data" style="color : red;"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <div id="SignIn" data-bind="click: SignIn" class="btn btn-default">Submit</div>
+                <div id="Join" data-bind="click: ShowJoin" class="btn btn-default">Join</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table id="newUser" style="display:none;">
+          <tbody>
+            <tr>
+              <td></td>
+              <td>Enter new user details</td>
+            </tr>
+            <tr>
+              <td>Username</td>
+              <td>
+                <input id="NewUserName" type="text" name="username">
+                <ul data-bind="foreach: SignUpUserNameError">
+                  <li data-bind="text: $data" style="color : red;"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Password</td>
+              <td>
+                <input id="NewPassword" type="password">
+                <ul data-bind="foreach: SignUpPassError">
+                  <li data-bind="text: $data" style="color : red;"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Confirm Password </td>
+              <td>
+                <input id="ConfPassword" type="password">
+                <ul data-bind="foreach: SignUpConfPassError">
+                  <li data-bind="text: $data" style="color : red;">		</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>
+                <input id="NewEmail" type="email">
+                <ul data-bind="foreach: SignUpEmailError">
+                  <li data-bind="text: $data" style="color : red;"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <div id="SignUP" data-bind="click: SignUp" class="btn btn-default">Sign Up</div>
+                <div id="ReturnToSignIn" data-bind="click: ShowSignIn" class="btn btn-default">Return to sign in</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-4"></div>
   </body>
   <footer>
     <script src="external/jquery-2.1.4.min.js"></script>
