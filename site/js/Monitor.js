@@ -49,7 +49,7 @@ function showPosition(position) {//initiate the google maps centred on my positi
 	center: myLatLng
 	});
 	getGamedata();
-	setInterval(getGamedata, 5000);/*calls method recursively every 5 seconds to get updates from server*/
+	setInterval(getGamedata, 2000);/*calls method recursively every 5 seconds to get updates from server*/
 }
 function showError(error) {
     switch(error.code) {
